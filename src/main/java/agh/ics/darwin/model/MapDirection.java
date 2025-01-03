@@ -1,6 +1,5 @@
 package agh.ics.darwin.model;
 
-import java.util.Map;
 import java.util.Random;
 
 public enum MapDirection {

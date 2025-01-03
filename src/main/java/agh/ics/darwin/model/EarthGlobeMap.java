@@ -1,15 +1,17 @@
 package agh.ics.darwin.model;
 
 import agh.ics.darwin.model.animal.Animal;
+import agh.ics.darwin.model.plant.Plant;
 import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.model.util.IncorrectPositionException;
 import agh.ics.darwin.model.util.MapVisualizer;
 
 import java.util.*;
 
-public abstract class AbstractWorldMap implements WorldMap {
+public class EarthGlobeMap implements WorldMap {
     protected final Vector2d lowerLeftBound, upperRightBound;
     private final Map<Vector2d, Animal> animals = new HashMap<>();
+    private final Map<Vector2d, Plant> plants = new HashMap<>();
     protected final MapVisualizer vis = new MapVisualizer(this);
     private final List<MapChangeListener> observers = new ArrayList<>();
     private final UUID uuid = UUID.randomUUID();
@@ -28,13 +30,9 @@ public abstract class AbstractWorldMap implements WorldMap {
         }
     }
 
-    public AbstractWorldMap(Vector2d lowerLeftBound, Vector2d upperRightBound) {
+    public EarthGlobeMap(Vector2d lowerLeftBound, Vector2d upperRightBound) {
         this.lowerLeftBound = lowerLeftBound;
         this.upperRightBound = upperRightBound;
-    }
-
-    public AbstractWorldMap(){
-        this(new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE), new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE));
     }
 
     @Override
@@ -45,6 +43,10 @@ public abstract class AbstractWorldMap implements WorldMap {
     @Override
     public WorldElement objectAt(Vector2d position) {
         return animals.get(position);
+    }
+
+    public Plant plantAt(Vector2d position){
+        return plants.get(position);
     }
 
     @Override
@@ -59,21 +61,25 @@ public abstract class AbstractWorldMap implements WorldMap {
 
     @Override
     public void place(Animal animal) throws IncorrectPositionException {
-        if (canMoveTo(animal.getPosition())){
-            animals.put(animal.getPosition(), animal);
-            mapChanged("Animal has been placed at %s".formatted(animal.getPosition()));
+        if (canMoveTo(animal.position())){
+            animals.put(animal.position(), animal);
+            mapChanged("Animal has been placed at %s".formatted(animal.position()));
         }
-        else throw new IncorrectPositionException(animal.getPosition());
+        else throw new IncorrectPositionException(animal.position());
+    }
+
+    public void addPlant(Plant plant){
+        this.plants.put(plant.position(), plant);
     }
 
     @Override
-    public void move(Animal animal, MoveDirection direction) {
-        if (animals.get(animal.getPosition()) == animal){ // jeżeli zwierzak jest na mapie
-            Vector2d oldPosition = animal.getPosition();
-            animals.remove(animal.getPosition(), animal);
-            animal.move(direction, this);
-            animals.put(animal.getPosition(), animal); // jeżeli ruch jest niemożliwy, to nic się nie zmieniło
-            mapChanged("Animal has been moved from %s to %s".formatted(oldPosition, animal.getPosition()));
+    public void move(Animal animal) {
+        if (animals.get(animal.position()) == animal){ // jeżeli zwierzak jest na mapie
+            Vector2d oldPosition = animal.position();
+            animals.remove(animal.position(), animal);
+            animal.move(this);
+            animals.put(animal.position(), animal); // jeżeli ruch jest niemożliwy, to nic się nie zmieniło
+            mapChanged("Animal has been moved from %s to %s".formatted(oldPosition, animal.position()));
         }
     }
 

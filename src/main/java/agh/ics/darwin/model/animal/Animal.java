@@ -15,7 +15,7 @@ public class Animal implements WorldElement {
         this.energy = energy;
     }
     public Animal(Animal father, Animal mother, int minNumberOfMutations, int maxNumberOfMutations, int energyForChild){
-        this.position = father.getPosition();
+        this.position = father.position();
         this.orientation = MapDirection.getRandomDirection();
         this.genome = new FullRandomMutationGenome(father, mother, minNumberOfMutations, maxNumberOfMutations);
         this.energy = 2 * energyForChild;
@@ -36,7 +36,7 @@ public class Animal implements WorldElement {
     }
 
     @Override
-    public Vector2d getPosition() {
+    public Vector2d position() {
         return position;
     }
 
@@ -49,18 +49,9 @@ public class Animal implements WorldElement {
     }
 
 
-//    public void move(MoveDirection direction, MoveValidator validator){
-//        switch (direction){
-//            case RIGHT -> this.orientation = this.orientation.next();
-//            case LEFT -> this.orientation = this.orientation.previous();
-//            case FORWARD -> {
-//                Vector2d newPosition = this.position.add(this.orientation.toUnitVector());
-//                if (validator.canMoveTo(newPosition)) this.position = newPosition;
-//            }
-//            case BACKWARD -> {
-//                Vector2d newPosition = this.position.subtract(this.orientation.toUnitVector());
-//                if (validator.canMoveTo(newPosition)) this.position = newPosition;
-//            }
-//        }
-//    }
+    public void move(MoveValidator validator){
+//        this.orientation = this.orientation.rotate();
+        Vector2d newPosition = this.position.add(this.orientation.toUnitVector());
+        if (validator.canMoveTo(newPosition)) this.position = newPosition;
+    }
 }
