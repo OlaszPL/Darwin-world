@@ -20,9 +20,9 @@ public class EquatorialForest extends AbstractPlantGenerator{
         Vector2d lowerLeft = bounds.lowerLeft();
         Vector2d upperRight = bounds.upperRight();
         int n = upperRight.getY() - lowerLeft.getY() + 1;
-        int rows_per_side = (int) ((n * PREFERRED_PERCENTAGE) / 2);
 
         if (n % 2 == 0){
+            int rows_per_side = (int) (((n * PREFERRED_PERCENTAGE) - 1) / 2);
             int center_down = (n / 2) - 1;
             int center_up = (n / 2);
 
@@ -46,6 +46,7 @@ public class EquatorialForest extends AbstractPlantGenerator{
 
         }
         else{
+            int rows_per_side = (int) ((n * PREFERRED_PERCENTAGE) / 2);
             int center = n / 2;
 
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++){

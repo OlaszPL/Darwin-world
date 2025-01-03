@@ -38,7 +38,7 @@ public class ParametersValidator {
             errors.add("Genome length should not be negative!");
         }
         if (miscParameters.genomeLength() < mutationParameters.minMutationsNum()){
-            errors.add("Minimal mutations number can't be higher than genom length!");
+            errors.add("Minimal mutations number can't be higher than genome length!");
         }
         if (miscParameters.startAnimalsNum() < 0){
             errors.add("Starting number of animals can't be negative!");
