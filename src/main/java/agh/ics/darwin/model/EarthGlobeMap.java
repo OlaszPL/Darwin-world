@@ -89,6 +89,10 @@ public class EarthGlobeMap implements WorldMap {
         return new ArrayList<>(List.copyOf(animals.values()));
     }
 
+    public List<Plant> getPlants(){
+        return new ArrayList<>(List.copyOf(plants.values()));
+    }
+
     @Override
     public String toString() {
         Boundary bound = getCurrentBounds();

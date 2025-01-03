@@ -7,10 +7,12 @@ import agh.ics.darwin.model.util.Boundary;
 import java.util.*;
 
 public abstract class AbstractPlantGenerator {
+    protected static final double PREFERRED_PERCENTAGE = 0.2;
     protected final EarthGlobeMap map;
 
-    public AbstractPlantGenerator(EarthGlobeMap map){
+    public AbstractPlantGenerator(EarthGlobeMap map, int noOfStartingPlants){
         this.map = map;
+        generate(noOfStartingPlants);
     }
 
     public abstract List<Vector2d> getPreferredFields();
