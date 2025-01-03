@@ -1,4 +1,6 @@
-package agh.ics.darwin.model;
+package agh.ics.darwin.model.animal;
+
+import agh.ics.darwin.model.*;
 
 public class Animal implements WorldElement {
     private MapDirection orientation;
