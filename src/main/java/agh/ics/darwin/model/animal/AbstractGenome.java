@@ -7,16 +7,20 @@ import java.util.Random;
 public abstract class AbstractGenome {
 
     protected List<Integer> genome = new ArrayList<>();
+    protected int activeGeneIndex;
 
     public AbstractGenome(int genomeLength){
         Random random = new Random();
         for (int i = 0; i < genomeLength; i++){
             this.genome.add(random.nextInt(8));
         }
+        activeGeneIndex = random.nextInt(8);
     }
 
     public AbstractGenome(List<Integer> genome){
         this.genome = genome;
+        Random random = new Random();
+        activeGeneIndex = random.nextInt(8);
     }
 
     public AbstractGenome (Animal father, Animal mother){
@@ -43,5 +47,13 @@ public abstract class AbstractGenome {
                 this.genome.add(mother.getGenome().genome.get(i));
             }
         }
+        activeGeneIndex = random.nextInt(8);
+    }
+
+    public List<Integer> getGenome() {
+        return genome;
+    }
+    public int getActiveGeneIndex(){
+        return activeGeneIndex;
     }
 }
