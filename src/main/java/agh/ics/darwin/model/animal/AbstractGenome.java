@@ -53,7 +53,10 @@ public abstract class AbstractGenome {
     public List<Integer> getGenome() {
         return genome;
     }
-    public int getActiveGeneIndex(){
-        return activeGeneIndex;
+    public int getActiveGene(){
+        return genome.get(activeGeneIndex);
+    }
+    public void incrementActiveGeneIndex(){
+        this.activeGeneIndex++;
     }
 }
