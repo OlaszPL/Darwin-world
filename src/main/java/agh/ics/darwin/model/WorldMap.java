@@ -30,20 +30,20 @@ public interface WorldMap extends MoveValidator {
     void move(Animal animal);
 
     /**
-     * Return true if given position on the map is occupied. Should not be
+     * Return true if given getPosition on the map is occupied. Should not be
      * confused with canMove since there might be empty positions where the animal
      * cannot move.
      *
      * @param position Position to check.
-     * @return True if the position is occupied.
+     * @return True if the getPosition is occupied.
      */
     boolean isOccupied(Vector2d position);
 
     /**
-     * Return an animal at a given position.
+     * Return an animal at a given getPosition.
      *
-     * @param position The position of the animal.
-     * @return animal or null if the position is not occupied.
+     * @param position The getPosition of the animal.
+     * @return animal or null if the getPosition is not occupied.
      */
     WorldElement objectAt(Vector2d position);
 

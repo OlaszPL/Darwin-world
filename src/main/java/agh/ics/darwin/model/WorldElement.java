@@ -1,6 +1,6 @@
 package agh.ics.darwin.model;
 
 public interface WorldElement {
-    Vector2d position();
+    Vector2d getPosition();
     String toString();
 }

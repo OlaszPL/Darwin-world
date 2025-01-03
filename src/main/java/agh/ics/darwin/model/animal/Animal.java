@@ -5,23 +5,20 @@ import agh.ics.darwin.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class Animal implements WorldElement, Comparable<Animal> {
-    private static int current_id = 0;
-    private final int id;
+    private final UUID uuid = UUID.randomUUID();
     private final AbstractGenome genome;
     private MapDirection orientation;
     private Vector2d position;
-    private int energy;
-    private int age;
-    private int numberOfChildren;
-    private int numberOfEatenPlants;
+    private int energy, age, numberOfChildren, numberOfEatenPlants;
     private Integer dayOfDeath = null;
     private final List<Animal> parents = new ArrayList<>();
+    private final BehaviourType behaviourType;
 
-
-    public Animal(Vector2d position, AbstractGenome genome, int energy){
-        this.id = current_id++;
+    public Animal(Vector2d position, AbstractGenome genome, int energy, BehaviourType behaviourType){
+        this.behaviourType = behaviourType;
         this.position = position;
         this.orientation = MapDirection.getRandomDirection();
         this.genome = genome;
@@ -30,18 +27,18 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.numberOfChildren = 0;
     }
 
-    public Animal(Animal father, Animal mother, int minNumberOfMutations, int maxNumberOfMutations, int energyForChild){
+    public Animal(Animal father, Animal mother, int minNumberOfMutations, int maxNumberOfMutations, int energyForChild, BehaviourType behaviourType){
         this(
-                father.position(),
+                father.getPosition(),
                 new FullRandomMutationGenome(father, mother, minNumberOfMutations, maxNumberOfMutations),
-                energyForChild*2
+                energyForChild*2, behaviourType
         );
         this.parents.add(father);
         this.parents.add(mother);
     }
 
-    public int getId(){
-        return id;
+    public UUID getId(){
+        return uuid;
     }
 
     public MapDirection getOrientation() {
@@ -53,7 +50,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     }
 
     @Override
-    public Vector2d position() {
+    public Vector2d getPosition() {
         return position;
     }
 
@@ -87,7 +84,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     }
 
     public void incrementAge(){
-        age += 1;
+        age ++;
     }
 
     public int getNumberOfChildren(){
@@ -95,7 +92,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     }
 
     public void incrementNumberOfChildren(){
-        numberOfChildren += 1;
+        numberOfChildren ++;
     }
 
     public void setDayOfDeath(Integer day){
@@ -140,16 +137,20 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.incrementNumberOfChildren();
         other.incrementNumberOfChildren();
 
-        return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, 2*energyForChild);
+        return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, 2*energyForChild, this.behaviourType);
     }
 
-    public void move(MoveValidator validator, WorldMap map, BehaviourType behaviourType){
+    public void move(MoveValidator validator){
         switch (behaviourType){
             case FULL_PREDESTINATION_BEHAVIOUR -> FullPredestinationBehaviour.executeGene(this);
             case A_BIT_OF_CRAZINESS_BEHAVIOUR -> ABitOfCrazinessBehaviour.executeGene(this);
         }
         Vector2d newPosition = this.position.add(this.orientation.toUnitVector());
         if (validator.canMoveTo(newPosition)) this.position = newPosition;
-        else this.position = map.determinePositionOfAnimalOnTheEdge(this);
+        else{
+            PositionAndDirection tmp = validator.determinePositionOfAnimalOnTheEdge(this, newPosition);
+            this.position = tmp.position();
+            this.orientation = tmp.direction();
+        }
     }
 }
