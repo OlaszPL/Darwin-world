@@ -1,5 +1,6 @@
 package agh.ics.darwin.model;
 
+import agh.ics.darwin.model.animal.Animal;
 import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.model.util.IncorrectPositionException;
 
