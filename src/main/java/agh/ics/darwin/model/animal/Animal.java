@@ -8,7 +8,7 @@ public class Animal implements WorldElement {
     private final AbstractGenome genome;
     private int energy;
 
-    public Animal(Vector2d position, MapDirection orientation, AbstractGenome genome, int energy){
+    public Animal(Vector2d position, AbstractGenome genome, int energy){
         this.position = position;
         this.orientation = MapDirection.getRandomDirection();
         this.genome = genome;
@@ -48,9 +48,16 @@ public class Animal implements WorldElement {
         return this.energy;
     }
 
+    public void setOrientation(MapDirection orientation){
+        this.orientation = orientation;
+    }
 
-    public void move(MoveValidator validator){
-//        this.orientation = this.orientation.rotate();
+
+    public void move(MoveValidator validator, BehaviourType behaviourType){
+        switch (behaviourType){
+            case FULL_PREDESTINATION_BEHAVIOUR -> FullPredestinationBehaviour.executeGene(this);
+            case A_BIT_OF_CRAZINESS_BEHAVIOUR -> ABitOfCrazinessBehaviour.executeGene(this);
+        }
         Vector2d newPosition = this.position.add(this.orientation.toUnitVector());
         if (validator.canMoveTo(newPosition)) this.position = newPosition;
     }
