@@ -12,12 +12,12 @@ import java.util.Random;
 public class RandomPositionGenerator implements Iterable<Vector2d> {
     private final int maxWidth, grassNo, totalPositions;
 
-    public RandomPositionGenerator(int maxWidth, int maxHeight, int grassNo) {
+    public RandomPositionGenerator(int maxWidth, int maxHeight, int number) {
         this.maxWidth = maxWidth;
-        this.grassNo = grassNo;
+        this.grassNo = number;
         totalPositions = maxWidth * maxHeight;
 
-        if (grassNo > totalPositions) {
+        if (number > totalPositions) {
             throw new IllegalArgumentException("Liczba traw przekracza możliwe różne pozycje");
         }
     }

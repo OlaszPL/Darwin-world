@@ -16,7 +16,7 @@ public class ParametersValidator {
         if (energyParameters.energyGivenToChild() <= 0){
             errors.add("Energy given to child should be positive!");
         }
-        if (energyParameters.minReproduceEnergy() >= energyParameters.energyGivenToChild()){
+        if (energyParameters.minReproduceEnergy() < energyParameters.energyGivenToChild()){
             errors.add("Minimal reproduce energy should be higher than energy given to child!");
         }
         if (energyParameters.onePlantEnergy() <= 0){

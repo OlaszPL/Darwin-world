@@ -13,6 +13,10 @@ public class FullRandomMutationGenome extends AbstractGenome {
         }
     }
 
+    public FullRandomMutationGenome(int genomeLength){
+        super(genomeLength);
+    }
+
     private void mutate(int minMutations, int maxMutations){
         int mutations = (minMutations == maxMutations) ? minMutations : random.nextInt((maxMutations-minMutations)) + minMutations;
         RandomMutateGenePositionGenerator randomGenerator = new RandomMutateGenePositionGenerator(this.genome.size(), mutations);
