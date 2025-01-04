@@ -109,7 +109,6 @@ public class EarthGlobeMap implements WorldMap {
 
     @Override
     public void move(Animal animal) {
-        Vector2d oldPosition = animal.getPosition();
         animals.get(animal.getPosition()).remove(animal);
         animal.move(this);
         if (animals.containsKey(animal.getPosition())){

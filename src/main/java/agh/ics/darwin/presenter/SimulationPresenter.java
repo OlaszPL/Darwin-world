@@ -20,7 +20,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 public class SimulationPresenter implements MapChangeListener {
-    private WorldMap map;
     @FXML
     public Label descriptionLabel;
     @FXML
@@ -28,18 +27,13 @@ public class SimulationPresenter implements MapChangeListener {
     private static final int CELL_WIDTH = 35;
     private static final int CELL_HEIGHT = 35;
 
-    @Override
-    public void setWorldMap(WorldMap map){
-        this.map = map;
-    }
-
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst()); // hack to retain visible grid lines
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }
 
-    public void drawMap(){
+    public void drawMap(WorldMap map){
         clearGrid();
         Boundary boundary = map.getCurrentBounds();
 
@@ -86,7 +80,7 @@ public class SimulationPresenter implements MapChangeListener {
     @Override
     public void mapChanged(WorldMap map, String message) {
         Platform.runLater(() -> {
-            drawMap();
+            drawMap(map);
             descriptionLabel.setText(message);
         });
     }

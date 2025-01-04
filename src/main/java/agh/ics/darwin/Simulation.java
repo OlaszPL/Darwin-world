@@ -49,7 +49,6 @@ public class Simulation implements Runnable {
 
     public void registerObserver(MapChangeListener observer){
         map.registerObserver(observer);
-        observer.setWorldMap(map);
         observer.mapChanged(map, "Map initialized!");
     }
 
