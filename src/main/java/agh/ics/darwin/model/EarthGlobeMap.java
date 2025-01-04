@@ -134,6 +134,8 @@ public class EarthGlobeMap implements WorldMap {
         return plants.values().stream().toList();
     }
 
+    public List<Animal> getAnimals() { return animals.values().stream().flatMap(List::stream).toList();}
+
     @Override
     public String toString() {
         Boundary bound = getCurrentBounds();
@@ -144,4 +146,6 @@ public class EarthGlobeMap implements WorldMap {
     public UUID getId(){
         return uuid;
     }
+
+
 }
