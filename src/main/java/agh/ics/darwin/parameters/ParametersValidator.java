@@ -46,6 +46,9 @@ public class ParametersValidator {
         if (miscParameters.startPlantsNum() < 0){
             errors.add("Starting number of plants can't be negative!");
         }
+        if (miscParameters.interval() <= 0){
+            errors.add("Interval should be positive!");
+        }
 
         if (!errors.isEmpty()){
             throw new InvalidParametersException(String.join(", ", errors));

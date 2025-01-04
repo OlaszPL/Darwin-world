@@ -31,7 +31,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this(
                 father.getPosition(),
                 new FullRandomMutationGenome(father, mother, minNumberOfMutations, maxNumberOfMutations),
-                energyForChild*2, behaviourType
+                energyForChild * 2, behaviourType
         );
         this.parents.add(father);
         this.parents.add(mother);
@@ -64,7 +64,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
 
     public void eat(int energy){
         this.energy += energy;
-        numberOfEatenPlants += 1;
+        numberOfEatenPlants++;
     }
 
     public int getEnergy(){
@@ -137,7 +137,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.incrementNumberOfChildren();
         other.incrementNumberOfChildren();
 
-        return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, 2*energyForChild, this.behaviourType);
+        return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, energyForChild, this.behaviourType);
     }
 
     public void move(MoveValidator validator){

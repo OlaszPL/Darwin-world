@@ -26,7 +26,7 @@ public class EarthGlobeMap implements WorldMap {
         observers.remove(observer);
     }
 
-    private void mapChanged(String message){
+    public void mapChanged(String message){
         for (MapChangeListener observer : observers){
             observer.mapChanged(this, message);
         }
@@ -55,9 +55,8 @@ public class EarthGlobeMap implements WorldMap {
     }
 
     public List<Animal> getOrderedAnimalsAt(Vector2d position){
-
         return animals.get(position)!= null ? animals.get(position).stream()
-                .sorted()
+                .sorted(Comparator.reverseOrder())
                 .toList() : null;
     }
 
@@ -100,7 +99,6 @@ public class EarthGlobeMap implements WorldMap {
                 newList.add(animal);
                 animals.put(animal.getPosition(), newList);
             }
-            mapChanged("Animal has been placed at %s".formatted(animal.getPosition()));
         }
         else throw new IncorrectPositionException(animal.getPosition());
     }
@@ -122,7 +120,6 @@ public class EarthGlobeMap implements WorldMap {
             newList.add(animal);
             animals.put(animal.getPosition(),newList);
         }
-        mapChanged("Animal has been moved from %s to %s".formatted(oldPosition, animal.getPosition()));
     }
 
     @Override
@@ -135,6 +132,39 @@ public class EarthGlobeMap implements WorldMap {
     }
 
     public List<Animal> getAnimals() { return animals.values().stream().flatMap(List::stream).toList();}
+
+    public void cleanDeadAnimals(int day){
+        for (List<Animal> animalList : animals.values()) {
+            Iterator<Animal> iterator = animalList.iterator();
+            while (iterator.hasNext()) {
+                Animal animal = iterator.next();
+                if (animal.getEnergy() <= 0) {
+                    animal.setDayOfDeath(day);
+                    iterator.remove();
+                }
+            }
+        }
+        mapChanged("Cleaned dead animals");
+    }
+
+    public List<List<Animal>> getAnimalsGroupedAtPositionAndOrdered(){
+        List<List<Animal>> groupedAnimals = new ArrayList<>();
+        for (List<Animal> animalList : animals.values()) {
+            if (!animalList.isEmpty()) {
+                List<Animal> sortedList = animalList.stream()
+                        .sorted(Comparator.reverseOrder())
+                        .toList();
+                groupedAnimals.add(sortedList);
+            }
+        }
+        return groupedAnimals;
+    }
+
+    public void removePlant(Vector2d position){
+        if (plantAt(position) != null){
+            plants.remove(position);
+        }
+    }
 
     @Override
     public String toString() {
