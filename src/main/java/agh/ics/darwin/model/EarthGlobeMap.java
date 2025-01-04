@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 public class EarthGlobeMap implements WorldMap {
     protected final Vector2d lowerLeftBound, upperRightBound;
-    private final Map<Vector2d, Animal> animals = new HashMap<>();
+    private final Map<Vector2d, List<Animal>> animals = new HashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     protected final MapVisualizer vis = new MapVisualizer(this);
     private final List<MapChangeListener> observers = new ArrayList<>();
@@ -44,9 +44,11 @@ public class EarthGlobeMap implements WorldMap {
 
     @Override
     public WorldElement objectAt(Vector2d position) {
-        WorldElement animal = animalAt(position);
-        if (animal != null) return animal;
-
+        if (animals.containsKey(position)) {
+            if(!animals.get(position).isEmpty()){
+                return animals.get(position).getFirst();
+            }
+        }
         return plantAt(position);
     }
 
@@ -54,8 +56,11 @@ public class EarthGlobeMap implements WorldMap {
         return plants.get(position);
     }
 
-    public Animal animalAt(Vector2d position){
-        return animals.get(position);
+    public List<Animal> getOrderedAnimalsAt(Vector2d position){
+
+        return animals.get(position)!= null ? animals.get(position).stream()
+                .sorted()
+                .toList() : null;
     }
 
     @Override
@@ -89,7 +94,14 @@ public class EarthGlobeMap implements WorldMap {
     @Override
     public void place(Animal animal) throws IncorrectPositionException {
         if (canMoveTo(animal.getPosition())){
-            animals.put(animal.getPosition(), animal);
+            if (animals.containsKey(animal.getPosition())){
+                animals.get(animal.getPosition()).add(animal);
+            }
+            else {
+                List<Animal> newList = new ArrayList<>();
+                newList.add(animal);
+                animals.put(animal.getPosition(), newList);
+            }
             mapChanged("Animal has been placed at %s".formatted(animal.getPosition()));
         }
         else throw new IncorrectPositionException(animal.getPosition());
@@ -102,15 +114,22 @@ public class EarthGlobeMap implements WorldMap {
     @Override
     public void move(Animal animal) {
         Vector2d oldPosition = animal.getPosition();
-        animals.remove(animal.getPosition(), animal);
+        animals.get(animal.getPosition()).remove(animal);
         animal.move(this);
-        animals.put(animal.getPosition(), animal); // jeżeli ruch jest niemożliwy, to nic się nie zmieniło
+        if (animals.containsKey(animal.getPosition())){
+            animals.get(animal.getPosition()).add(animal);
+        }
+        else {
+            List<Animal> newList = new ArrayList<>();
+            newList.add(animal);
+            animals.put(animal.getPosition(),newList);
+        }
         mapChanged("Animal has been moved from %s to %s".formatted(oldPosition, animal.getPosition()));
     }
 
     @Override
     public List<WorldElement> getElements(){
-        return Stream.concat(animals.values().stream(), plants.values().stream()).toList();
+        return Stream.concat(animals.values().stream().flatMap(List::stream), plants.values().stream()).toList();
     }
 
     public List<Plant> getPlants(){
