@@ -1,6 +1,7 @@
 package agh.ics.darwin;
 
 import agh.ics.darwin.model.EarthGlobeMap;
+import agh.ics.darwin.model.MapChangeListener;
 import agh.ics.darwin.model.Vector2d;
 import agh.ics.darwin.model.animal.AbstractGenome;
 import agh.ics.darwin.model.animal.Animal;
@@ -12,7 +13,7 @@ import agh.ics.darwin.model.util.IncorrectPositionException;
 import agh.ics.darwin.model.util.RandomPositionGenerator;
 import agh.ics.darwin.parameters.SimulationParameters;
 
-public class Simulation {
+public class Simulation implements Runnable {
     private final SimulationParameters simulationParameters;
     private final EarthGlobeMap map;
     private final AbstractPlantGenerator plantGenerator;
@@ -42,7 +43,17 @@ public class Simulation {
         };
     }
 
+    public void registerObserver(MapChangeListener observer){
+        map.registerObserver(observer);
+        observer.setWorldMap(map);
+        observer.mapChanged(map, "Map initialized!");
+    }
+
+    public void deregisterObserver(MapChangeListener observer){
+        map.deregisterObserver(observer);
+    }
+
     public void run(){
-        System.out.printf(map.toString());
+
     }
 }
