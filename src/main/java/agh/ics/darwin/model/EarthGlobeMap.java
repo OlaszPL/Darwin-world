@@ -44,10 +44,8 @@ public class EarthGlobeMap implements WorldMap {
 
     @Override
     public WorldElement objectAt(Vector2d position) {
-        if (animals.containsKey(position)) {
-            if(!animals.get(position).isEmpty()){
-                return animals.get(position).getFirst();
-            }
+        if (animals.containsKey(position) && !animals.get(position).isEmpty()) {
+            return Collections.max(animals.get(position));
         }
         return plantAt(position);
     }
