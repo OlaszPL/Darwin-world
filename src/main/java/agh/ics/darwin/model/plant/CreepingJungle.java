@@ -36,6 +36,6 @@ public class CreepingJungle extends AbstractPlantGenerator{
                 }
             }
         }
-        return preferredFields.stream().toList();
+        return new ArrayList<>(preferredFields);
     }
 }

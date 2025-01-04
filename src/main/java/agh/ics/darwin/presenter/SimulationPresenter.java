@@ -97,7 +97,7 @@ public class SimulationPresenter implements MapChangeListener {
 
         EnergyParameters energy = new EnergyParameters(3, 8, 4, 2);
         MapParameters map = new MapParameters(10, 10);
-        MiscParameters misc = new MiscParameters(BehaviourType.A_BIT_OF_CRAZINESS_BEHAVIOUR, PlantGeneratorType.EQUATORIAL_FOREST, 7, 7, 10, 3, 100);
+        MiscParameters misc = new MiscParameters(BehaviourType.FULL_PREDESTINATION_BEHAVIOUR, PlantGeneratorType.CREEPING_JUNGLE, 7, 7, 10, 3, 300);
         MutationParameters mutations = new MutationParameters(1, 2);
 
         SimulationParameters sim = ParametersValidator.validate(energy, map, mutations, misc);
