@@ -12,6 +12,8 @@ import agh.ics.darwin.model.plant.EquatorialForest;
 import agh.ics.darwin.model.util.IncorrectPositionException;
 import agh.ics.darwin.model.util.RandomPositionGenerator;
 import agh.ics.darwin.parameters.SimulationParameters;
+import agh.ics.darwin.stats.StatsCreator;
+import agh.ics.darwin.stats.StatsRecord;
 
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class Simulation implements Runnable {
     private final EarthGlobeMap map;
     private final AbstractPlantGenerator plantGenerator;
     private int day = 0;
+    private final StatsCreator statsCreator;
+    private volatile boolean running = true;
 
 
     public Simulation(SimulationParameters simulationParameters){
@@ -45,6 +49,8 @@ public class Simulation implements Runnable {
             case EQUATORIAL_FOREST -> new EquatorialForest(map, simulationParameters.miscParameters().startPlantsNum());
             case CREEPING_JUNGLE -> new CreepingJungle(map, simulationParameters.miscParameters().startPlantsNum());
         };
+
+        statsCreator = new StatsCreator(map);
     }
 
     public void registerObserver(MapChangeListener observer){
@@ -64,10 +70,14 @@ public class Simulation implements Runnable {
         }
     }
 
+    public void stop() {
+        running = false;
+    }
+
     public void run() {
-        while (true) {
+        while (running) {
             // clean dead animals
-            map.cleanDeadAnimals(day++);
+            map.cleanDeadAnimals(day++, statsCreator);
             map.mapChanged("Cleaned all dead animals");
 
             sleep();
@@ -122,6 +132,8 @@ public class Simulation implements Runnable {
             plantGenerator.generate(simulationParameters.miscParameters().dailyPlantsNum());
 
             map.mapChanged("Day: %s".formatted(day));
+            StatsRecord statsRecord = statsCreator.create(day);
+            System.out.println(statsRecord);
 
             sleep();
         }

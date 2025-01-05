@@ -18,6 +18,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class SimulationPresenter implements MapChangeListener {
     @FXML
@@ -26,6 +28,26 @@ public class SimulationPresenter implements MapChangeListener {
     public GridPane mapGrid;
     private static final int CELL_WIDTH = 35;
     private static final int CELL_HEIGHT = 35;
+    private Simulation simulation;
+    private Thread simulationThread;
+
+    @FXML
+    public void initialize() {
+        // Dodajemy listener do okna po inicjalizacji komponentów
+        Platform.runLater(() -> {
+            Stage stage = (Stage) mapGrid.getScene().getWindow();
+            stage.setOnCloseRequest(this::handleWindowClosing);
+        });
+    }
+
+    private void handleWindowClosing(WindowEvent event) {
+        if (simulation != null) {
+            simulation.stop();
+        }
+        if (simulationThread != null) {
+            simulationThread.interrupt();
+        }
+    }
 
     private void clearGrid() {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst()); // hack to retain visible grid lines
@@ -96,6 +118,13 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void onSimulationStartClicked(ActionEvent actionEvent) {
+        if (simulation != null) {
+            simulation.stop();
+        }
+        if (simulationThread != null) {
+            simulationThread.interrupt();
+        }
+
         EnergyParameters energy = new EnergyParameters(3, 8, 4, 2, 1);
         MapParameters map = new MapParameters(10, 10);
         MiscParameters misc = new MiscParameters(BehaviourType.A_BIT_OF_CRAZINESS_BEHAVIOUR, PlantGeneratorType.EQUATORIAL_FOREST, 7, 7, 10, 3, 300);
@@ -103,10 +132,11 @@ public class SimulationPresenter implements MapChangeListener {
 
         SimulationParameters sim = ParametersValidator.validate(energy, map, mutations, misc);
 
-        Simulation simulation = new Simulation(sim);
+        simulation = new Simulation(sim);
         simulation.registerObserver(this);
 
-        new Thread(simulation).start();
+        simulationThread =  new Thread(simulation);
+        simulationThread.start();
     }
 
 }

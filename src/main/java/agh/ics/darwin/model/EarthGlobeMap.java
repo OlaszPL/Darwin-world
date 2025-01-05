@@ -6,6 +6,7 @@ import agh.ics.darwin.model.plant.Plant;
 import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.model.util.IncorrectPositionException;
 import agh.ics.darwin.model.util.MapVisualizer;
+import agh.ics.darwin.stats.StatsCreator;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -132,15 +133,18 @@ public class EarthGlobeMap implements WorldMap {
         return plants.values().stream().toList();
     }
 
+    public int getPlantsSize() { return plants.size(); }
+
     public List<Animal> getAnimals() { return animals.values().stream().flatMap(List::stream).toList();}
 
-    public void cleanDeadAnimals(int day){
+    public void cleanDeadAnimals(int day, StatsCreator statsCreator){
         for (List<Animal> animalList : animals.values()) {
             Iterator<Animal> iterator = animalList.iterator();
             while (iterator.hasNext()) {
                 Animal animal = iterator.next();
                 if (animal.getEnergy() <= 0) {
                     animal.setDayOfDeath(day);
+                    statsCreator.increaseDeadAnimals(animal.getAge());
                     iterator.remove();
                 }
             }
