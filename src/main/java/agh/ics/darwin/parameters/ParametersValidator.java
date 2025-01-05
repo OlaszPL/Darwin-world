@@ -1,7 +1,5 @@
 package agh.ics.darwin.parameters;
 
-import agh.ics.darwin.model.animal.BehaviourType;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +54,12 @@ public class ParametersValidator {
         }
         if (miscParameters.plantGeneratorType() == null){
             errors.add("Plant generator type cannot be null!");
+        }
+        if (energyParameters.moveEnergy() < 0){
+            errors.add("Move energy can't be negative!");
+        }
+        if (energyParameters.moveEnergy() > energyParameters.initialAnimalEnergy()){
+            errors.add("Move energy should be lower than initial energy of animal!");
         }
 
         if (!errors.isEmpty()){

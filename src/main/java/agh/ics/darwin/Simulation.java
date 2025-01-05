@@ -83,8 +83,10 @@ public class Simulation implements Runnable {
             sleep();
 
             // execute move
-            for (Animal animal: animals) {
+            for (Animal animal : animals) {
                 map.move(animal);
+                animal.decreaseEnergy(simulationParameters.energyParameters().moveEnergy());
+                animal.incrementAge();
             }
 
             List<List<Animal>> groupedAnimals = map.getAnimalsGroupedAtPositionAndOrdered();
@@ -111,8 +113,8 @@ public class Simulation implements Runnable {
                             System.out.println(e.getMessage());
                         }
                     }
-                    animal1.decreaseEnergy(simulationParameters.energyParameters().minReproduceEnergy());
-                    animal2.decreaseEnergy(simulationParameters.energyParameters().minReproduceEnergy());
+                    animal1.decreaseEnergy(simulationParameters.energyParameters().energyGivenToChild());
+                    animal2.decreaseEnergy(simulationParameters.energyParameters().energyGivenToChild());
                 }
             }
 

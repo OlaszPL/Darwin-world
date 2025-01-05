@@ -73,16 +73,18 @@ public class EarthGlobeMap implements WorldMap {
     public PositionAndDirection determinePositionOfAnimalOnTheEdge(Animal animal, Vector2d newPosition){
         MapDirection orientation = animal.getOrientation();
         Vector2d position = animal.getPosition();
+        int y = position.getY();
 
         if (newPosition.getY() > upperRightBound.getY() || newPosition.getY() < lowerLeftBound.getY()){
             orientation = animal.getOrientation().reverse();
         }
+        else y = newPosition.getY();
 
         if (newPosition.getX() > upperRightBound.getX()){
-            position = new Vector2d(newPosition.getX() % (upperRightBound.getX() + 1), position.getY());
+            position = new Vector2d(newPosition.getX() % (upperRightBound.getX() + 1), y);
         }
         else if (newPosition.getX() < lowerLeftBound.getX()){
-            position = new Vector2d(upperRightBound.getX() + 1 + newPosition.getX(), position.getY());
+            position = new Vector2d(upperRightBound.getX() + 1 + newPosition.getX(), y);
         }
 
         return new PositionAndDirection(position, orientation);
