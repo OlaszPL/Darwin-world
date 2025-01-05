@@ -62,14 +62,14 @@ public enum MapDirection {
 
     public MapDirection reverse() {
         return switch (this) {
-            case NORTHEAST -> SOUTHEAST;
-            case SOUTHEAST -> NORTHEAST;
-            case NORTHWEST -> SOUTHWEST;
-            case SOUTHWEST -> NORTHWEST;
+            case NORTHEAST -> SOUTHWEST;
+            case SOUTHEAST -> NORTHWEST;
+            case NORTHWEST -> SOUTHEAST;
+            case SOUTHWEST -> NORTHEAST;
             case SOUTH -> NORTH;
             case NORTH -> SOUTH;
-            case EAST -> EAST;
-            case WEST -> WEST;
+            case EAST -> WEST;
+            case WEST -> EAST;
         };
     }
 

@@ -78,12 +78,9 @@ public class Simulation implements Runnable {
             for (Animal animal : animals) {
                 animal.rotate();
             }
-            map.mapChanged("Animals roteted");
-            try {
-                Thread.sleep(simulationParameters.miscParameters().interval());
-            } catch (InterruptedException e) {
-                System.out.printf("Thread interrupted! -> %s%n", e.getMessage());
-            }
+            map.mapChanged("Animals rotated");
+
+            sleep();
 
             // execute move
             for (Animal animal: animals) {

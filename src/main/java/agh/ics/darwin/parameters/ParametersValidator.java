@@ -1,5 +1,7 @@
 package agh.ics.darwin.parameters;
 
+import agh.ics.darwin.model.animal.BehaviourType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +50,12 @@ public class ParametersValidator {
         }
         if (miscParameters.interval() <= 0){
             errors.add("Interval should be positive!");
+        }
+        if (miscParameters.behaviourType() == null){
+            errors.add("Behaviour type cannot be null!");
+        }
+        if (miscParameters.plantGeneratorType() == null){
+            errors.add("Plant generator type cannot be null!");
         }
 
         if (!errors.isEmpty()){
