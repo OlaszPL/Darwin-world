@@ -69,11 +69,20 @@ public class Simulation implements Runnable {
             }
             List<Animal> animals = map.getAnimals();
 
-            // execute moves
+            // execute rotation
             for (Animal animal : animals) {
+                animal.rotate();
+            }
+            map.mapChanged("Animals roteted");
+            try {
+                Thread.sleep(simulationParameters.miscParameters().interval());
+            } catch (InterruptedException e) {
+                System.out.printf("Thread interrupted! -> %s%n", e.getMessage());
+            }
+
+            // execute move
+            for (Animal animal: animals) {
                 map.move(animal);
-                animal.decreaseEnergy(1);
-                animal.incrementAge();
             }
 
             List<List<Animal>> groupedAnimals = map.getAnimalsGroupedAtPositionAndOrdered();

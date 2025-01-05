@@ -140,11 +140,13 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, energyForChild, this.behaviourType);
     }
 
-    public void move(MoveValidator validator){
-        switch (behaviourType){
+    public void rotate(){
+        switch (behaviourType) {
             case FULL_PREDESTINATION_BEHAVIOUR -> FullPredestinationBehaviour.executeGene(this);
             case A_BIT_OF_CRAZINESS_BEHAVIOUR -> ABitOfCrazinessBehaviour.executeGene(this);
         }
+    }
+    public void move(MoveValidator validator){
         Vector2d newPosition = this.position.add(this.orientation.toUnitVector());
         if (validator.canMoveTo(newPosition)) this.position = newPosition;
         else{
