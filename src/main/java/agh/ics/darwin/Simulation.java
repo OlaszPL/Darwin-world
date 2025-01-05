@@ -56,17 +56,22 @@ public class Simulation implements Runnable {
         map.deregisterObserver(observer);
     }
 
+    private void sleep(){
+        try {
+            Thread.sleep(simulationParameters.miscParameters().interval());
+        } catch (InterruptedException e) {
+            System.out.printf("Thread interrupted! -> %s%n", e.getMessage());
+        }
+    }
+
     public void run() {
         while (true) {
             // clean dead animals
             map.cleanDeadAnimals(day++);
             map.mapChanged("Cleaned all dead animals");
 
-            try {
-                Thread.sleep(simulationParameters.miscParameters().interval());
-            } catch (InterruptedException e) {
-                System.out.printf("Thread interrupted! -> %s%n", e.getMessage());
-            }
+            sleep();
+
             List<Animal> animals = map.getAnimals();
 
             // execute rotation
@@ -119,11 +124,7 @@ public class Simulation implements Runnable {
 
             map.mapChanged("Day: %s".formatted(day));
 
-            try {
-                Thread.sleep(simulationParameters.miscParameters().interval());
-            } catch (InterruptedException e) {
-                System.out.printf("Thread interrupted! -> %s%n", e.getMessage());
-            }
+            sleep();
         }
     }
 }
