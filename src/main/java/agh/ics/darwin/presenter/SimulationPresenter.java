@@ -29,7 +29,6 @@ public class SimulationPresenter implements MapChangeListener {
     private static final int CELL_WIDTH = 35;
     private static final int CELL_HEIGHT = 35;
     private Simulation simulation;
-    private Thread simulationThread;
 
     @FXML
     public void initialize() {
@@ -43,9 +42,6 @@ public class SimulationPresenter implements MapChangeListener {
     private void handleWindowClosing(WindowEvent event) {
         if (simulation != null) {
             simulation.stop();
-        }
-        if (simulationThread != null) {
-            simulationThread.interrupt();
         }
     }
 
@@ -121,9 +117,6 @@ public class SimulationPresenter implements MapChangeListener {
         if (simulation != null) {
             simulation.stop();
         }
-        if (simulationThread != null) {
-            simulationThread.interrupt();
-        }
 
         EnergyParameters energy = new EnergyParameters(3, 8, 4, 2, 1);
         MapParameters map = new MapParameters(10, 10);
@@ -135,8 +128,7 @@ public class SimulationPresenter implements MapChangeListener {
         simulation = new Simulation(sim);
         simulation.registerObserver(this);
 
-        simulationThread =  new Thread(simulation);
-        simulationThread.start();
+        new Thread(simulation).start();
     }
 
 }
