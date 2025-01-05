@@ -143,7 +143,6 @@ public class EarthGlobeMap implements WorldMap {
                 }
             }
         }
-        mapChanged("Cleaned dead animals");
     }
 
     public List<List<Animal>> getAnimalsGroupedAtPositionAndOrdered(){

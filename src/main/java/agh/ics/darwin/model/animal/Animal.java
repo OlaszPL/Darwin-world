@@ -154,5 +154,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
             this.position = tmp.position();
             this.orientation = tmp.direction();
         }
+        this.decreaseEnergy(1);
+        this.incrementAge();
     }
 }
