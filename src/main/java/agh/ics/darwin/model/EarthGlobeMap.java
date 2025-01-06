@@ -9,11 +9,12 @@ import agh.ics.darwin.model.util.MapVisualizer;
 import agh.ics.darwin.stats.StatsCreator;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 public class EarthGlobeMap implements WorldMap {
     protected final Vector2d lowerLeftBound, upperRightBound;
-    private final Map<Vector2d, List<Animal>> animals = new HashMap<>();
+    private final Map<Vector2d, List<Animal>> animals = new ConcurrentHashMap<>();
     private final Map<Vector2d, Plant> plants = new HashMap<>();
     protected final MapVisualizer vis = new MapVisualizer(this);
     private final List<MapChangeListener> observers = new ArrayList<>();
