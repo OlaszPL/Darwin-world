@@ -295,6 +295,199 @@ class AnimalTest {
         assertEquals(animal.toString(),expectedString);
     }
 
+    @Test
+    void isCompareToResultPositiveWhenAnimalHasMoreEnergyThanOther(){
+        //given:
+        Vector2d position = new Vector2d(0,0);
+        AbstractGenome genome = new FullRandomMutationGenome(5);
+        int energy = 8;
+        Animal animal = new Animal(position, genome, energy);
+        int otherEnergy = 3;
+        Animal other = new Animal(position, genome, otherEnergy);
+
+        //when+then
+        assertTrue(animal.compareTo(other)>0);
+    }
+
+    @Test
+    void isCompareToResultNegativeWhenAnimalHasMoreEnergyThanOther(){
+        //given:
+        Vector2d position = new Vector2d(0,0);
+        AbstractGenome genome = new FullRandomMutationGenome(5);
+        int energy = 8;
+        Animal animal = new Animal(position, genome, energy);
+        int otherEnergy = 10;
+        Animal other = new Animal(position, genome, otherEnergy);
+
+        //when+then
+        assertTrue(animal.compareTo(other)<0);
+    }
+
+    @Test
+    void isCompareToResultPositiveWhenEnergyEqualAndAgeHigher(){
+        //given:
+        Vector2d position = new Vector2d(0,0);
+        AbstractGenome genome = new FullRandomMutationGenome(5);
+        int energy = 5;
+        Animal animal = new Animal(position, genome, energy);
+        int otherEnergy = 5;
+        Animal other = new Animal(position, genome, otherEnergy);
+        animal.incrementAge();
+
+        //when+then
+        assertEquals(animal.getEnergy(),other.getEnergy());
+        assertTrue(animal.getAge()>other.getAge());
+        assertTrue(animal.compareTo(other)>0);
+    }
+
+    @Test
+    void isCompareToResultNegativeWhenEnergyEqualAndAgeLower(){
+        //given:
+        Vector2d position = new Vector2d(0,0);
+        AbstractGenome genome = new FullRandomMutationGenome(5);
+        int energy = 5;
+        Animal animal = new Animal(position, genome, energy);
+        int otherEnergy = 5;
+        Animal other = new Animal(position, genome, otherEnergy);
+        other.incrementAge();
+
+        //when+then
+        assertEquals(animal.getEnergy(),other.getEnergy());
+        assertTrue(animal.getAge()<other.getAge());
+        assertTrue(animal.compareTo(other)<0);
+    }
+
+    @Test
+    void isCompareToResultPositiveWhenEnergyAndAgeEqualAndChildrenNumBigger(){
+        //given:
+        Vector2d position = new Vector2d(0,0);
+        AbstractGenome genome = new FullRandomMutationGenome(5);
+        int energy = 5;
+        Animal animal = new Animal(position, genome, energy);
+        int otherEnergy = 5;
+        Animal other = new Animal(position, genome, otherEnergy);
+        animal.incrementNumberOfChildren();
+
+        //when+then
+        assertEquals(animal.getEnergy(),other.getEnergy());
+        assertEquals(animal.getAge(),other.getAge());
+        assertTrue(animal.getNumberOfChildren()>other.getNumberOfChildren());
+        assertTrue(animal.compareTo(other)>0);
+    }
+
+
+    @Test
+    void isCompareToResultNegativeWhenEnergyAndAgeEqualAndChildrenNumBigger(){
+        //given:
+        Vector2d position = new Vector2d(0,0);
+        AbstractGenome genome = new FullRandomMutationGenome(5);
+        int energy = 5;
+        Animal animal = new Animal(position, genome, energy);
+        int otherEnergy = 5;
+        Animal other = new Animal(position, genome, otherEnergy);
+        other.incrementNumberOfChildren();
+
+        //when+then
+        assertEquals(animal.getEnergy(),other.getEnergy());
+        assertEquals(animal.getAge(),other.getAge());
+        assertTrue(animal.getNumberOfChildren()<other.getNumberOfChildren());
+        assertTrue(animal.compareTo(other)<0);
+    }
+
+    @Test
+    void doesReproducingReturnAnimal(){
+        //given
+        Vector2d position = new Vector2d(1,1);
+        AbstractGenome fatherGenome = new FullRandomMutationGenome(5);
+        AbstractGenome motherGenome = new FullRandomMutationGenome(5);
+
+        Animal father = new Animal(position, fatherGenome, 9);
+        Animal mother = new Animal(position, motherGenome, 7);
+        int minNumberOfMutations=0;
+        int maxNumberOfMutations=2;
+        int energyForChild = 2;
+
+
+        //when+then
+        assertInstanceOf(Animal.class,father.reproduce(mother, minNumberOfMutations,maxNumberOfMutations, energyForChild));
+    }
+
+    @Test
+    void isSumOfEnergyConstantInReproducing(){
+        //given
+        Vector2d position = new Vector2d(1,1);
+        AbstractGenome fatherGenome = new FullRandomMutationGenome(5);
+        AbstractGenome motherGenome = new FullRandomMutationGenome(5);
+
+        Animal father = new Animal(position, fatherGenome, 9);
+        Animal mother = new Animal(position, motherGenome, 7);
+        int minNumberOfMutations=0;
+        int maxNumberOfMutations=2;
+        int energyForChild = 2;
+
+
+        //when
+        int sumOfEnergy = father.getEnergy()+mother.getEnergy();
+        Animal child = father.reproduce(mother, minNumberOfMutations,maxNumberOfMutations, energyForChild);
+
+        //then
+        assertEquals(mother.getEnergy()+father.getEnergy()+child.getEnergy(),sumOfEnergy);
+    }
+
+    @Test
+    void isAnimalsEnergyDecreasedByAppropriateValueWhileReproducing(){
+        //given
+        Vector2d position = new Vector2d(1,1);
+        AbstractGenome fatherGenome = new FullRandomMutationGenome(5);
+        AbstractGenome motherGenome = new FullRandomMutationGenome(5);
+        int initial_father_energy_value = 8;
+        int initial_mother_energy_value = 5;
+        Animal father = new Animal(position, fatherGenome, initial_father_energy_value);
+        Animal mother = new Animal(position, motherGenome, initial_mother_energy_value);
+        int minNumberOfMutations=0;
+        int maxNumberOfMutations=2;
+        int energyForChild = 2;
+
+        //when
+        father.reproduce(mother, minNumberOfMutations,maxNumberOfMutations, energyForChild);
+
+        //then
+        assertEquals(father.getEnergy(),initial_father_energy_value-energyForChild);
+        assertEquals(mother.getEnergy(),initial_mother_energy_value-energyForChild);
+    }
+
+    @Test
+    void isNumberOfChildrenIncrementedInReproducing(){
+        //given
+        Vector2d position = new Vector2d(1,1);
+        AbstractGenome fatherGenome = new FullRandomMutationGenome(5);
+        AbstractGenome motherGenome = new FullRandomMutationGenome(5);
+
+        Animal father = new Animal(position, fatherGenome, 9);
+        Animal mother = new Animal(position, motherGenome, 7);
+        int minNumberOfMutations=0;
+        int maxNumberOfMutations=2;
+        int energyForChild = 2;
+        int num_of_fathers_children = father.getNumberOfChildren();
+        int num_of_mothers_children = mother.getNumberOfChildren();
+
+
+        //when
+        father.reproduce(mother, minNumberOfMutations,maxNumberOfMutations, energyForChild);
+
+        //then
+        assertEquals(father.getNumberOfChildren(),num_of_fathers_children+1);
+        assertEquals(mother.getNumberOfChildren(),num_of_mothers_children+1);
+    }
+
+
+
+
+
+
+
+
+
 
 
 
