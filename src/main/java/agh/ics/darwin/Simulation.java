@@ -123,8 +123,6 @@ public class Simulation implements Runnable {
                             System.out.println(e.getMessage());
                         }
                     }
-                    animal1.decreaseEnergy(simulationParameters.energyParameters().energyGivenToChild());
-                    animal2.decreaseEnergy(simulationParameters.energyParameters().energyGivenToChild());
                 }
             }
 
