@@ -61,6 +61,9 @@ public class ParametersValidator {
         if (energyParameters.moveEnergy() > energyParameters.initialAnimalEnergy()){
             errors.add("Move energy should be lower than initial energy of animal!");
         }
+        if (miscParameters.csvSave() && (miscParameters.csvPath() == null || !miscParameters.csvPath().endsWith(".csv"))){
+            errors.add("Csv path not specified or does not end with .csv extension!");
+        }
 
         if (!errors.isEmpty()){
             throw new InvalidParametersException(String.join(", ", errors));

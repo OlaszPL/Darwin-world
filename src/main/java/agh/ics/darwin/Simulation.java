@@ -12,6 +12,7 @@ import agh.ics.darwin.model.plant.EquatorialForest;
 import agh.ics.darwin.model.util.IncorrectPositionException;
 import agh.ics.darwin.model.util.RandomPositionGenerator;
 import agh.ics.darwin.parameters.SimulationParameters;
+import agh.ics.darwin.stats.CsvHandler;
 import agh.ics.darwin.stats.StatsCreator;
 import agh.ics.darwin.stats.StatsRecord;
 
@@ -23,6 +24,7 @@ public class Simulation implements Runnable {
     private final AbstractPlantGenerator plantGenerator;
     private int day = 0;
     private final StatsCreator statsCreator;
+    private CsvHandler csvHandler = null;
     private volatile boolean running = true;
 
 
@@ -36,8 +38,7 @@ public class Simulation implements Runnable {
 
         for (Vector2d position : positionGenerator){
             AbstractGenome genome = new FullRandomMutationGenome(simulationParameters.miscParameters().genomeLength());
-            Animal animal = new Animal(position, genome, simulationParameters.energyParameters().initialAnimalEnergy(),
-                    simulationParameters.miscParameters().behaviourType());
+            Animal animal = new Animal(position, genome, simulationParameters.energyParameters().initialAnimalEnergy());
             try {
                 this.map.place(animal);
             } catch (IncorrectPositionException e) {
@@ -51,6 +52,10 @@ public class Simulation implements Runnable {
         };
 
         statsCreator = new StatsCreator(map);
+
+        if (simulationParameters.miscParameters().csvSave()) {
+            csvHandler = new CsvHandler(simulationParameters.miscParameters().csvPath());
+        }
     }
 
     public void registerObserver(MapChangeListener observer){
@@ -71,6 +76,7 @@ public class Simulation implements Runnable {
     }
 
     public void stop() {
+        if (simulationParameters.miscParameters().csvSave()) csvHandler.close();
         running = false;
     }
 
@@ -131,6 +137,7 @@ public class Simulation implements Runnable {
 
             map.mapChanged("Day: %s".formatted(day));
             StatsRecord statsRecord = statsCreator.create(day);
+            if (simulationParameters.miscParameters().csvSave()) csvHandler.addRecord(statsRecord);
             System.out.println(statsRecord);
 
             sleep();

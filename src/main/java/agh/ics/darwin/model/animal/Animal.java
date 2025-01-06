@@ -135,7 +135,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.incrementNumberOfChildren();
         other.incrementNumberOfChildren();
 
-        return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, energyForChild, this.behaviourType);
+        return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, energyForChild);
     }
 
     public void rotate(BehaviourType behaviourType){
