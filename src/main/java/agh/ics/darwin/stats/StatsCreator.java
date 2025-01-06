@@ -5,9 +5,7 @@ import agh.ics.darwin.model.Vector2d;
 import agh.ics.darwin.model.animal.Animal;
 import agh.ics.darwin.model.util.Boundary;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -38,18 +36,32 @@ public class StatsCreator {
         return cnt;
     }
 
+    private List<String> mostPopularGenotypes(List<Animal> animals){
+        Map<String, Integer> countMap = new HashMap<>();
+        int maxCount = 0;
+
+        for (Animal animal : animals){
+            String genotype = animal.getGenome().getGenome().stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(""));
+
+            int count = countMap.merge(genotype, 1, Integer::sum);
+            maxCount = Math.max(maxCount, count);
+        }
+
+        List<String> mostPopularGenotypes = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : countMap.entrySet()){
+            if (entry.getValue() == maxCount){
+                mostPopularGenotypes.add(entry.getKey());
+            }
+        }
+
+        return mostPopularGenotypes;
+    }
+
     public StatsRecord create(int day){
         List<Animal> animals = map.getAnimals();
-
-        List<String> animalsGenotypes = animals.stream()
-                .map(animal -> animal.getGenome().getGenome().stream()
-                        .map(String::valueOf)
-                        .collect(Collectors.joining("")))
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .map(Map.Entry::getKey)
-                .toList();
 
         double averageEnergyLevel = animals.stream()
                 .mapToInt(Animal::getEnergy)
@@ -63,7 +75,7 @@ public class StatsCreator {
                 .average()
                 .orElse(0.0);
 
-        return new StatsRecord(day, animals.size(), map.getPlantsSize(), freeFieldsNumber(), animalsGenotypes,
+        return new StatsRecord(day, animals.size(), map.getPlantsSize(), freeFieldsNumber(), mostPopularGenotypes(animals),
                 averageEnergyLevel, averageLifespan, averageNumberOfChildren);
     }
 
