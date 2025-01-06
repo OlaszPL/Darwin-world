@@ -1,9 +1,12 @@
 package agh.ics.darwin.model.animal;
 
+import agh.ics.darwin.model.EarthGlobeMap;
 import agh.ics.darwin.model.MapDirection;
 import agh.ics.darwin.model.Vector2d;
+import agh.ics.darwin.model.WorldMap;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -478,6 +481,78 @@ class AnimalTest {
         //then
         assertEquals(father.getNumberOfChildren(),num_of_fathers_children+1);
         assertEquals(mother.getNumberOfChildren(),num_of_mothers_children+1);
+    }
+
+    @Test
+    void testAnimalMove() {
+        //given
+        WorldMap validator = new EarthGlobeMap(10,10);
+        Vector2d position = new Vector2d(4,4);
+        FullRandomMutationGenome genome = new FullRandomMutationGenome(5);
+        int energy = 30;
+        Animal animal = new Animal(position, genome, energy);
+
+        for (int i=0; i<20; i++){
+            position = animal.getPosition();
+            MapDirection orientation = animal.getOrientation();
+
+            //when
+            animal.move(validator);
+
+            //then
+            Animal animalInStateOfAnimalBeforeMove = new Animal(position,genome,energy);
+            Vector2d newPosition = animalInStateOfAnimalBeforeMove.getPosition().add(orientation.toUnitVector());
+            if (validator.canMoveTo(newPosition)){
+                assertEquals(animal.getPosition(), newPosition);
+            }
+            else {
+                animal.setOrientation(orientation);
+                PositionAndDirection posAndDir = validator.determinePositionOfAnimalOnTheEdge(animalInStateOfAnimalBeforeMove,newPosition);
+                Vector2d expectedPos = posAndDir.position();
+                assertEquals(animal.getPosition(), expectedPos);
+            }
+        }
+    }
+
+    @Test
+    void isFullPredestinationBehaviourRotationCorrect(){
+        //given
+        Vector2d position = new Vector2d(4,4);
+        FullRandomMutationGenome genome = new FullRandomMutationGenome(5);
+        int energy = 30;
+        Animal animal = new Animal(position, genome, energy);
+
+        int activeGene = genome.getActiveGene();
+        MapDirection newOrientation = animal.getOrientation().rotate(activeGene);
+
+        //when
+        animal.rotate(BehaviourType.FULL_PREDESTINATION_BEHAVIOUR);
+
+        //then
+        assertEquals(animal.getOrientation(),newOrientation);
+    }
+
+    @Test
+    void isAnimalWithABitOfCrazinessBehaviourRotatedBasingOnGenesFromItsGenome(){
+        //given
+        Vector2d position = new Vector2d(4,4);
+        FullRandomMutationGenome genome = new FullRandomMutationGenome(5);
+        int energy = 30;
+        Animal animal = new Animal(position, genome, energy);
+
+        for (int i=0; i<20; i++){
+            List<MapDirection> possibleOrientationsBasedOnGenome = new ArrayList<>();
+            for (int j=0; j<genome.getGenome().size(); j++){
+                int gene = genome.getGenome().get(j);
+                possibleOrientationsBasedOnGenome.add(animal.getOrientation().rotate(gene));
+            }
+
+            //when
+            animal.rotate(BehaviourType.A_BIT_OF_CRAZINESS_BEHAVIOUR);
+
+            //then
+            assertTrue(possibleOrientationsBasedOnGenome.contains(animal.getOrientation()));
+        }
     }
 
 
