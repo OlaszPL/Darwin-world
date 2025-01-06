@@ -6,7 +6,6 @@ import agh.ics.darwin.model.animal.Animal;
 import agh.ics.darwin.model.util.Boundary;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class StatsCreator {
