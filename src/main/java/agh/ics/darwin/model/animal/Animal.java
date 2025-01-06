@@ -15,10 +15,8 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private int energy, age, numberOfChildren, numberOfEatenPlants;
     private Integer dayOfDeath = null;
     private final List<Animal> parents = new ArrayList<>();
-    private final BehaviourType behaviourType;
 
-    public Animal(Vector2d position, AbstractGenome genome, int energy, BehaviourType behaviourType){
-        this.behaviourType = behaviourType;
+    public Animal(Vector2d position, AbstractGenome genome, int energy){
         this.position = position;
         this.orientation = MapDirection.getRandomDirection();
         this.genome = genome;
@@ -27,11 +25,11 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.numberOfChildren = 0;
     }
 
-    public Animal(Animal father, Animal mother, int minNumberOfMutations, int maxNumberOfMutations, int energyForChild, BehaviourType behaviourType){
+    public Animal(Animal father, Animal mother, int minNumberOfMutations, int maxNumberOfMutations, int energyForChild){
         this(
                 father.getPosition(),
                 new FullRandomMutationGenome(father, mother, minNumberOfMutations, maxNumberOfMutations),
-                energyForChild * 2, behaviourType
+                energyForChild * 2
         );
         this.parents.add(father);
         this.parents.add(mother);
@@ -140,7 +138,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, energyForChild, this.behaviourType);
     }
 
-    public void rotate(){
+    public void rotate(BehaviourType behaviourType){
         switch (behaviourType) {
             case FULL_PREDESTINATION_BEHAVIOUR -> FullPredestinationBehaviour.executeGene(this);
             case A_BIT_OF_CRAZINESS_BEHAVIOUR -> ABitOfCrazinessBehaviour.executeGene(this);
