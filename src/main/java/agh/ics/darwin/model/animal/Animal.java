@@ -14,7 +14,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private Vector2d position;
     private int energy, age = 0, numberOfChildren = 0, numberOfEatenPlants = 0;
     private Integer dayOfDeath = null;
-    private final List<Animal> parents = new ArrayList<>();
+    private List<Animal> parents = null;
 
     public Animal(Vector2d position, AbstractGenome genome, int energy){
         this.position = position;
@@ -29,8 +29,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
                 new FullRandomMutationGenome(father, mother, minNumberOfMutations, maxNumberOfMutations),
                 energyForChild * 2
         );
-        this.parents.add(father);
-        this.parents.add(mother);
+        this.parents = List.of(father, mother);
     }
 
     public UUID getId(){
@@ -99,13 +98,8 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return Optional.ofNullable(dayOfDeath);
     }
 
-    public List<Animal> getParents() {
-        return parents;
-    }
-
-    public void setParents(Animal father, Animal mother){
-        parents.add(father);
-        parents.add(mother);
+    public Optional<List<Animal>> getParents() {
+        return Optional.ofNullable(parents);
     }
 
     @Override
