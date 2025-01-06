@@ -12,7 +12,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private final AbstractGenome genome;
     private MapDirection orientation;
     private Vector2d position;
-    private int energy, age, numberOfChildren, numberOfEatenPlants;
+    private int energy, age = 0, numberOfChildren = 0, numberOfEatenPlants = 0;
     private Integer dayOfDeath = null;
     private final List<Animal> parents = new ArrayList<>();
 
@@ -21,8 +21,6 @@ public class Animal implements WorldElement, Comparable<Animal> {
         this.orientation = MapDirection.getRandomDirection();
         this.genome = genome;
         this.energy = energy;
-        this.age = 0;
-        this.numberOfChildren = 0;
     }
 
     public Animal(Animal father, Animal mother, int minNumberOfMutations, int maxNumberOfMutations, int energyForChild){
