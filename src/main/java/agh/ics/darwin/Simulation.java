@@ -86,7 +86,7 @@ public class Simulation implements Runnable {
 
             // execute rotation
             for (Animal animal : animals) {
-                animal.rotate();
+                animal.rotate(simulationParameters.miscParameters().behaviourType());
             }
             map.mapChanged("Animals rotated");
 
