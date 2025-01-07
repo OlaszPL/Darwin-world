@@ -79,8 +79,8 @@ public class Simulation implements Runnable {
 
     public void stop() {
         if (simulationParameters.miscParameters().csvSave()) csvHandler.close();
-        countDown();
         running = false;
+        countDown();
     }
 
     // fixes JavaFX being too slow for simulation
@@ -90,7 +90,7 @@ public class Simulation implements Runnable {
         try{
             latch.await();
         } catch (InterruptedException e){
-            System.out.println(e.getMessage());
+            System.out.printf("Thread interrupted! -> %s%n", e.getMessage());
         }
     }
 
@@ -155,6 +155,8 @@ public class Simulation implements Runnable {
             plantGenerator.generate(simulationParameters.miscParameters().dailyPlantsNum());
 
             updateUI("Day: %s".formatted(day));
+
+            // collect statistics
             StatsRecord statsRecord = statsCreator.create(day);
             if (simulationParameters.miscParameters().csvSave()) csvHandler.addRecord(statsRecord);
             System.out.println(statsRecord);
