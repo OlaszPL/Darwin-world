@@ -18,7 +18,7 @@ public class RandomPositionGenerator implements Iterable<Vector2d> {
         totalPositions = maxWidth * maxHeight;
 
         if (number > totalPositions) {
-            throw new IllegalArgumentException("Liczba traw przekracza możliwe różne pozycje");
+            throw new IllegalArgumentException("Liczba zwierząt przekracza możliwe różne pozycje!");
         }
     }
 
