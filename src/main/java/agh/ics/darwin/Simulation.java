@@ -17,6 +17,7 @@ import agh.ics.darwin.stats.StatsCreator;
 import agh.ics.darwin.stats.StatsRecord;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class Simulation implements Runnable {
     private final SimulationParameters simulationParameters;
@@ -26,6 +27,7 @@ public class Simulation implements Runnable {
     private final StatsCreator statsCreator;
     private CsvHandler csvHandler = null;
     private volatile boolean running = true;
+    private CountDownLatch latch = null;
 
 
     public Simulation(SimulationParameters simulationParameters){
@@ -77,24 +79,41 @@ public class Simulation implements Runnable {
 
     public void stop() {
         if (simulationParameters.miscParameters().csvSave()) csvHandler.close();
+        countDown();
         running = false;
+    }
+
+    // fixes JavaFX being too slow for simulation
+    private void updateUI(String message){
+        latch = new CountDownLatch(1);
+        map.mapChanged(message);
+        try{
+            latch.await();
+        } catch (InterruptedException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void countDown(){
+        if (latch != null) latch.countDown();
     }
 
     public void run() {
         while (running) {
             // clean dead animals
             map.cleanDeadAnimals(day++, statsCreator);
-            map.mapChanged("Cleaned all dead animals");
+            updateUI("Cleaned all dead animals");
 
             sleep();
 
             List<Animal> animals = map.getAnimals();
+            if (animals.isEmpty()) stop();
 
             // execute rotation
             for (Animal animal : animals) {
                 animal.rotate(simulationParameters.miscParameters().behaviourType());
             }
-            map.mapChanged("Animals rotated");
+            updateUI("Animals rotated");
 
             sleep();
 
@@ -135,7 +154,7 @@ public class Simulation implements Runnable {
             // generate new plants
             plantGenerator.generate(simulationParameters.miscParameters().dailyPlantsNum());
 
-            map.mapChanged("Day: %s".formatted(day));
+            updateUI("Day: %s".formatted(day));
             StatsRecord statsRecord = statsCreator.create(day);
             if (simulationParameters.miscParameters().csvSave()) csvHandler.addRecord(statsRecord);
             System.out.println(statsRecord);
