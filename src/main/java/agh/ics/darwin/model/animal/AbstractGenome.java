@@ -50,6 +50,9 @@ public abstract class AbstractGenome {
     public int getActiveGene(){
         return genome.get(activeGeneIndex);
     }
+    public int getActiveGeneIndex(){
+        return activeGeneIndex;
+    }
     public void incrementActiveGeneIndex(){
         this.activeGeneIndex++;
         this.activeGeneIndex %= genome.size();
