@@ -21,8 +21,8 @@ class ABitOfCrazinessBehaviourTest {
 
         for (int i=0; i<20; i++){
             List<MapDirection> possibleOrientationsBasedOnGenome = new ArrayList<>();
-            for (int j=0; j<genome.getGenome().size(); j++){
-                int gene = genome.getGenome().get(j);
+            for (int j=0; j<genome.getGenes().size(); j++){
+                int gene = genome.getGenes().get(j);
                 possibleOrientationsBasedOnGenome.add(animal.getOrientation().rotate(gene));
             }
             //when
@@ -44,7 +44,7 @@ class ABitOfCrazinessBehaviourTest {
         FullPredestinationBehaviour.executeGene(animal);
 
         //then
-        assertEquals(genome.getActiveGeneIndex(),(activeGeneIndex+1)%genome.getGenome().size());
+        assertEquals(genome.getActiveGeneIndex(),(activeGeneIndex+1)%genome.getGenes().size());
     }
 
 }

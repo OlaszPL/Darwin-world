@@ -20,7 +20,7 @@ class FullPredestinationBehaviourTest {
         FullPredestinationBehaviour.executeGene(animal);
 
         //then
-        assertEquals(animal.getOrientation(),orientation.rotate(genome.getGenome().get(activeGeneIndex)));
+        assertEquals(animal.getOrientation(),orientation.rotate(genome.getGenes().get(activeGeneIndex)));
     }
 
     @Test
@@ -34,6 +34,6 @@ class FullPredestinationBehaviourTest {
         FullPredestinationBehaviour.executeGene(animal);
 
         //then
-        assertEquals(genome.getActiveGeneIndex(),(activeGeneIndex+1)%genome.getGenome().size());
+        assertEquals(genome.getActiveGeneIndex(),(activeGeneIndex+1)%genome.getGenes().size());
     }
 }

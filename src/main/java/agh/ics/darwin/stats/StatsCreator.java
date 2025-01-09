@@ -40,7 +40,7 @@ public class StatsCreator {
         int maxCount = 0;
 
         for (Animal animal : animals){
-            String genotype = animal.getGenome().getGenome().stream()
+            String genotype = animal.getGenes().stream()
                     .map(String::valueOf)
                     .collect(Collectors.joining(""));
 
