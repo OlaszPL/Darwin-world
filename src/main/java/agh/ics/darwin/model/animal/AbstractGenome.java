@@ -24,7 +24,7 @@ public abstract class AbstractGenome {
         boolean genesOrder = random.nextBoolean();
         int genomeLength = father.getGenome().genome.size();
         if (genesOrder){
-            int splitPoint = (int) ((double) fatherEnergy / (double) (fatherEnergy+motherEnergy)) * genomeLength;
+            int splitPoint = (int) (((double) fatherEnergy / (double) (fatherEnergy+motherEnergy)) * genomeLength);
             for (int i=0; i<splitPoint; i++){
                 this.genome.add(father.getGenome().genome.get(i));
             }
@@ -33,12 +33,12 @@ public abstract class AbstractGenome {
             }
         }
         else {
-            int splitPoint = (int) ((double) motherEnergy / (double) (fatherEnergy+motherEnergy)) * genomeLength;
+            int splitPoint = (int) (((double) motherEnergy / (double) (fatherEnergy+motherEnergy)) * genomeLength);
             for (int i=0; i<splitPoint; i++){
                 this.genome.add(mother.getGenome().genome.get(i));
             }
             for (int i = splitPoint; i< genomeLength; i++){
-                this.genome.add(mother.getGenome().genome.get(i));
+                this.genome.add(father.getGenome().genome.get(i));
             }
         }
         activeGeneIndex = random.nextInt(genomeLength);
