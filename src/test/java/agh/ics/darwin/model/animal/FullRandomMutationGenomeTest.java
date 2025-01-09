@@ -18,21 +18,21 @@ class FullRandomMutationGenomeTest {
         Animal father = new Animal(new Vector2d(2,2),fatherGenome, 6);
         Animal mother = new Animal(new Vector2d(2,2),motherGenome, 4);
         List<Integer> firstPossible = IntStream.range(0, 10)
-                .mapToObj(i -> i < 6 ? fatherGenome.getGenome().get(i) : motherGenome.getGenome().get(i))
+                .mapToObj(i -> i < 6 ? fatherGenome.getGenes().get(i) : motherGenome.getGenes().get(i))
                 .toList();
 
         List<Integer> secondPossible = IntStream.range(0, 10)
-                .mapToObj(i -> i < 6 ? motherGenome.getGenome().get(i) : fatherGenome.getGenome().get(i))
+                .mapToObj(i -> i < 6 ? motherGenome.getGenes().get(i) : fatherGenome.getGenes().get(i))
                 .toList();
 
         //when
         FullRandomMutationGenome genome = new FullRandomMutationGenome(father, mother, 3, 3);
 
         long mutationCount1 = IntStream.range(0, 10)
-                .filter(i -> i < 6 ? genome.getGenome().get(i) != fatherGenome.getGenome().get(i) : genome.getGenome().get(i) != motherGenome.getGenome().get(i))
+                .filter(i -> i < 6 ? genome.getGenes().get(i) != fatherGenome.getGenes().get(i) : genome.getGenes().get(i) != motherGenome.getGenes().get(i))
                 .count();
         long mutationCount2 = IntStream.range(0, 10)
-                .filter(i -> i < 4 ? genome.getGenome().get(i) != motherGenome.getGenome().get(i) : genome.getGenome().get(i) != fatherGenome.getGenome().get(i))
+                .filter(i -> i < 4 ? genome.getGenes().get(i) != motherGenome.getGenes().get(i) : genome.getGenes().get(i) != fatherGenome.getGenes().get(i))
                 .count();
 
         //then
@@ -46,25 +46,19 @@ class FullRandomMutationGenomeTest {
         AbstractGenome motherGenome = new FullRandomMutationGenome(14);
         Animal father = new Animal(new Vector2d(2,2),fatherGenome, 6);
         Animal mother = new Animal(new Vector2d(2,2),motherGenome, 4);
-        List<Integer> firstPossible = IntStream.range(0, 14)
-                .mapToObj(i -> i < 8 ? fatherGenome.getGenome().get(i) : motherGenome.getGenome().get(i))
-                .toList();
-
-        List<Integer> secondPossible = IntStream.range(0, 14)
-                .mapToObj(i -> i < 6 ? motherGenome.getGenome().get(i) : fatherGenome.getGenome().get(i))
-                .toList();
 
         //when
         FullRandomMutationGenome genome = new FullRandomMutationGenome(father, mother, 2, 5);
 
+        //then
         long mutationCount1 = IntStream.range(0, 14)
-                .filter(i -> i < 8 ? genome.getGenome().get(i) != fatherGenome.getGenome().get(i) : genome.getGenome().get(i) != motherGenome.getGenome().get(i))
+                .filter(i -> i < 8 ? genome.getGenes().get(i) != fatherGenome.getGenes().get(i) : genome.getGenes().get(i) != motherGenome.getGenes().get(i))
                 .count();
         long mutationCount2 = IntStream.range(0, 14)
-                .filter(i -> i < 6 ? genome.getGenome().get(i) != motherGenome.getGenome().get(i) : genome.getGenome().get(i) != fatherGenome.getGenome().get(i))
+                .filter(i -> i < 6 ? genome.getGenes().get(i) != motherGenome.getGenes().get(i) : genome.getGenes().get(i) != fatherGenome.getGenes().get(i))
                 .count();
 
         //then
-        assertTrue(mutationCount1>=2 && mutationCount1<=5 || mutationCount2>=3 && mutationCount2<=5);
+        assertTrue(mutationCount1>=2 && mutationCount1<=5 || mutationCount2>=2 && mutationCount2<=5);
     }
 }

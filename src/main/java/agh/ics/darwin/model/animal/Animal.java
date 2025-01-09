@@ -2,7 +2,6 @@ package agh.ics.darwin.model.animal;
 
 import agh.ics.darwin.model.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,6 +54,9 @@ public class Animal implements WorldElement, Comparable<Animal> {
 
     public AbstractGenome getGenome(){
         return genome;
+    }
+    public List<Integer> getGenes(){
+        return genome.getGenes();
     }
 
     public void eat(int energy){

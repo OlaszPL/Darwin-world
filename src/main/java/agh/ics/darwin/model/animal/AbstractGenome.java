@@ -9,13 +9,13 @@ import java.util.stream.IntStream;
 
 public abstract class AbstractGenome {
 
-    protected List<Integer> genome = new ArrayList<>();
+    protected List<Integer> genes = new ArrayList<>();
     protected int activeGeneIndex;
 
     public AbstractGenome(int genomeLength){
         Random random = new Random();
         for (int i = 0; i < genomeLength; i++){
-            this.genome.add(random.nextInt(8));
+            this.genes.add(random.nextInt(8));
         }
         activeGeneIndex = random.nextInt(genomeLength);
     }
@@ -25,35 +25,35 @@ public abstract class AbstractGenome {
         int motherEnergy = mother.getEnergy();
         Random random = new Random();
         boolean genesOrder = random.nextBoolean();
-        int genomeLength = father.getGenome().genome.size();
+        int genomeLength = father.getGenome().genes.size();
         if (genesOrder){
-            int splitPoint = (int) (((double) fatherEnergy / (double) (fatherEnergy+motherEnergy)) * genomeLength);
-            this.genome = IntStream.range(0, genomeLength)
-                    .map(i -> i < splitPoint ? father.getGenome().getGenome().get(i) : mother.getGenome().getGenome().get(i))
+            int splitPoint = (int) ((double) fatherEnergy / (double) (fatherEnergy+motherEnergy) * genomeLength);
+            this.genes = IntStream.range(0, genomeLength)
+                    .map(i -> i < splitPoint ? father.getGenes().get(i) : mother.getGenes().get(i))
                     .boxed()
                     .collect(Collectors.toList());
         }
         else {
-            int splitPoint = (int) (((double) motherEnergy / (double) (fatherEnergy+motherEnergy)) * genomeLength);
-            this.genome = IntStream.range(0, genomeLength)
-                    .map(i -> i < splitPoint ? mother.getGenome().getGenome().get(i) : father.getGenome().getGenome().get(i))
+            int splitPoint = (int) ((double) motherEnergy / (double) (fatherEnergy+motherEnergy) * genomeLength);
+            this.genes = IntStream.range(0, genomeLength)
+                    .map(i -> i < splitPoint ? mother.getGenes().get(i) : father.getGenes().get(i))
                     .boxed()
                     .collect(Collectors.toList());
         }
         activeGeneIndex = random.nextInt(genomeLength);
     }
 
-    public List<Integer> getGenome() {
-        return genome;
+    public List<Integer> getGenes() {
+        return genes;
     }
     public int getActiveGene(){
-        return genome.get(activeGeneIndex);
+        return genes.get(activeGeneIndex);
     }
     public int getActiveGeneIndex(){
         return activeGeneIndex;
     }
     public void incrementActiveGeneIndex(){
         this.activeGeneIndex++;
-        this.activeGeneIndex %= genome.size();
+        this.activeGeneIndex %= genes.size();
     }
 }

@@ -18,7 +18,7 @@ class AbstractGenomeTest {
 
         //when
         AbstractGenome genome = new FullRandomMutationGenome(genomeLength);
-        List<Integer> genes = genome.getGenome();
+        List<Integer> genes = genome.getGenes();
 
         //then
         assertEquals(genes.size(),genomeLength);
@@ -31,7 +31,7 @@ class AbstractGenomeTest {
         AbstractGenome genome = new FullRandomMutationGenome(genomeLength);
 
         //when
-        List<Integer> genes = genome.getGenome();
+        List<Integer> genes = genome.getGenes();
 
         //then
         for (int gene:genes) {
@@ -81,7 +81,7 @@ class AbstractGenomeTest {
         int gene = genome.getActiveGene();
 
         //then
-        assertEquals(gene, genome.getGenome().get(activeGeneIndex));
+        assertEquals(gene, genome.getGenes().get(activeGeneIndex));
     }
 
     @Test
@@ -93,15 +93,15 @@ class AbstractGenomeTest {
         Animal mother = new Animal(new Vector2d(2, 2), motherGenome, 4);
 
         List<Integer> firstPossible = IntStream.range(0, 10)
-                .mapToObj(i -> i < 6 ? fatherGenome.getGenome().get(i) : motherGenome.getGenome().get(i))
+                .mapToObj(i -> i < 6 ? fatherGenome.getGenes().get(i) : motherGenome.getGenes().get(i))
                 .toList();
 
         List<Integer> secondPossible = IntStream.range(0, 10)
-                .mapToObj(i -> i < 4 ? motherGenome.getGenome().get(i) : fatherGenome.getGenome().get(i))
+                .mapToObj(i -> i < 4 ? motherGenome.getGenes().get(i) : fatherGenome.getGenes().get(i))
                 .toList();
 
         // when
-        List<Integer> childGenome = new FullRandomMutationGenome(father, mother,0,0).getGenome();
+        List<Integer> childGenome = new FullRandomMutationGenome(father, mother,0,0).getGenes();
 
         // then
         assertTrue(childGenome.equals(firstPossible) || childGenome.equals(secondPossible));

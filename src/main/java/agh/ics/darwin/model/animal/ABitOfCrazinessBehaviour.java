@@ -11,7 +11,7 @@ class ABitOfCrazinessBehaviour implements AnimalBehaviour{
             animal.setOrientation(animal.getOrientation().rotate(animalGenome.getActiveGene()));
         }
         else {
-            animal.setOrientation(animal.getOrientation().rotate(animalGenome.getGenome().get(RANDOM.nextInt(animalGenome.getGenome().size()))));
+            animal.setOrientation(animal.getOrientation().rotate(animal.getGenes().get(RANDOM.nextInt(animal.getGenes().size()))));
         }
         animalGenome.incrementActiveGeneIndex();
     }
