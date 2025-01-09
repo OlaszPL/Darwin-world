@@ -1,8 +1,11 @@
 package agh.ics.darwin.model.animal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public abstract class AbstractGenome {
 
@@ -25,21 +28,17 @@ public abstract class AbstractGenome {
         int genomeLength = father.getGenome().genome.size();
         if (genesOrder){
             int splitPoint = (int) (((double) fatherEnergy / (double) (fatherEnergy+motherEnergy)) * genomeLength);
-            for (int i=0; i<splitPoint; i++){
-                this.genome.add(father.getGenome().genome.get(i));
-            }
-            for (int i = splitPoint; i< genomeLength; i++){
-                this.genome.add(mother.getGenome().genome.get(i));
-            }
+            this.genome = IntStream.range(0, genomeLength)
+                    .map(i -> i < splitPoint ? father.getGenome().getGenome().get(i) : mother.getGenome().getGenome().get(i))
+                    .boxed()
+                    .collect(Collectors.toList());
         }
         else {
             int splitPoint = (int) (((double) motherEnergy / (double) (fatherEnergy+motherEnergy)) * genomeLength);
-            for (int i=0; i<splitPoint; i++){
-                this.genome.add(mother.getGenome().genome.get(i));
-            }
-            for (int i = splitPoint; i< genomeLength; i++){
-                this.genome.add(father.getGenome().genome.get(i));
-            }
+            this.genome = IntStream.range(0, genomeLength)
+                    .map(i -> i < splitPoint ? mother.getGenome().getGenome().get(i) : father.getGenome().getGenome().get(i))
+                    .boxed()
+                    .collect(Collectors.toList());
         }
         activeGeneIndex = random.nextInt(genomeLength);
     }
