@@ -27,14 +27,14 @@ public abstract class AbstractGenome {
         boolean genesOrder = random.nextBoolean();
         int genomeLength = father.getGenome().genes.size();
         if (genesOrder){
-            int splitPoint = (int) ((double) fatherEnergy / (double) (fatherEnergy+motherEnergy) * genomeLength);
+            int splitPoint = (int) Math.round((double) fatherEnergy / (double) (fatherEnergy+motherEnergy) * genomeLength);
             this.genes = IntStream.range(0, genomeLength)
                     .map(i -> i < splitPoint ? father.getGenes().get(i) : mother.getGenes().get(i))
                     .boxed()
                     .collect(Collectors.toList());
         }
         else {
-            int splitPoint = (int) ((double) motherEnergy / (double) (fatherEnergy+motherEnergy) * genomeLength);
+            int splitPoint = (int) Math.round((double) motherEnergy / (double) (fatherEnergy+motherEnergy) * genomeLength);
             this.genes = IntStream.range(0, genomeLength)
                     .map(i -> i < splitPoint ? mother.getGenes().get(i) : father.getGenes().get(i))
                     .boxed()
