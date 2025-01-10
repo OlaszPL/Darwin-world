@@ -10,28 +10,35 @@ class AbstractPlantGeneratorTest {
 
     @Test
     void testGenerateWithPreferredFields() {
+        // given
         EarthGlobeMap map = new EarthGlobeMap(10, 10);
         AbstractPlantGenerator generator = new EquatorialForest(map, 10) {
         };
 
+        // when
         generator.generate(5);
 
+        // then
         assertEquals(15, map.getPlantsSize());
     }
 
     @Test
     void testGenerateWithNoPlantsBefore() {
+        // given
         EarthGlobeMap map = new EarthGlobeMap(10, 10);
         AbstractPlantGenerator generator = new CreepingJungle(map, 0) {
         };
 
+        // when
         generator.generate(5);
 
+        // then
         assertEquals(5, map.getPlantsSize());
     }
 
     @Test
     void testGenerateWhenAllFieldsOccupied() {
+        // given
         EarthGlobeMap map = new EarthGlobeMap(10, 10);
         AbstractPlantGenerator generator = new EquatorialForest(map, 10) {
         };
@@ -42,30 +49,38 @@ class AbstractPlantGeneratorTest {
             }
         }
 
+        // when
         generator.generate(5);
 
+        // then
         assertEquals(100, map.getPlantsSize());
     }
 
     @Test
     void testGenerateWithZeroPlants() {
+        // given
         EarthGlobeMap map = new EarthGlobeMap(10, 10);
-        AbstractPlantGenerator generator = new EquatorialForest(map, 10) {
+        AbstractPlantGenerator generator = new CreepingJungle(map, 10) {
         };
 
+        // when
         generator.generate(0);
 
+        // then
         assertEquals(10, map.getPlantsSize());
     }
 
     @Test
     void testGenerateWithNegativePlants() {
+        // given
         EarthGlobeMap map = new EarthGlobeMap(10, 10);
         AbstractPlantGenerator generator = new EquatorialForest(map, 10) {
         };
 
+        // when
         generator.generate(-5);
 
+        // then
         assertEquals(10, map.getPlantsSize());
     }
 }
