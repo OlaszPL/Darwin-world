@@ -26,13 +26,13 @@ class AnimalTest {
         Animal animal = new Animal(position, genome, energy);
 
         //then
-        assertEquals(animal.getPosition(), new Vector2d(0,0));
+        assertEquals(new Vector2d(0,0), animal.getPosition());
         assertEquals(animal.getGenome(), genome);
-        assertEquals(animal.getEnergy(),8);
-        assertEquals(animal.getAge(),0);
+        assertEquals(8, animal.getEnergy());
+        assertEquals(0, animal.getAge());
         assertInstanceOf(MapDirection.class,animal.getOrientation());
-        assertEquals(animal.getNumberOfChildren(),0);
-        assertEquals(animal.getNumberOfEatenPlants(),0);
+        assertEquals(0, animal.getNumberOfChildren());
+        assertEquals(0, animal.getNumberOfEatenPlants());
         assertTrue(animal.getDayOfDeath().isEmpty());
         assertTrue(animal.getParents().isEmpty());
     }
@@ -54,7 +54,7 @@ class AnimalTest {
         Animal child = new Animal(father, mother, minNumberOfMutations,maxNumberOfMutations, energyForChild);
 
         //then
-        assertEquals(child.getEnergy(),2*energyForChild);
+        assertEquals(2*energyForChild, child.getEnergy());
 
     }
 
@@ -124,42 +124,42 @@ class AnimalTest {
         //when
         animal.setOrientation(MapDirection.NORTH);
         //then
-        assertEquals(animal.getOrientation(),MapDirection.NORTH);
+        assertEquals(MapDirection.NORTH, animal.getOrientation());
 
         //when
         animal.setOrientation(MapDirection.NORTHEAST);
         //then
-        assertEquals(animal.getOrientation(),MapDirection.NORTHEAST);
+        assertEquals(MapDirection.NORTHEAST, animal.getOrientation());
 
         //when
         animal.setOrientation(MapDirection.EAST);
         //then
-        assertEquals(animal.getOrientation(),MapDirection.EAST);
+        assertEquals(MapDirection.EAST, animal.getOrientation());
 
         //when
         animal.setOrientation(MapDirection.SOUTHEAST);
         //then
-        assertEquals(animal.getOrientation(),MapDirection.SOUTHEAST);
+        assertEquals(MapDirection.SOUTHEAST, animal.getOrientation());
 
         //when
         animal.setOrientation(MapDirection.SOUTH);
         //then
-        assertEquals(animal.getOrientation(),MapDirection.SOUTH);
+        assertEquals(MapDirection.SOUTH, animal.getOrientation());
 
         //when
         animal.setOrientation(MapDirection.SOUTHWEST);
         //then
-        assertEquals(animal.getOrientation(),MapDirection.SOUTHWEST);
+        assertEquals(MapDirection.SOUTHWEST, animal.getOrientation());
 
         //when
         animal.setOrientation(MapDirection.WEST);
         //then
-        assertEquals(animal.getOrientation(),MapDirection.WEST);
+        assertEquals(MapDirection.WEST, animal.getOrientation());
 
         //when
         animal.setOrientation(MapDirection.NORTHWEST);
         //then
-        assertEquals(animal.getOrientation(),MapDirection.NORTHWEST);
+        assertEquals(MapDirection.NORTHWEST, animal.getOrientation());
     }
 
     @Test
@@ -187,7 +187,7 @@ class AnimalTest {
         animal.eat(5);
 
         //then
-        assertEquals(animal.getEnergy(),13);
+        assertEquals(13, animal.getEnergy());
     }
 
     @Test
@@ -201,12 +201,12 @@ class AnimalTest {
         //when
         animal.eat(5);
         //then
-        assertEquals(animal.getNumberOfEatenPlants(),1);
+        assertEquals(1, animal.getNumberOfEatenPlants());
 
         //when
         animal.eat(2);
         //then
-        assertEquals(animal.getNumberOfEatenPlants(),2);
+        assertEquals(2, animal.getNumberOfEatenPlants());
     }
 
     @Test
@@ -220,12 +220,12 @@ class AnimalTest {
         //when
         animal.decreaseEnergy(5);
         //then
-        assertEquals(animal.getEnergy(),3);
+        assertEquals(3, animal.getEnergy());
 
         //when
         animal.decreaseEnergy(2);
         //then
-        assertEquals(animal.getEnergy(),1);
+        assertEquals(1, animal.getEnergy());
     }
 
     @Test
@@ -239,12 +239,12 @@ class AnimalTest {
         //when
         animal.incrementAge();
         //then
-        assertEquals(animal.getAge(),1);
+        assertEquals(1, animal.getAge());
 
         //when
         animal.incrementAge();
         //then
-        assertEquals(animal.getAge(),2);
+        assertEquals(2, animal.getAge());
     }
 
     @Test
@@ -258,12 +258,12 @@ class AnimalTest {
         //when
         animal.incrementNumberOfChildren();
         //then
-        assertEquals(animal.getNumberOfChildren(),1);
+        assertEquals(1, animal.getNumberOfChildren());
 
         //when
         animal.incrementNumberOfChildren();
         //then
-        assertEquals(animal.getNumberOfChildren(),2);
+        assertEquals(2, animal.getNumberOfChildren());
     }
 
     @Test
@@ -455,8 +455,8 @@ class AnimalTest {
         father.reproduce(mother, minNumberOfMutations,maxNumberOfMutations, energyForChild);
 
         //then
-        assertEquals(father.getEnergy(),initial_father_energy_value-energyForChild);
-        assertEquals(mother.getEnergy(),initial_mother_energy_value-energyForChild);
+        assertEquals(initial_father_energy_value-energyForChild, father.getEnergy());
+        assertEquals(initial_mother_energy_value-energyForChild, mother.getEnergy());
     }
 
     @Test

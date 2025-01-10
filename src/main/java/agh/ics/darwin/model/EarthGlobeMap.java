@@ -107,7 +107,7 @@ public class EarthGlobeMap implements WorldMap {
     }
 
     public void addPlant(Plant plant){
-        this.plants.put(plant.getPosition(), plant);
+        if (!this.plants.containsKey(plant.getPosition())) this.plants.put(plant.getPosition(), plant);
     }
 
     @Override
