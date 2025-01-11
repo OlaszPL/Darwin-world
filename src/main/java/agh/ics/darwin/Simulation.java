@@ -69,6 +69,11 @@ public class Simulation implements Runnable {
         map.deregisterObserver(observer);
     }
 
+    // used to make unit tests of simulation
+    EarthGlobeMap getMap(){
+        return this.map;
+    }
+
     private void sleep(){
         try {
             Thread.sleep(simulationParameters.miscParameters().interval());
