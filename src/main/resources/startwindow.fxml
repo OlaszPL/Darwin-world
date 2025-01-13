@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.scene.control.ComboBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="agh.ics.darwin.StartWindow"
             minHeight="550.0" minWidth="850.0">
+    <center>
+        <GridPane alignment="CENTER" hgap="10" vgap="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
 
+            <Label text="Map Settings" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" style="-fx-font-weight: bold;"/>
+            <Label text="Width" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Spinner fx:id="widthSpinner" GridPane.columnIndex="1" GridPane.rowIndex="1" editable="true" prefWidth="80"/>
+            <Label text="Height" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <Spinner fx:id="heightSpinner" GridPane.columnIndex="1" GridPane.rowIndex="2" editable="true" prefWidth="80"/>
+
+            <Label text="Animal Parameters" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2" style="-fx-font-weight: bold;"/>
+            <Label text="Starting number" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <Spinner fx:id="startAnimalsNum" GridPane.columnIndex="1" GridPane.rowIndex="5" editable="true" prefWidth="80"/>
+            <Label text="Genome length" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <Spinner fx:id="genomeLength" GridPane.columnIndex="1" GridPane.rowIndex="7" editable="true" prefWidth="80"/>
+            <Label text="Behaviour type" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+            <ComboBox fx:id="behaviourType" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+        </GridPane>
+    </center>
 </BorderPane>
