@@ -1,10 +1,7 @@
 package agh.ics.darwin.presenter;
 
 import agh.ics.darwin.Simulation;
-import agh.ics.darwin.model.MapChangeListener;
-import agh.ics.darwin.model.Vector2d;
-import agh.ics.darwin.model.WorldElement;
-import agh.ics.darwin.model.WorldMap;
+import agh.ics.darwin.model.*;
 import agh.ics.darwin.model.animal.BehaviourType;
 import agh.ics.darwin.model.plant.PlantGeneratorType;
 import agh.ics.darwin.model.util.Boundary;
@@ -71,7 +68,7 @@ public class SimulationPresenter implements MapChangeListener {
             for (int y = bottom; y <= top; y++) {
                 Vector2d position = new Vector2d(x, y);
                 if (map.isOccupied(position)) {
-                    mapGrid.add(new Label(map.objectAt(position).toString()), x - left + 1, top - y + 1);
+                    mapGrid.add(new WorldElementBox(map.objectAt(position)), position.getX() - left + 1, top - position.getY() + 1);
                 }
             }
         }
