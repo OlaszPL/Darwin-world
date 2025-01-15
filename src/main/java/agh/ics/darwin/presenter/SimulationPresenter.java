@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -51,57 +52,42 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    public void drawMap(WorldMap map) {
+    public void drawMap(WorldMap map){
         clearGrid();
         Boundary boundary = map.getCurrentBounds();
+        int left = boundary.lowerLeft().getX();
+        int right = boundary.upperRight().getX();
+        int bottom = boundary.lowerLeft().getY();
+        int top = boundary.upperRight().getY();
+        drawAxes(left, right, bottom, top);
+        drawMapElements(map, left, right, bottom, top);
+        for (Node label : mapGrid.getChildren()){
+            GridPane.setHalignment(label, HPos.CENTER);
+        }
+    }
 
-        // Dodanie kolumn (z zapasem na oznaczenie osi Y)
-        for (int x = boundary.lowerLeft().getX(); x <= boundary.upperRight().getX() + 1; x++) {
+    private void drawMapElements(WorldMap map, int left, int right, int bottom, int top) {
+        for (int x = left; x <= right; x++) {
+            for (int y = bottom; y <= top; y++) {
+                Vector2d position = new Vector2d(x, y);
+                if (map.isOccupied(position)) {
+                    mapGrid.add(new Label(map.objectAt(position).toString()), x - left + 1, top - y + 1);
+                }
+            }
+        }
+    }
+
+    private void drawAxes(int left, int right, int bottom, int top) {
+        mapGrid.add(new Label("y\\x"),0,0);
+        mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
+        mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
+        for (int x = left; x <= right; x++){
+            mapGrid.add(new Label("%d".formatted(x)), x - left + 1, 0);
             mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
         }
-
-        // Dodanie wierszy (włącznie z wierszem na oznaczenia osi X na dole)
-        for (int y = boundary.lowerLeft().getY(); y <= boundary.upperRight().getY() + 1; y++) {
+        for (int y = bottom; y <= top; y++){
+            mapGrid.add(new Label("%d".formatted(y)), 0,  top - y + 1);
             mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
-        }
-
-        // Dodanie etykiety "y/x"
-        Label sign = new Label("y/x");
-        GridPane.setHalignment(sign, HPos.CENTER);
-        GridPane.setValignment(sign, VPos.CENTER);
-        // Umieszczamy etykietę w lewym dolnym rogu siatki oznaczeń
-        mapGrid.add(sign, 0, boundary.upperRight().getY() - boundary.lowerLeft().getY() + 1);
-
-        // Dodanie oznaczeń osi X (na dole)
-        for (int x = boundary.lowerLeft().getX(); x <= boundary.upperRight().getX(); x++) {
-            Label label = new Label(Integer.toString(x));
-            GridPane.setHalignment(label, HPos.CENTER);
-            GridPane.setValignment(label, VPos.CENTER);
-            int rowIndex = boundary.upperRight().getY() - boundary.lowerLeft().getY() + 1;
-            mapGrid.add(label, x - boundary.lowerLeft().getX() + 1, rowIndex);
-        }
-
-        // Dodanie oznaczeń osi Y (po lewej stronie, rosnąco od dołu)
-        for (int y = boundary.lowerLeft().getY(); y <= boundary.upperRight().getY(); y++) {
-            Label label = new Label(Integer.toString(y));
-            GridPane.setHalignment(label, HPos.CENTER);
-            GridPane.setValignment(label, VPos.CENTER);
-            int invertedY = boundary.upperRight().getY() - y + boundary.lowerLeft().getY();
-            mapGrid.add(label, 0, invertedY);
-        }
-
-        // Dodanie elementów mapy (z odwróceniem osi Y, bo domyślnie jest w przeciwną stronę)
-        for (WorldElement element : map.getElements()) {
-            Vector2d pos = element.getPosition();
-            Vector2d mapPos = new Vector2d(
-                    pos.getX() - boundary.lowerLeft().getX() + 1,
-                    boundary.upperRight().getY() - pos.getY() + boundary.lowerLeft().getY()
-            );
-
-            Label label = new Label(map.objectAt(pos).toString());
-            GridPane.setHalignment(label, HPos.CENTER);
-            GridPane.setValignment(label, VPos.CENTER);
-            mapGrid.add(label, mapPos.getX(), mapPos.getY());
         }
     }
 
