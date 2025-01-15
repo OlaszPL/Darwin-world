@@ -19,4 +19,9 @@ public class Plant implements WorldElement {
     public String toString() {
         return "*";
     }
+
+    @Override
+    public String getResourceName() {
+        return "/images/grass.png";
+    }
 }

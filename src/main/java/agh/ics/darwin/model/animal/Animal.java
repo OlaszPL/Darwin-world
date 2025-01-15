@@ -110,6 +110,20 @@ public class Animal implements WorldElement, Comparable<Animal> {
     }
 
     @Override
+    public String getResourceName() {
+        return switch(this.orientation){
+            case NORTH -> "/images/N.png";
+            case NORTHEAST ->"/images/NE.png";
+            case EAST -> "/images/E.png";
+            case SOUTHEAST ->"/images/SE.png";
+            case SOUTH -> "/images/S.png";
+            case SOUTHWEST -> "/images/SW.png";
+            case WEST -> "/images/W.png";
+            case NORTHWEST -> "/images/NW.png";
+        };
+    }
+
+    @Override
     public int compareTo(Animal other){
         if (this.energy != other.energy){
             return this.energy - other.energy;
