@@ -8,6 +8,7 @@
 
 <?import javafx.scene.control.ComboBox?>
 
+<?import javafx.scene.control.Button?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="agh.ics.darwin.StartWindow"
@@ -31,6 +32,7 @@
             <Spinner fx:id="genomeLength" GridPane.columnIndex="1" GridPane.rowIndex="7" editable="true" prefWidth="80"/>
             <Label text="Behaviour type" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
             <ComboBox fx:id="behaviourType" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+            <Button text="New Simulation" onAction="#newSimulation"/>
 
         </GridPane>
     </center>

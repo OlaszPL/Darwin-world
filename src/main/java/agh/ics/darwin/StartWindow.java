@@ -2,6 +2,7 @@ package agh.ics.darwin;
 
 import agh.ics.darwin.model.animal.BehaviourType;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -46,5 +47,15 @@ public class StartWindow extends Application {
         startAnimalsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
         genomeLength.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
         behaviourType.getItems().setAll(BehaviourType.values());
+    }
+
+    @FXML
+    public void newSimulation(ActionEvent actionEvent) {
+        SimulationApp simulationApp = new SimulationApp();
+        try {
+            simulationApp.start(new Stage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
