@@ -1,6 +1,10 @@
 package agh.ics.darwin;
 
 import agh.ics.darwin.model.animal.BehaviourType;
+import atlantafx.base.theme.CupertinoLight;
+import atlantafx.base.theme.Dracula;
+import atlantafx.base.theme.NordDark;
+import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +37,7 @@ public class StartWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        Application.setUserAgentStylesheet(new CupertinoLight().getUserAgentStylesheet());
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("startwindow.fxml"));
         BorderPane viewRoot = loader.load();
