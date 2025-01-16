@@ -88,6 +88,11 @@ public class Simulation implements Runnable {
         countDown();
     }
 
+    public void continueSimulation(){
+        running = true;
+        this.run();
+    }
+
     // fixes JavaFX being too slow for simulation
     private void updateUI(String message){
         latch = new CountDownLatch(1);

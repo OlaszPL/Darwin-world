@@ -16,7 +16,8 @@
     </padding>
     <top>
         <VBox spacing="10" alignment="CENTER">
-            <Button text="Start" onAction="#onSimulationStartClicked"/>
+            <Button fx:id="ContinueButton" text="Continue" onAction="#onContinueClicked"/>
+            <Button fx:id="StopButton" text="Stop" onAction="#onSimulationStopClicked"/>
         </VBox>
     </top>
     <center>

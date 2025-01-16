@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -26,6 +27,8 @@ public class SimulationPresenter implements MapChangeListener {
     public GridPane mapGrid;
     private static final int CELL_WIDTH = 35;
     private static final int CELL_HEIGHT = 35;
+    public Button StopButton;
+    public Button ContinueButton;
     private Simulation simulation;
 
     @FXML
@@ -115,6 +118,19 @@ public class SimulationPresenter implements MapChangeListener {
         simulation.registerObserver(this);
 
         new Thread(simulation).start();
+        ContinueButton.setDisable(true);
+        StopButton.setDisable(false);
     }
 
+    public void onContinueClicked(){
+        simulation.continueSimulation();
+        ContinueButton.setDisable(true);
+        StopButton.setDisable(false);
+    }
+
+    public void onSimulationStopClicked(ActionEvent actionEvent) {
+        StopButton.setDisable(true);
+        ContinueButton.setDisable(false);
+        simulation.stop();
+    }
 }
