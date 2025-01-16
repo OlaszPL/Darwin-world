@@ -33,6 +33,7 @@ public class SimulationPresenter implements MapChangeListener {
         // Dodajemy listener do okna po inicjalizacji komponentów
         Platform.runLater(() -> {
             Stage stage = (Stage) mapGrid.getScene().getWindow();
+            onSimulationStartClicked();
             stage.setOnCloseRequest(this::handleWindowClosing);
         });
     }
@@ -97,7 +98,7 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
-    public void onSimulationStartClicked(ActionEvent actionEvent) {
+    public void onSimulationStartClicked() {
         if (simulation != null) {
             simulation.stop();
         }
