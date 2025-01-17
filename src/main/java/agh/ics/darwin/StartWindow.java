@@ -4,7 +4,6 @@ import agh.ics.darwin.model.animal.BehaviourType;
 import agh.ics.darwin.model.plant.PlantGeneratorType;
 import atlantafx.base.theme.CupertinoLight;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
