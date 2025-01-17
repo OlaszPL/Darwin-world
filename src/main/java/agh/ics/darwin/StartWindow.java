@@ -2,6 +2,7 @@ package agh.ics.darwin;
 
 import agh.ics.darwin.model.animal.BehaviourType;
 import agh.ics.darwin.model.plant.PlantGeneratorType;
+import agh.ics.darwin.presenter.PresetCreator;
 import atlantafx.base.theme.CupertinoLight;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -9,8 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 public class StartWindow extends Application {
@@ -26,6 +29,8 @@ public class StartWindow extends Application {
     public CheckBox csvSave;
     @FXML
     public TextField csvFileName;
+    @FXML
+    public Button browseButton;
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
@@ -72,10 +77,34 @@ public class StartWindow extends Application {
         interval.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 10));
         csvSave.setSelected(false);
         csvFileName.setDisable(true);
+        browseButton.setDisable(true);
         csvFileName.setText("stats.csv");
 
-        csvSave.selectedProperty().addListener((observable, oldValue, newValue) -> csvFileName.setDisable(!newValue));
+        csvSave.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            csvFileName.setDisable(!newValue);
+            browseButton.setDisable(!newValue);
+        });
+    }
 
+    @FXML
+    public void browseCsvFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select CSV File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(csvFileName.getScene().getWindow());
+        if (file != null) {
+            csvFileName.setText(file.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    public void savePreset() {
+        PresetCreator.savePreset(this, (Stage) widthSpinner.getScene().getWindow());
+    }
+
+    @FXML
+    public void loadPreset() {
+        PresetCreator.loadPreset(this, (Stage) widthSpinner.getScene().getWindow());
     }
 
     @FXML

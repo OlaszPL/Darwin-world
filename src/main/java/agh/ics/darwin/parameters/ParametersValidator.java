@@ -64,6 +64,12 @@ public class ParametersValidator {
         if (miscParameters.csvSave() && (miscParameters.csvPath() == null || !miscParameters.csvPath().endsWith(".csv"))){
             errors.add("Csv path not specified or does not end with .csv extension!");
         }
+        if (miscParameters.startPlantsNum() > mapParameters.width() * mapParameters.width()){
+            errors.add("Number of starting plants can't be higher than number of fields!");
+        }
+        if (miscParameters.dailyPlantsNum() > mapParameters.width() * mapParameters.width()){
+            errors.add("Number of daily plants can't be higher than number of fields!");
+        }
 
         if (!errors.isEmpty()){
             throw new InvalidParametersException(String.join(", ", errors));
