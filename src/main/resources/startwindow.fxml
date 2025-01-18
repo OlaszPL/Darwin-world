@@ -5,35 +5,97 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.geometry.Insets?>
-
 <?import javafx.scene.control.ComboBox?>
-
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Separator?>
+
+<?import javafx.scene.layout.StackPane?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="agh.ics.darwin.StartWindow"
-            minHeight="550.0" minWidth="850.0">
+            minHeight="550.0" minWidth="850.0"
+            stylesheets="@startWindowStyle.css">
+    <top>
+    </top>
     <center>
-        <GridPane alignment="CENTER" hgap="10" vgap="10">
+        <GridPane alignment="CENTER" hgap="20" vgap="10">
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
 
-            <Label text="Map Settings" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" style="-fx-font-weight: bold;"/>
-            <Label text="Width" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-            <Spinner fx:id="widthSpinner" GridPane.columnIndex="1" GridPane.rowIndex="1" editable="true" prefWidth="80"/>
-            <Label text="Height" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-            <Spinner fx:id="heightSpinner" GridPane.columnIndex="1" GridPane.rowIndex="2" editable="true" prefWidth="80"/>
+            <!-- Column 1 -->
+            <Label text="Map width" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Spinner fx:id="widthSpinner" GridPane.columnIndex="1" GridPane.rowIndex="0" editable="true" prefWidth="80"/>
+            <Label text="Map height" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+            <Spinner fx:id="heightSpinner" GridPane.columnIndex="3" GridPane.rowIndex="0" editable="true" prefWidth="80"/>
 
-            <Label text="Animal Parameters" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2" style="-fx-font-weight: bold;"/>
-            <Label text="Starting number" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-            <Spinner fx:id="startAnimalsNum" GridPane.columnIndex="1" GridPane.rowIndex="5" editable="true" prefWidth="80"/>
-            <Label text="Genome length" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-            <Spinner fx:id="genomeLength" GridPane.columnIndex="1" GridPane.rowIndex="7" editable="true" prefWidth="80"/>
-            <Label text="Behaviour type" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-            <ComboBox fx:id="behaviourType" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
-            <Button text="New Simulation" onAction="#newSimulation"/>
+            <Separator GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="4"/>
+
+            <padding>
+                <Insets top="10" right="10" bottom="20" left="10"/>
+            </padding>
+
+            <Label text="Animal Parameters" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+            <Label text="Starting number" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <Spinner fx:id="startAnimalsNum" GridPane.columnIndex="1" GridPane.rowIndex="3" editable="true" prefWidth="80"/>
+            <Label text="Genome length" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+            <Spinner fx:id="genomeLength" GridPane.columnIndex="1" GridPane.rowIndex="4" editable="true" prefWidth="80"/>
+            <Label text="Minimal number of mutations" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+            <Spinner fx:id="minMutationsNum" GridPane.columnIndex="1" GridPane.rowIndex="5" editable="true" prefWidth="80"/>
+            <Label text="Maximal number of mutations" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <Spinner fx:id="maxMutationsNum" GridPane.columnIndex="1" GridPane.rowIndex="6" editable="true" prefWidth="80"/>
+            <Label text="Behaviour type" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+            <ComboBox fx:id="behaviourType" GridPane.columnIndex="1" GridPane.rowIndex="7" prefWidth="170"/>
+
+            <Label text="Plant Parameters" GridPane.columnIndex="0" GridPane.rowIndex="8" style="-fx-font-weight: bold;"/>
+            <Label text="Starting number" GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+            <Spinner fx:id="startPlantsNum" GridPane.columnIndex="1" GridPane.rowIndex="9" editable="true" prefWidth="80"/>
+            <Label text="Daily number" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+            <Spinner fx:id="dailyPlantsNum" GridPane.columnIndex="1" GridPane.rowIndex="10" editable="true" prefWidth="80"/>
+            <Label text="Generator type" GridPane.columnIndex="0" GridPane.rowIndex="11"/>
+            <ComboBox fx:id="plantGeneratorType" GridPane.columnIndex="1" GridPane.rowIndex="11" prefWidth="170"/>
+
+            <!-- Column 2 -->
+            <Label text="Energy Parameters" GridPane.columnIndex="2" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+            <Label text="Initial animal energy" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+            <Spinner fx:id="initialAnimalEnergy" GridPane.columnIndex="3" GridPane.rowIndex="3" editable="true" prefWidth="80"/>
+            <Label text="Minimum reproduce energy" GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+            <Spinner fx:id="minReproduceEnergy" GridPane.columnIndex="3" GridPane.rowIndex="4" editable="true" prefWidth="80"/>
+            <Label text="Energy given to child" GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+            <Spinner fx:id="energyGivenToChild" GridPane.columnIndex="3" GridPane.rowIndex="5" editable="true" prefWidth="80"/>
+            <Label text="Move energy" GridPane.columnIndex="2" GridPane.rowIndex="6"/>
+            <Spinner fx:id="moveEnergy" GridPane.columnIndex="3" GridPane.rowIndex="6" editable="true" prefWidth="80"/>
+            <Label text="Energy per plant" GridPane.columnIndex="2" GridPane.rowIndex="7"/>
+            <Spinner fx:id="onePlantEnergy" GridPane.columnIndex="3" GridPane.rowIndex="7" editable="true" prefWidth="80"/>
+
+            <Label text="Simulation Settings" GridPane.columnIndex="2" GridPane.rowIndex="8" style="-fx-font-weight: bold;"/>
+            <Label text="Frame interval" GridPane.columnIndex="2" GridPane.rowIndex="9"/>
+            <Spinner fx:id="interval" GridPane.columnIndex="3" GridPane.rowIndex="9" editable="true" prefWidth="80"/>
+            <Label text="Save to CSV" GridPane.columnIndex="2" GridPane.rowIndex="10"/>
+            <CheckBox fx:id="csvSave" GridPane.columnIndex="3" GridPane.rowIndex="10"/>
+            <Label text="CSV File Name" GridPane.columnIndex="2" GridPane.rowIndex="11"/>
+            <HBox GridPane.columnIndex="3" GridPane.rowIndex="11" spacing="10">
+                <TextField fx:id="csvFileName" prefWidth="132" editable="false"/>
+                <Button fx:id="browseButton" text="📁" onAction="#browseCsvFile" prefWidth="38"/>
+            </HBox>
 
         </GridPane>
     </center>
+    <bottom>
+        <StackPane>
+            <HBox alignment="CENTER">
+                <Button text="New Simulation" onAction="#newSimulation"/>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" StackPane.alignment="BOTTOM_RIGHT" spacing="10">
+                <padding>
+                    <Insets top="20" bottom="10" right="10"/>
+                </padding>
+                <Button text="Save" onAction="#savePreset"/>
+                <Button text="Load" onAction="#loadPreset"/>
+            </HBox>
+        </StackPane>
+    </bottom>
 </BorderPane>

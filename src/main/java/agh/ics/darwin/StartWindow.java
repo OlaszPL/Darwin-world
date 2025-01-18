@@ -1,31 +1,36 @@
 package agh.ics.darwin;
 
 import agh.ics.darwin.model.animal.BehaviourType;
+import agh.ics.darwin.model.plant.PlantGeneratorType;
+import agh.ics.darwin.presenter.PresetCreator;
 import atlantafx.base.theme.CupertinoLight;
-import atlantafx.base.theme.Dracula;
-import atlantafx.base.theme.NordDark;
-import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 public class StartWindow extends Application {
-    public Spinner<Integer> startAnimalsNum;
-    public Spinner<Integer> genomeLength;
+    @FXML
+    public Spinner<Integer> startAnimalsNum, genomeLength, minMutationsNum, maxMutationsNum, widthSpinner, heightSpinner,
+    startPlantsNum, dailyPlantsNum, initialAnimalEnergy, minReproduceEnergy, energyGivenToChild, moveEnergy, onePlantEnergy,
+    interval;
+    @FXML
     public ComboBox<BehaviourType> behaviourType;
     @FXML
-    private Spinner<Integer> widthSpinner;
+    public ComboBox<PlantGeneratorType> plantGeneratorType;
     @FXML
-    private Spinner<Integer> heightSpinner;
+    public CheckBox csvSave;
+    @FXML
+    public TextField csvFileName;
+    @FXML
+    public Button browseButton;
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
@@ -47,20 +52,68 @@ public class StartWindow extends Application {
 
     @FXML
     public void initialize() {
+        // preferencje wartości do ustawienia
         widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
         heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
-        startAnimalsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
+
+        startAnimalsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 100, 10));
         genomeLength.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
         behaviourType.getItems().setAll(BehaviourType.values());
+        behaviourType.setValue(BehaviourType.FULL_PREDESTINATION_BEHAVIOUR);
+        minMutationsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
+        maxMutationsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
+
+        startPlantsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
+        dailyPlantsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
+        plantGeneratorType.getItems().setAll(PlantGeneratorType.values());
+        plantGeneratorType.setValue(PlantGeneratorType.EQUATORIAL_FOREST);
+
+        initialAnimalEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
+        minReproduceEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
+        energyGivenToChild.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
+        moveEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
+        onePlantEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
+
+        interval.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 10));
+        csvSave.setSelected(false);
+        csvFileName.setDisable(true);
+        browseButton.setDisable(true);
+        csvFileName.setText("stats.csv");
+
+        csvSave.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            csvFileName.setDisable(!newValue);
+            browseButton.setDisable(!newValue);
+        });
     }
 
     @FXML
-    public void newSimulation(ActionEvent actionEvent) {
+    public void browseCsvFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select CSV File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(csvFileName.getScene().getWindow());
+        if (file != null) {
+            csvFileName.setText(file.getAbsolutePath());
+        }
+    }
+
+    @FXML
+    public void savePreset() {
+        PresetCreator.savePreset(this, (Stage) widthSpinner.getScene().getWindow());
+    }
+
+    @FXML
+    public void loadPreset() {
+        PresetCreator.loadPreset(this, (Stage) widthSpinner.getScene().getWindow());
+    }
+
+    @FXML
+    public void newSimulation() {
         SimulationApp simulationApp = new SimulationApp();
         try {
             simulationApp.start(new Stage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
