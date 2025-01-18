@@ -24,12 +24,12 @@
                     <NumberAxis label="Number" />
                 </yAxis>
             </LineChart>
-            <LineChart fx:id="energyChart" prefHeight="266.0" prefWidth="325.0" title="Average energy, lifespan, children number">
+            <LineChart fx:id="energyChart" prefHeight="266.0" prefWidth="325.0" title="Energy, Lifespan, Children Number">
                 <xAxis>
                     <NumberAxis label="Days" />
                 </xAxis>
                 <yAxis>
-                    <NumberAxis label="Number" />
+                    <NumberAxis label="Average" />
                 </yAxis>
             </LineChart>
 
@@ -43,16 +43,12 @@
             </HBox>
 
             <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true" prefHeight="10.0" prefWidth="2328.0" />
+            <Label fx:id="descriptionLabel" text="Tutaj pojawi się opis ruchu" textAlignment="CENTER"/>
         </VBox>
     </center>
    <bottom>
-      <HBox prefHeight="899.0" prefWidth="830.0" BorderPane.alignment="CENTER">
-         <children>
-               <Label fx:id="popularGenotypesLabel" text="Most Popular Genotypes" />
-         </children>
-      </HBox>
+       <HBox alignment="CENTER">
+           <Label fx:id="popularGenotypesLabel" text="Most Popular Genotypes"/>
+       </HBox>
    </bottom>
-    <bottom>
-        <Label fx:id="descriptionLabel" text="Tutaj pojawi się opis ruchu" textAlignment="CENTER"/>
-    </bottom>
 </BorderPane>
