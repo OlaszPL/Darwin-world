@@ -6,6 +6,7 @@ import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.parameters.*;
 import agh.ics.darwin.stats.StatsRecord;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -25,6 +26,7 @@ import javafx.stage.WindowEvent;
 import java.util.Objects;
 
 public class SimulationPresenter implements MapChangeListener {
+    public Button toggleButton;
     private SimulationParameters simulationParameters;
     @FXML
     public Label descriptionLabel;
@@ -32,8 +34,6 @@ public class SimulationPresenter implements MapChangeListener {
     public GridPane mapGrid;
     private static final int CELL_WIDTH = 35;
     private static final int CELL_HEIGHT = 35;
-    public Button StopButton;
-    public Button ContinueButton;
     public TextArea popularGenotypesLabel;
     public VBox statsBox;
     public LineChart<Number, Number> animalsChart;
@@ -147,20 +147,6 @@ public class SimulationPresenter implements MapChangeListener {
         simulation.registerObserver(this);
 
         new Thread(simulation).start();
-        ContinueButton.setDisable(true);
-        StopButton.setDisable(false);
-    }
-
-    public void onContinueClicked(){
-        simulation.continueSimulation();
-        ContinueButton.setDisable(true);
-        StopButton.setDisable(false);
-    }
-
-    public void onSimulationStopClicked() {
-        StopButton.setDisable(true);
-        ContinueButton.setDisable(false);
-        simulation.stop();
     }
 
     public void updateStats(StatsRecord statsRecord) {
@@ -175,4 +161,13 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
+    public void onToggleClicked(ActionEvent actionEvent) {
+        if (simulation.isPaused()) {
+            simulation.continueSimulation();
+            toggleButton.setText("⏸ Pause");
+        } else {
+            simulation.pause();
+            toggleButton.setText("▶ Play");
+        }
+    }
 }

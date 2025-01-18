@@ -29,6 +29,8 @@ public class Simulation implements Runnable {
     private volatile boolean running = true;
     private CountDownLatch latch = null;
     private MapChangeListener observer;
+    private CountDownLatch pauseLatch = null;
+    private boolean paused = false;
 
 
     public Simulation(SimulationParameters simulationParameters){
@@ -86,9 +88,23 @@ public class Simulation implements Runnable {
         countDown();
     }
 
+    public void pause() {
+        paused = true;
+//        pauseLatch = new CountDownLatch(1);
+//        try{
+//            pauseLatch.await();
+//        } catch (InterruptedException e){
+//            System.out.printf("Thread interrupted! -> %s%n", e.getMessage());
+//        }
+    }
+
+    public boolean isPaused(){
+        return paused;
+    }
+
     public void continueSimulation(){
-        running = true;
-        this.run();
+        paused = false;
+//        pauseLatch.countDown();
     }
 
     // fixes JavaFX being too slow for simulation
@@ -108,6 +124,7 @@ public class Simulation implements Runnable {
 
     public void run() {
         while (running) {
+            if (paused) continue;
             // clean dead animals
             map.cleanDeadAnimals(day++, statsCreator);
             updateUI();

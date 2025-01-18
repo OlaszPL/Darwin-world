@@ -42,13 +42,11 @@
     </left>
     <center>
         <VBox alignment="CENTER" prefHeight="530.0" prefWidth="390.0" spacing="10">
-            <HBox alignment="CENTER">
-                <Button fx:id="ContinueButton" onAction="#onContinueClicked" text="▶ Play" />
-                <Button fx:id="StopButton" onAction="#onSimulationStopClicked" text="⏸ Pause" />
-            </HBox>
-
-            <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true" prefHeight="10.0" prefWidth="2328.0" />
             <Label fx:id="descriptionLabel" text="Tutaj pojawi się opis ruchu" textAlignment="CENTER"/>
+            <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true" prefHeight="10.0" prefWidth="2328.0" />
+            <HBox alignment="CENTER">
+                <Button fx:id="toggleButton" onAction="#onToggleClicked" text="⏸ Pause" />
+            </HBox>
         </VBox>
     </center>
     <bottom>
