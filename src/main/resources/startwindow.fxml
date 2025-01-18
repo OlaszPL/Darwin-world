@@ -17,7 +17,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="agh.ics.darwin.StartWindow"
             minHeight="550.0" minWidth="850.0"
-            stylesheets="@startWindowStyle.css">
+            stylesheets="@start-window-styles.css">
     <center>
         <GridPane alignment="CENTER" hgap="20" vgap="10">
             <padding>
