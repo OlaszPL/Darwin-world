@@ -67,10 +67,6 @@ public class Simulation implements Runnable {
         observer.mapChanged(map, "Map initialized!");
     }
 
-    public void deregisterObserver(MapChangeListener observer){
-        map.deregisterObserver(observer);
-    }
-
     // used to make unit tests of simulation
     EarthGlobeMap getMap(){
         return this.map;
@@ -172,7 +168,6 @@ public class Simulation implements Runnable {
             StatsRecord statsRecord = statsCreator.create(day);
             this.observer.updateStats(statsRecord);
             if (simulationParameters.miscParameters().csvSave()) csvHandler.addRecord(statsRecord);
-            System.out.println(statsRecord);
 
             sleep();
         }

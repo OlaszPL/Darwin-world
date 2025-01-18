@@ -1,0 +1,11 @@
+.chart-series-line {
+    -fx-stroke-width: 2px; /* Set the desired line thickness */
+}
+
+.chart-title {
+    -fx-alignment: center;
+}
+
+.chart-legend {
+    -fx-alignment: center;
+}

@@ -21,6 +21,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.util.Objects;
+
 public class SimulationPresenter implements MapChangeListener {
     private SimulationParameters simulationParameters;
     @FXML
@@ -55,12 +57,22 @@ public class SimulationPresenter implements MapChangeListener {
             onSimulationStartClicked();
             stage.setOnCloseRequest(this::handleWindowClosing);
         });
+        animalsChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chartStyle.css")).toExternalForm());
+        energyChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chartStyle.css")).toExternalForm());
         animalsChart.getData().add(animalsSeries);
+        animalsSeries.setName("Animals");
         animalsChart.getData().add(plantsSeries);
+        plantsSeries.setName("Plants");
         animalsChart.getData().add(freeFieldsSeries);
+        freeFieldsSeries.setName("Free Fields");
         energyChart.getData().add(averageEnergySeries);
+        averageEnergySeries.setName("Energy");
         energyChart.getData().add(averageLifeSpan);
+        averageLifeSpan.setName("Lifespan");
         energyChart.getData().add(averageChildrenNumber);
+        averageChildrenNumber.setName("Children");
+        animalsChart.setCreateSymbols(false);
+        energyChart.setCreateSymbols(false);
     }
 
     private void handleWindowClosing(WindowEvent event) {
