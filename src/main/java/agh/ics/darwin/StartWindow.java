@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class StartWindow extends Application {
     @FXML
@@ -51,9 +52,29 @@ public class StartWindow extends Application {
         primaryStage.show();
     }
 
+    private void addNumericValidation(Spinner<Integer> spinner) {
+        spinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                spinner.getEditor().setText(oldValue);
+            }
+        });
+    }
+
+    private void addNumericValidationToAllSpinners() {
+        List<Spinner<Integer>> spinners = List.of(
+                widthSpinner, heightSpinner, startAnimalsNum, genomeLength,
+                minMutationsNum, maxMutationsNum, startPlantsNum, dailyPlantsNum,
+                initialAnimalEnergy, minReproduceEnergy, energyGivenToChild,
+                moveEnergy, onePlantEnergy, interval
+        );
+
+        spinners.forEach(this::addNumericValidation);
+    }
+
     @FXML
     public void initialize() {
-        // preferencje wartości do ustawienia
+        addNumericValidationToAllSpinners();
+
         widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 1000, 10));
         heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 1000, 10));
 
