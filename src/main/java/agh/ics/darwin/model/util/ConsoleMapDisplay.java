@@ -3,7 +3,7 @@ package agh.ics.darwin.model.util;
 import agh.ics.darwin.model.MapChangeListener;
 import agh.ics.darwin.model.WorldMap;
 
-public class ConsoleMapDisplay implements MapChangeListener {
+public abstract class ConsoleMapDisplay implements MapChangeListener {
     private int updateCount = 0;
 
     @Override

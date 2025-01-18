@@ -6,17 +6,21 @@ import agh.ics.darwin.model.animal.BehaviourType;
 import agh.ics.darwin.model.plant.PlantGeneratorType;
 import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.parameters.*;
+import agh.ics.darwin.stats.StatsRecord;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -29,7 +33,18 @@ public class SimulationPresenter implements MapChangeListener {
     private static final int CELL_HEIGHT = 35;
     public Button StopButton;
     public Button ContinueButton;
+    public Label popularGenotypesLabel;
+    public VBox statsBox;
+    public LineChart<Number, Number> animalsChart;
+    public LineChart<Number, Number> plantsChart;
+    public LineChart<Number, Number> energyChart;
     private Simulation simulation;
+    private XYChart.Series<Number, Number> animalsSeries = new XYChart.Series<>();
+    private XYChart.Series<Number, Number> plantsSeries = new XYChart.Series<>();
+    private XYChart.Series<Number, Number> freeFieldsSeries = new XYChart.Series<>();
+    private XYChart.Series<Number, Number> averageEnergySeries = new XYChart.Series<>();
+    private XYChart.Series<Number, Number> averageLifeSpan = new XYChart.Series<>();
+    private XYChart.Series<Number, Number> averageChildrenNumber = new XYChart.Series<>();
 
     @FXML
     public void initialize() {
@@ -39,6 +54,12 @@ public class SimulationPresenter implements MapChangeListener {
             onSimulationStartClicked();
             stage.setOnCloseRequest(this::handleWindowClosing);
         });
+        animalsChart.getData().add(animalsSeries);
+        animalsChart.getData().add(plantsSeries);
+        animalsChart.getData().add(freeFieldsSeries);
+        energyChart.getData().add(averageEnergySeries);
+        energyChart.getData().add(averageLifeSpan);
+        energyChart.getData().add(averageChildrenNumber);
     }
 
     private void handleWindowClosing(WindowEvent event) {
@@ -134,4 +155,15 @@ public class SimulationPresenter implements MapChangeListener {
         ContinueButton.setDisable(false);
         simulation.stop();
     }
+
+    public void updateStats(StatsRecord statsRecord) {
+        animalsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.animalsNumber()));
+        plantsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.plantsNumber()));
+        freeFieldsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.freeFields()));
+        popularGenotypesLabel.setText("Most Popular Genotypes: " + statsRecord.mostPopularGenotypes());
+        averageEnergySeries.getData().add(new XYChart.Data<>(statsRecord.days(),statsRecord.averageEnergyLevel()));
+        averageLifeSpan.getData().add(new XYChart.Data<>(statsRecord.days(),statsRecord.averageLifespan()));
+        averageChildrenNumber.getData().add(new XYChart.Data<>(statsRecord.days(),statsRecord.averageNumberOfChildren()));
+    }
+
 }

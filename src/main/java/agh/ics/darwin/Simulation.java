@@ -28,6 +28,7 @@ public class Simulation implements Runnable {
     private CsvHandler csvHandler = null;
     private volatile boolean running = true;
     private CountDownLatch latch = null;
+    private MapChangeListener observer;
 
 
     public Simulation(SimulationParameters simulationParameters){
@@ -61,6 +62,7 @@ public class Simulation implements Runnable {
     }
 
     public void registerObserver(MapChangeListener observer){
+        this.observer = observer;
         map.registerObserver(observer);
         observer.mapChanged(map, "Map initialized!");
     }
@@ -168,6 +170,7 @@ public class Simulation implements Runnable {
 
             // collect statistics
             StatsRecord statsRecord = statsCreator.create(day);
+            this.observer.updateStats(statsRecord);
             if (simulationParameters.miscParameters().csvSave()) csvHandler.addRecord(statsRecord);
             System.out.println(statsRecord);
 
