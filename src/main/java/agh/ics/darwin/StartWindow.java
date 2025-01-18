@@ -2,6 +2,7 @@ package agh.ics.darwin;
 
 import agh.ics.darwin.model.animal.BehaviourType;
 import agh.ics.darwin.model.plant.PlantGeneratorType;
+import agh.ics.darwin.parameters.*;
 import agh.ics.darwin.presenter.PresetCreator;
 import atlantafx.base.theme.CupertinoLight;
 import javafx.application.Application;
@@ -53,28 +54,28 @@ public class StartWindow extends Application {
     @FXML
     public void initialize() {
         // preferencje wartości do ustawienia
-        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
-        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
+        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 1000, 10));
+        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 1000, 10));
 
-        startAnimalsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 100, 10));
-        genomeLength.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 100, 10));
+        startAnimalsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE, 10));
+        genomeLength.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 100, 7));
         behaviourType.getItems().setAll(BehaviourType.values());
         behaviourType.setValue(BehaviourType.FULL_PREDESTINATION_BEHAVIOUR);
-        minMutationsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
-        maxMutationsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
+        minMutationsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 5));
+        maxMutationsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 5));
 
-        startPlantsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
-        dailyPlantsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
+        startPlantsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000, 10));
+        dailyPlantsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 5));
         plantGeneratorType.getItems().setAll(PlantGeneratorType.values());
         plantGeneratorType.setValue(PlantGeneratorType.EQUATORIAL_FOREST);
 
         initialAnimalEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
         minReproduceEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
         energyGivenToChild.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
-        moveEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100, 10));
-        onePlantEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 10));
+        moveEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1));
+        onePlantEnergy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 3));
 
-        interval.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 10));
+        interval.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Integer.MAX_VALUE, 300));
         csvSave.setSelected(false);
         csvFileName.setDisable(true);
         browseButton.setDisable(true);
@@ -109,7 +110,19 @@ public class StartWindow extends Application {
 
     @FXML
     public void newSimulation() {
+
+        EnergyParameters energy = new EnergyParameters(onePlantEnergy.getValue(), initialAnimalEnergy.getValue(),
+                minReproduceEnergy.getValue(), energyGivenToChild.getValue(), moveEnergy.getValue());
+        MapParameters map = new MapParameters(widthSpinner.getValue(), heightSpinner.getValue());
+        MiscParameters misc = new MiscParameters(behaviourType.getValue(), plantGeneratorType.getValue(),
+                genomeLength.getValue(), startAnimalsNum.getValue(), startPlantsNum.getValue(), dailyPlantsNum.getValue(),
+                interval.getValue(), csvSave.isSelected(), csvSave.isSelected() ? csvFileName.getText() : null);
+        MutationParameters mutations = new MutationParameters(minMutationsNum.getValue(), maxMutationsNum.getValue());
+
+        SimulationParameters sim = ParametersValidator.validate(energy, map, mutations, misc);
+
         SimulationApp simulationApp = new SimulationApp();
+        simulationApp.setSimulationParameters(sim);
         try {
             simulationApp.start(new Stage());
         } catch (IOException e) {
