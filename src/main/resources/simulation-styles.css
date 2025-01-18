@@ -1,0 +1,32 @@
+.energy-bar-high .bar {
+    -fx-background-color: #00FF00;
+    -fx-background-insets: 0, 1;
+}
+
+.energy-bar-medium .bar {
+    -fx-background-color: #FFA500;
+    -fx-background-insets: 0, 1;
+}
+
+.energy-bar-low .bar {
+    -fx-background-color: #FF0000;
+    -fx-background-insets: 0, 1;
+}
+
+.energy-bar-high .track {
+    -fx-fill: #00FF00;
+    -fx-stroke: #00FF00;
+    -fx-stroke-width: 1;
+}
+
+.energy-bar-medium .track {
+    -fx-fill: #FFA500;
+    -fx-stroke: #FFA500;
+    -fx-stroke-width: 1;
+}
+
+.energy-bar-low .track {
+    -fx-fill: #FF0000;
+    -fx-stroke: #FF0000;
+    -fx-stroke-width: 1;
+}

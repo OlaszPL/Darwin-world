@@ -5,7 +5,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane minHeight="550.0" minWidth="850.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.ics.darwin.presenter.SimulationPresenter">
+<BorderPane minHeight="550.0"
+            minWidth="850.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="agh.ics.darwin.presenter.SimulationPresenter"
+            stylesheets="@simulation-styles.css">
     <padding>
         <Insets bottom="10" left="10" right="10" top="10" />
     </padding>
