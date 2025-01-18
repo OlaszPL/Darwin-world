@@ -14,6 +14,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -33,7 +34,7 @@ public class SimulationPresenter implements MapChangeListener {
     private static final int CELL_HEIGHT = 35;
     public Button StopButton;
     public Button ContinueButton;
-    public Label popularGenotypesLabel;
+    public TextArea popularGenotypesLabel;
     public VBox statsBox;
     public LineChart<Number, Number> animalsChart;
     public LineChart<Number, Number> energyChart;
@@ -57,8 +58,8 @@ public class SimulationPresenter implements MapChangeListener {
             onSimulationStartClicked();
             stage.setOnCloseRequest(this::handleWindowClosing);
         });
-        animalsChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chartStyle.css")).toExternalForm());
-        energyChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chartStyle.css")).toExternalForm());
+        animalsChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chart-styles.css")).toExternalForm());
+        energyChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chart-styles.css")).toExternalForm());
         animalsChart.getData().add(animalsSeries);
         animalsSeries.setName("Animals");
         animalsChart.getData().add(plantsSeries);

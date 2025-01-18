@@ -92,9 +92,9 @@ public class Simulation implements Runnable {
     }
 
     // fixes JavaFX being too slow for simulation
-    private void updateUI(String message){
+    private void updateUI(){
         latch = new CountDownLatch(1);
-        map.mapChanged(message);
+        map.mapChanged("Day: %s".formatted(day));
         try{
             latch.await();
         } catch (InterruptedException e){
@@ -110,7 +110,7 @@ public class Simulation implements Runnable {
         while (running) {
             // clean dead animals
             map.cleanDeadAnimals(day++, statsCreator);
-            updateUI("Cleaned all dead animals");
+            updateUI();
 
             sleep();
 
@@ -121,7 +121,7 @@ public class Simulation implements Runnable {
             for (Animal animal : animals) {
                 animal.rotate(simulationParameters.miscParameters().behaviourType());
             }
-            updateUI("Animals rotated");
+            updateUI();
 
             sleep();
 
@@ -162,7 +162,7 @@ public class Simulation implements Runnable {
             // generate new plants
             plantGenerator.generate(simulationParameters.miscParameters().dailyPlantsNum());
 
-            updateUI("Day: %s".formatted(day));
+            updateUI();
 
             // collect statistics
             StatsRecord statsRecord = statsCreator.create(day);
