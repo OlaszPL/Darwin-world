@@ -11,15 +11,13 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Separator?>
-
 <?import javafx.scene.layout.AnchorPane?>
+
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="agh.ics.darwin.StartWindow"
             minHeight="550.0" minWidth="850.0"
             stylesheets="@startWindowStyle.css">
-    <top>
-    </top>
     <center>
         <GridPane alignment="CENTER" hgap="20" vgap="10">
             <padding>
