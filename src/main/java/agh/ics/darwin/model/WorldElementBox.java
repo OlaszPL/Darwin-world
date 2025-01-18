@@ -32,7 +32,6 @@ public class WorldElementBox extends VBox {
         if (element instanceof Animal) {
             energyBar = new ProgressBar();
             energyBar.getStyleClass().clear();
-            energyBar.getStyleClass().add("progress-bar2");
             energyBar.setPrefWidth(33);
             energyBar.setMaxHeight(2);
             energyBar.setMinHeight(2);

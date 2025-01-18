@@ -49,6 +49,22 @@
             </HBox>
         </VBox>
     </center>
+    <right>
+        <VBox alignment="CENTER" spacing="10">
+            <Button fx:id="showDominantGenesButton" text="Highlight animals with most popular genome" wrapText="true"
+                    onAction="#onShowDominantGenesClicked" maxWidth="150" alignment="CENTER" textAlignment="CENTER">
+                <VBox.margin>
+                    <Insets left="10"/>
+                </VBox.margin>
+            </Button>
+            <Button fx:id="showPreferredFields" text="Highlight fields preferred by plants" wrapText="true"
+                    onAction="#onShowPreferredFieldsClicked" maxWidth="150" alignment="CENTER" textAlignment="CENTER">
+                <VBox.margin>
+                    <Insets left="10"/>
+                </VBox.margin>
+            </Button>
+        </VBox>
+    </right>
     <bottom>
         <ScrollPane fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER">
             <TextArea fx:id="popularGenotypesLabel" text="Most Popular Genotypes: " prefRowCount="1" editable="false"

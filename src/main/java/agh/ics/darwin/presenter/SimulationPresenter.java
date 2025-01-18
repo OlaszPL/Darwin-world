@@ -2,11 +2,11 @@ package agh.ics.darwin.presenter;
 
 import agh.ics.darwin.Simulation;
 import agh.ics.darwin.model.*;
+import agh.ics.darwin.model.animal.Animal;
 import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.parameters.*;
 import agh.ics.darwin.stats.StatsRecord;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -23,11 +23,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public class SimulationPresenter implements MapChangeListener {
     public Button toggleButton;
+    public Button showDominantGenesButton;
+    public Button showPreferredFields;
     private SimulationParameters simulationParameters;
+    private boolean highlightedGenes = false, highlightedFields = false;
+    private Set<Animal> highlightedAnimals;
+    private Set<Vector2d> highlightedPositions;
     @FXML
     public Label descriptionLabel;
     @FXML
@@ -58,6 +65,8 @@ public class SimulationPresenter implements MapChangeListener {
             onSimulationStartClicked();
             stage.setOnCloseRequest(this::handleWindowClosing);
         });
+        showDominantGenesButton.setDisable(true);
+        showPreferredFields.setDisable(true);
         animalsChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chart-styles.css")).toExternalForm());
         energyChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chart-styles.css")).toExternalForm());
         animalsChart.getData().add(animalsSeries);
@@ -107,9 +116,23 @@ public class SimulationPresenter implements MapChangeListener {
         for (int x = left; x <= right; x++) {
             for (int y = bottom; y <= top; y++) {
                 Vector2d position = new Vector2d(x, y);
+
+                if (highlightedFields && highlightedPositions.contains(position)){
+                    VBox vBox = new VBox();
+                    vBox.getStyleClass().add("preferred-field");
+
+                    mapGrid.add(vBox, position.getX() - left + 1, top - position.getY() + 1);
+                }
+
                 if (map.isOccupied(position)) {
-                    mapGrid.add(new WorldElementBox(map.objectAt(position), simulationParameters.energyParameters().moveEnergy()),
-                            position.getX() - left + 1, top - position.getY() + 1);
+                    WorldElement element = map.objectAt(position);
+                    WorldElementBox box = new WorldElementBox(element, simulationParameters.energyParameters().moveEnergy());
+
+                    if (highlightedGenes && element instanceof Animal && highlightedAnimals.contains((Animal) element)){
+                        box.getStyleClass().add("dominant-animal");
+                    }
+
+                    mapGrid.add(box, position.getX() - left + 1, top - position.getY() + 1);
                 }
             }
         }
@@ -161,13 +184,37 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
-    public void onToggleClicked(ActionEvent actionEvent) {
+    public void onToggleClicked() {
         if (simulation.isPaused()) {
             simulation.continueSimulation();
             toggleButton.setText("⏸ Pause");
+            showDominantGenesButton.setDisable(true);
+            showPreferredFields.setDisable(true);
+            highlightedGenes = false;
+            highlightedFields = false;
         } else {
             simulation.pause();
             toggleButton.setText("▶ Play");
+            showDominantGenesButton.setDisable(false);
+            showPreferredFields.setDisable(false);
         }
+    }
+
+    @FXML
+    public void onShowDominantGenesClicked() {
+        if (!highlightedGenes) {
+            highlightedAnimals = new HashSet<>(simulation.getDominantGenotypeAnimals());
+        }
+        highlightedGenes = !highlightedGenes;
+        drawMap(simulation.getMap());
+    }
+
+    @FXML
+    public void onShowPreferredFieldsClicked() {
+        if (!highlightedFields){
+            highlightedPositions = new HashSet<>(simulation.getPreferredFields());
+        }
+        highlightedFields = !highlightedFields;
+        drawMap(simulation.getMap());
     }
 }

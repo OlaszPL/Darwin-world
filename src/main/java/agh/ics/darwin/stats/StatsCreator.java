@@ -35,7 +35,7 @@ public class StatsCreator {
         return cnt;
     }
 
-    private List<String> mostPopularGenotypes(List<Animal> animals){
+    public List<String> mostPopularGenotypes(List<Animal> animals){
         Map<String, Integer> countMap = new HashMap<>();
         int maxCount = 0;
 

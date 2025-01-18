@@ -18,6 +18,7 @@ import agh.ics.darwin.stats.StatsRecord;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 public class Simulation implements Runnable {
     private final SimulationParameters simulationParameters;
@@ -29,7 +30,7 @@ public class Simulation implements Runnable {
     private volatile boolean running = true;
     private CountDownLatch latch = null;
     private MapChangeListener observer;
-    private CountDownLatch pauseLatch = null;
+    private StatsRecord statsRecord;
     private boolean paused = false;
 
 
@@ -69,8 +70,7 @@ public class Simulation implements Runnable {
         observer.mapChanged(map, "Map initialized!");
     }
 
-    // used to make unit tests of simulation
-    EarthGlobeMap getMap(){
+    public EarthGlobeMap getMap(){
         return this.map;
     }
 
@@ -90,12 +90,6 @@ public class Simulation implements Runnable {
 
     public void pause() {
         paused = true;
-//        pauseLatch = new CountDownLatch(1);
-//        try{
-//            pauseLatch.await();
-//        } catch (InterruptedException e){
-//            System.out.printf("Thread interrupted! -> %s%n", e.getMessage());
-//        }
     }
 
     public boolean isPaused(){
@@ -104,7 +98,6 @@ public class Simulation implements Runnable {
 
     public void continueSimulation(){
         paused = false;
-//        pauseLatch.countDown();
     }
 
     // fixes JavaFX being too slow for simulation
@@ -120,6 +113,21 @@ public class Simulation implements Runnable {
 
     public void countDown(){
         if (latch != null) latch.countDown();
+    }
+
+    public List<Animal> getDominantGenotypeAnimals() {
+        return map.getAnimals().stream()
+                .filter(animal -> {
+                    String genotype = animal.getGenes().stream()
+                            .map(String::valueOf)
+                            .collect(Collectors.joining(""));
+                    return statsRecord.mostPopularGenotypes().contains(genotype);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<Vector2d> getPreferredFields(){
+        return plantGenerator.getPreferredFields();
     }
 
     public void run() {
@@ -182,7 +190,7 @@ public class Simulation implements Runnable {
             updateUI();
 
             // collect statistics
-            StatsRecord statsRecord = statsCreator.create(day);
+            statsRecord = statsCreator.create(day);
             this.observer.updateStats(statsRecord);
             if (simulationParameters.miscParameters().csvSave()) csvHandler.addRecord(statsRecord);
 

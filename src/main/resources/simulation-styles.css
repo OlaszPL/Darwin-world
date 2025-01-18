@@ -30,3 +30,18 @@
     -fx-stroke: #FF0000;
     -fx-stroke-width: 1;
 }
+
+.dominant-animal {
+    -fx-background-color: lightseagreen;
+}
+
+.preferred-field {
+    -fx-background-color: yellow;
+}
+
+.dominant-animal, .preferred-field {
+    -fx-min-width: 33px;
+    -fx-min-height: 33px;
+    -fx-max-width: 33px;
+    -fx-max-height: 33px;
+}
