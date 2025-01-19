@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -219,12 +220,18 @@ public class SimulationPresenter implements MapChangeListener {
             freeFieldsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.freeFields()));
             freeFieldsSeries.setName("Free fields\n" + statsRecord.freeFields());
             popularGenotypesLabel.setText("Most Popular Genotypes: " + statsRecord.mostPopularGenotypes());
-            averageEnergySeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageEnergyLevel()));
-            averageEnergySeries.setName("Energy\n" + statsRecord.averageEnergyLevel());
-            averageLifeSpan.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageLifespan()));
-            averageLifeSpan.setName("Lifespan\n" + statsRecord.averageLifespan());
-            averageChildrenNumber.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageNumberOfChildren()));
-            averageChildrenNumber.setName("Children\n" + statsRecord.averageNumberOfChildren());
+
+            double averageEnergy = Double.parseDouble(String.format(Locale.US, "%.2f", statsRecord.averageEnergyLevel()));
+            averageEnergySeries.getData().add(new XYChart.Data<>(statsRecord.days(), averageEnergy));
+            averageEnergySeries.setName("Energy\n" + averageEnergy);
+
+            double averageLifespan = Double.parseDouble(String.format(Locale.US, "%.2f", statsRecord.averageLifespan()));
+            averageLifeSpan.getData().add(new XYChart.Data<>(statsRecord.days(), averageLifespan));
+            averageLifeSpan.setName("Lifespan\n" + averageLifespan);
+
+            double averageChildren = Double.parseDouble(String.format(Locale.US, "%.2f", statsRecord.averageNumberOfChildren()));
+            averageChildrenNumber.getData().add(new XYChart.Data<>(statsRecord.days(), averageChildren));
+            averageChildrenNumber.setName("Children\n" + averageChildren);
         });
     }
 
