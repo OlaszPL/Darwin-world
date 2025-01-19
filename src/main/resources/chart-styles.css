@@ -8,4 +8,7 @@
 
 .chart-legend {
     -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-label-padding: 0 0 0 0;
+    -fx-end-margin: 100;
 }

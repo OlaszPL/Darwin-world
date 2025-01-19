@@ -21,6 +21,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -189,13 +191,18 @@ public class SimulationPresenter implements MapChangeListener {
     public void updateStats(StatsRecord statsRecord) {
         Platform.runLater(() -> {
             animalsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.animalsNumber()));
-//            animalsSeries.setName("Animals" + String.valueOf(statsRecord.animalsNumber()));
+            animalsSeries.setName("Animals\n" + statsRecord.animalsNumber());
             plantsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.plantsNumber()));
+            plantsSeries.setName("Plants\n" + statsRecord.plantsNumber());
             freeFieldsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.freeFields()));
+            freeFieldsSeries.setName("Free fields\n" + statsRecord.freeFields());
             popularGenotypesLabel.setText("Most Popular Genotypes: " + statsRecord.mostPopularGenotypes());
             averageEnergySeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageEnergyLevel()));
+            averageEnergySeries.setName("Energy\n" + statsRecord.averageEnergyLevel());
             averageLifeSpan.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageLifespan()));
+            averageLifeSpan.setName("Lifespan\n" + statsRecord.averageLifespan());
             averageChildrenNumber.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageNumberOfChildren()));
+            averageChildrenNumber.setName("Children\n" + statsRecord.averageNumberOfChildren());
         });
     }
 
