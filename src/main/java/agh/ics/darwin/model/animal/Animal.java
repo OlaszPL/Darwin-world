@@ -13,6 +13,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private Integer dayOfDeath = null;
     private List<Animal> parents = null;
     private int numberOfDescendants = 0;
+    private static final Comparator<Animal> comparator = new AnimalComparator();
 
     public Animal(Vector2d position, AbstractGenome genome, int energy){
         this.position = position;
@@ -129,16 +130,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
 
     @Override
     public int compareTo(Animal other){
-        if (this.energy != other.energy){
-            return this.energy - other.energy;
-        }
-        if (this.age != other.age){
-            return this.age - other.age;
-        }
-        if (this.numberOfChildren != other.numberOfChildren){
-            return this.numberOfChildren - other.numberOfChildren;
-        }
-        return 0;
+        return comparator.compare(this, other);
     }
 
     public Animal reproduce(Animal other, int minNumberOfMutations, int maxNumberOfMutations, int energyForChild){

@@ -55,7 +55,7 @@ public class EarthGlobeMap implements WorldMap {
     }
 
     public List<Animal> getOrderedAnimalsAt(Vector2d position){
-        return animals.get(position)!= null ? animals.get(position).stream()
+        return animals.containsKey(position) && animals.get(position)!= null ? animals.get(position).stream()
                 .sorted(Comparator.reverseOrder())
                 .toList() : null;
     }
