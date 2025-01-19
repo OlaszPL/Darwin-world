@@ -5,7 +5,6 @@ import agh.ics.darwin.model.*;
 import agh.ics.darwin.model.animal.Animal;
 import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.parameters.*;
-import agh.ics.darwin.stats.SelectedAnimalStats;
 import agh.ics.darwin.stats.StatsRecord;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -13,7 +12,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -22,46 +20,59 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 public class SimulationPresenter implements MapChangeListener {
+
     private static final int GRID_HEIGHT_WIDTH = 385;
     private int cellSize;
+
+    @FXML
     public Button toggleButton;
+    @FXML
     public Button showDominantGenesButton;
+    @FXML
     public Button showPreferredFields;
+    @FXML
     public Label genomeLabel;
+    @FXML
     public Label activeGeneLabel;
+    @FXML
     public Label energyLabel;
+    @FXML
     public Label eatenPlantsLabel;
+    @FXML
     public Label childrenLabel;
+    @FXML
     public Label descendantsLabel;
+    @FXML
     public Label ageLabel;
+    @FXML
     public Label dayOfDeathLabel;
-    private SimulationParameters simulationParameters;
-    private boolean highlightedGenes = false, highlightedFields = false;
-    private Set<Animal> highlightedAnimals;
-    private Set<Vector2d> highlightedPositions;
+    @FXML
     private VBox selectedElement;
     @FXML
     public Label descriptionLabel;
     @FXML
     public GridPane mapGrid;
+    @FXML
     public TextArea popularGenotypesLabel;
+    @FXML
     public VBox statsBox;
+    @FXML
     public LineChart<Number, Number> animalsChart;
+    @FXML
     public LineChart<Number, Number> energyChart;
+
     private Simulation simulation;
-    private final XYChart.Series<Number, Number> animalsSeries = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> plantsSeries = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> freeFieldsSeries = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> averageEnergySeries = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> averageLifeSpan = new XYChart.Series<>();
-    private final XYChart.Series<Number, Number> averageChildrenNumber = new XYChart.Series<>();
+    private SimulationParameters simulationParameters;
+    private boolean highlightedGenes = false, highlightedFields = false;
+    private Set<Animal> highlightedAnimals;
+    private Set<Vector2d> highlightedPositions;
+
+    private final ChartUpdater chartUpdater = new ChartUpdater();
 
     public void setSimulationParameters(SimulationParameters simulationParameters){
         this.simulationParameters = simulationParameters;
@@ -69,35 +80,24 @@ public class SimulationPresenter implements MapChangeListener {
 
     @FXML
     public void initialize() {
+        setupWindowHandling();
+        chartUpdater.initializeCharts(animalsChart, energyChart);
+        setupButtons();
+    }
+
+    private void setupButtons() {
+        showDominantGenesButton.setDisable(true);
+        showPreferredFields.setDisable(true);
+    }
+
+    private void setupWindowHandling() {
         Platform.runLater(() -> {
             Stage stage = (Stage) mapGrid.getScene().getWindow();
             onSimulationStartClicked();
-            stage.setOnCloseRequest(this::handleWindowClosing);
+            stage.setOnCloseRequest(event -> {
+                if (simulation != null) simulation.stop();
+            });
         });
-        showDominantGenesButton.setDisable(true);
-        showPreferredFields.setDisable(true);
-        animalsChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chart-styles.css")).toExternalForm());
-        energyChart.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/chart-styles.css")).toExternalForm());
-        animalsChart.getData().add(animalsSeries);
-        animalsSeries.setName("Animals");
-        animalsChart.getData().add(plantsSeries);
-        plantsSeries.setName("Plants");
-        animalsChart.getData().add(freeFieldsSeries);
-        freeFieldsSeries.setName("Free Fields");
-        energyChart.getData().add(averageEnergySeries);
-        averageEnergySeries.setName("Energy");
-        energyChart.getData().add(averageLifeSpan);
-        averageLifeSpan.setName("Lifespan");
-        energyChart.getData().add(averageChildrenNumber);
-        averageChildrenNumber.setName("Children");
-        animalsChart.setCreateSymbols(false);
-        energyChart.setCreateSymbols(false);
-    }
-
-    private void handleWindowClosing(WindowEvent event) {
-        if (simulation != null) {
-            simulation.stop();
-        }
     }
 
     private void clearGrid() {
@@ -191,7 +191,7 @@ public class SimulationPresenter implements MapChangeListener {
     public void mapChanged(WorldMap map, String message) {
         Platform.runLater(() -> {
             drawMap(map);
-            updateSelectedAnimalInfo();
+            AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation, genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
             descriptionLabel.setText(message);
             simulation.countDown(); // fix JavaFX being too slow for simulation interval
         });
@@ -201,72 +201,39 @@ public class SimulationPresenter implements MapChangeListener {
         if (simulation != null) {
             simulation.stop();
         }
-
         simulation = new Simulation(simulationParameters);
         simulation.registerObserver(this);
-
         new Thread(simulation).start();
     }
 
     public void updateStats(StatsRecord statsRecord) {
-        Platform.runLater(() -> {
-            animalsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.animalsNumber()));
-            animalsSeries.setName("Animals\n" + statsRecord.animalsNumber());
-            plantsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.plantsNumber()));
-            plantsSeries.setName("Plants\n" + statsRecord.plantsNumber());
-            freeFieldsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.freeFields()));
-            freeFieldsSeries.setName("Free fields\n" + statsRecord.freeFields());
-            popularGenotypesLabel.setText("Most Popular Genotypes: " + statsRecord.mostPopularGenotypes());
-            averageEnergySeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageEnergyLevel()));
-            averageEnergySeries.setName("Energy\n" + statsRecord.averageEnergyLevel());
-            averageLifeSpan.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageLifespan()));
-            averageLifeSpan.setName("Lifespan\n" + statsRecord.averageLifespan());
-            averageChildrenNumber.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageNumberOfChildren()));
-            averageChildrenNumber.setName("Children\n" + statsRecord.averageNumberOfChildren());
-        });
+        Platform.runLater(() ->
+                chartUpdater.updateCharts(statsRecord, popularGenotypesLabel));
     }
 
-    private void updateSelectedAnimalInfo(){
-        if (selectedElement != null) {
-            Animal animal = (Animal) ((WorldElementBox) selectedElement).getElement();
-
-            SelectedAnimalStats animalStats = simulation.generateAnimalStats(animal);
-            genomeLabel.setText(animalStats.genome().toString());
-            activeGeneLabel.setText(String.valueOf(animalStats.activeGene()));
-            energyLabel.setText(String.valueOf(animalStats.energy()));
-            eatenPlantsLabel.setText(String.valueOf(animalStats.eatenPlants()));
-            childrenLabel.setText(String.valueOf(animalStats.childrenNumber()));
-            descendantsLabel.setText(String.valueOf(animalStats.descendantsNumber()));
-            ageLabel.setText(String.valueOf(animalStats.age()));
-            dayOfDeathLabel.setText(animalStats.dayOfDeath().map(String::valueOf).orElse(""));
-        }
-    }
-
-    private void cleanSelectedAnimalInfo(){
-        genomeLabel.setText("");
-        activeGeneLabel.setText("");
-        energyLabel.setText("");
-        eatenPlantsLabel.setText("");
-        childrenLabel.setText("");
-        descendantsLabel.setText("");
-        ageLabel.setText("");
-        dayOfDeathLabel.setText("");
-    }
-
+    @FXML
     public void onToggleClicked() {
         if (simulation.isPaused()) {
-            simulation.continueSimulation();
-            toggleButton.setText("⏸ Pause");
-            showDominantGenesButton.setDisable(true);
-            showPreferredFields.setDisable(true);
-            highlightedGenes = false;
-            highlightedFields = false;
+            resumeSimulation();
         } else {
-            simulation.pause();
-            toggleButton.setText("▶ Play");
-            showDominantGenesButton.setDisable(false);
-            showPreferredFields.setDisable(false);
+            pauseSimulation();
         }
+    }
+
+    private void resumeSimulation() {
+        simulation.continueSimulation();
+        toggleButton.setText("⏸ Pause");
+        showDominantGenesButton.setDisable(true);
+        showPreferredFields.setDisable(true);
+        highlightedGenes = false;
+        highlightedFields = false;
+    }
+
+    private void pauseSimulation() {
+        simulation.pause();
+        toggleButton.setText("▶ Play");
+        showDominantGenesButton.setDisable(false);
+        showPreferredFields.setDisable(false);
     }
 
     @FXML
@@ -288,19 +255,23 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void handleElementClick(VBox element) {
-        if (simulation.isPaused()) {
-            if (selectedElement != null) {
-                selectedElement.getStyleClass().remove("selected-element");
-                cleanSelectedAnimalInfo();
-                if (selectedElement == element) {
-                    selectedElement = null;
-                    return;
-                }
+        if (!simulation.isPaused()) return;
+
+        if (selectedElement != null) {
+            selectedElement.getStyleClass().remove("selected-element");
+            AnimalInfoUpdater.cleanSelectedAnimalInfo(genomeLabel, activeGeneLabel, energyLabel,
+                    eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
+
+            if (selectedElement == element) {
+                selectedElement = null;
+                return;
             }
-            selectedElement = element;
-            selectedElement.getStyleClass().add("selected-element");
-            setElementSize(selectedElement, cellSize);
-            updateSelectedAnimalInfo();
         }
+        selectedElement = element;
+        selectedElement.getStyleClass().add("selected-element");
+        setElementSize(selectedElement, cellSize);
+        AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation,
+                genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel,
+                childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
     }
 }

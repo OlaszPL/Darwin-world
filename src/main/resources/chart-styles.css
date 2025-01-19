@@ -12,3 +12,38 @@
     -fx-label-padding: 0 0 0 0;
     -fx-end-margin: 100;
 }
+
+.fixed-size-chart {
+    -fx-pref-height: 266;
+    -fx-min-height: 266;
+    -fx-max-height: 266;
+}
+
+.fixed-size-chart .chart-plot-background {
+    -fx-min-height: 200;
+    -fx-pref-height: 200;
+    -fx-max-height: 200;
+}
+
+.fixed-size-chart .chart-legend {
+    -fx-font-size: 10px;
+}
+
+.fixed-size-chart .chart-legend-item {
+    -fx-font-size: 10px;
+}
+
+/* Wymuś stałą wysokość obszaru wykresu */
+.fixed-size-chart .chart-content {
+    -fx-padding: 0;
+    -fx-min-height: 200;
+    -fx-pref-height: 200;
+    -fx-max-height: 200;
+}
+
+.chart-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-alignment: center;
+}

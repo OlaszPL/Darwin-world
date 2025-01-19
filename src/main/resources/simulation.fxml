@@ -20,23 +20,29 @@
         </VBox>
     </top>
     <left>
-        <VBox fx:id="statsBox" alignment="CENTER" prefHeight="530.0" prefWidth="325.0" spacing="10">
-            <LineChart fx:id="animalsChart" prefHeight="266.0" prefWidth="325.0" title="Animals, Plants and Free Fields Number">
-                <xAxis>
-                    <NumberAxis label="Days" />
-                </xAxis>
-                <yAxis>
-                    <NumberAxis label="Number" />
-                </yAxis>
-            </LineChart>
-            <LineChart fx:id="energyChart" prefHeight="266.0" prefWidth="325.0" title="Energy, Lifespan, Children Number">
-                <xAxis>
-                    <NumberAxis label="Days" />
-                </xAxis>
-                <yAxis>
-                    <NumberAxis label="Average" />
-                </yAxis>
-            </LineChart>
+        <VBox fx:id="statsBox" alignment="CENTER" prefHeight="530.0" prefWidth="325.0" spacing="10" stylesheets="@chart-styles.css">
+            <VBox prefHeight="266.0" prefWidth="325.0">
+                <LineChart fx:id="animalsChart" title="Animals, Plants and Free Fields Number"
+                           styleClass="fixed-size-chart chart-title">
+                    <xAxis>
+                        <NumberAxis label="Days" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Number" />
+                    </yAxis>
+                </LineChart>
+            </VBox>
+            <VBox prefHeight="266.0" prefWidth="325.0">
+                <LineChart fx:id="energyChart" title="Energy, Lifespan, Children Number"
+                           styleClass="fixed-size-chart chart-title">
+                    <xAxis>
+                        <NumberAxis label="Days" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Average" />
+                    </yAxis>
+                </LineChart>
+            </VBox>
         </VBox>
     </left>
     <center>
