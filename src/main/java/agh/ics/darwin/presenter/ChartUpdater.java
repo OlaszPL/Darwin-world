@@ -5,6 +5,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextArea;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -21,8 +22,8 @@ public class ChartUpdater {
         setupChart(animalsChart);
         setupChart(energyChart);
 
-        animalsChart.getData().addAll(animalsSeries, plantsSeries, freeFieldsSeries);
-        energyChart.getData().addAll(averageEnergySeries, averageLifeSpan, averageChildrenNumber);
+        animalsChart.getData().addAll(List.of(animalsSeries, plantsSeries, freeFieldsSeries));
+        energyChart.getData().addAll(List.of(averageEnergySeries, averageLifeSpan, averageChildrenNumber));
 
         setupSeriesNames();
     }

@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class AnimalInfoUpdater {
-    public void updateSelectedAnimalInfo(VBox selectedElement, Simulation simulation,
+    public static void updateSelectedAnimalInfo(VBox selectedElement, Simulation simulation,
                                          Label genomeLabel, Label activeGeneLabel,
                                          Label energyLabel, Label eatenPlantsLabel,
                                          Label childrenLabel, Label descendantsLabel,
@@ -23,7 +23,7 @@ public class AnimalInfoUpdater {
                 ageLabel, dayOfDeathLabel);
     }
 
-    public void cleanSelectedAnimalInfo(Label genomeLabel, Label activeGeneLabel,
+    public static void cleanSelectedAnimalInfo(Label genomeLabel, Label activeGeneLabel,
                                         Label energyLabel, Label eatenPlantsLabel,
                                         Label childrenLabel, Label descendantsLabel,
                                         Label ageLabel, Label dayOfDeathLabel) {
@@ -37,7 +37,7 @@ public class AnimalInfoUpdater {
         dayOfDeathLabel.setText("");
     }
 
-    private void updateLabels(SelectedAnimalStats stats,
+    private static void updateLabels(SelectedAnimalStats stats,
                               Label genomeLabel, Label activeGeneLabel,
                               Label energyLabel, Label eatenPlantsLabel,
                               Label childrenLabel, Label descendantsLabel,
