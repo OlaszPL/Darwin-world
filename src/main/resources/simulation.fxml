@@ -5,8 +5,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane minHeight="550.0"
-            minWidth="850.0"
+<BorderPane minHeight="600.0"
+            minWidth="900.0"
             xmlns="http://javafx.com/javafx/17.0.12"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="agh.ics.darwin.presenter.SimulationPresenter"
