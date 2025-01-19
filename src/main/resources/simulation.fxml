@@ -91,7 +91,7 @@
 
     </right>
     <bottom>
-        <ScrollPane fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER">
+        <ScrollPane fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER" minViewportHeight="50">
             <TextArea fx:id="popularGenotypesLabel" text="Most Popular Genotypes: " prefRowCount="1" editable="false"
                       style="-fx-control-inner-background: transparent; -fx-background-color: transparent;"/>
         </ScrollPane>
