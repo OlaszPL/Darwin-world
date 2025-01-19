@@ -21,12 +21,12 @@ public class WorldElementBox extends VBox {
         return imageCache.computeIfAbsent(resourceName, Image::new);
     }
 
-    public WorldElementBox(WorldElement element, int moveEnergy) {
+    public WorldElementBox(WorldElement element, int moveEnergy, int cellSize) {
         this.element = element;
         Image image = loadImage(element.getResourceName());
         ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(35);
-        imageView.setFitWidth(35);
+        imageView.setFitHeight(cellSize);
+        imageView.setFitWidth(cellSize);
         imageView.setPreserveRatio(true);
         this.getChildren().add(imageView);
         this.setAlignment(Pos.CENTER);
@@ -34,16 +34,17 @@ public class WorldElementBox extends VBox {
         if (element instanceof Animal) {
             energyBar = new ProgressBar();
             energyBar.getStyleClass().clear();
-            energyBar.setPrefWidth(33);
-            energyBar.setMaxHeight(2);
-            energyBar.setMinHeight(2);
+            energyBar.setPrefWidth(cellSize - 2);
+            double barSize = cellSize * 0.05;
+            energyBar.setMaxHeight(barSize);
+            energyBar.setMinHeight(barSize);
 
             VBox.setVgrow(energyBar, Priority.NEVER);
-            VBox.setMargin(energyBar, new Insets(0, 0, 4, 0));
+            VBox.setMargin(energyBar, new Insets(0, 0, cellSize * 0.12, 0));
 
             this.getChildren().add(energyBar);
             this.setAlignment(Pos.CENTER);
-            this.setPrefSize(35, 35);
+            this.setPrefSize(cellSize, cellSize);
 
             updateEnergyBar((Animal) element, moveEnergy);
         }

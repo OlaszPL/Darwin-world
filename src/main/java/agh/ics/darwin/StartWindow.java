@@ -78,8 +78,8 @@ public class StartWindow extends Application {
     public void initialize() {
         addNumericValidationToAllSpinners();
 
-        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 1000, 10));
-        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 1000, 10));
+        widthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 300, 10));
+        heightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 300, 10));
 
         startAnimalsNum.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, Integer.MAX_VALUE, 10));
         genomeLength.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 100, 7));

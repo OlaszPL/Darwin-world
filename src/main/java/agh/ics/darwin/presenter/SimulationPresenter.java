@@ -29,6 +29,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public class SimulationPresenter implements MapChangeListener {
+    private static final int GRID_HEIGHT_WIDTH = 385;
+    private int cellSize;
     public Button toggleButton;
     public Button showDominantGenesButton;
     public Button showPreferredFields;
@@ -49,8 +51,6 @@ public class SimulationPresenter implements MapChangeListener {
     public Label descriptionLabel;
     @FXML
     public GridPane mapGrid;
-    private static final int CELL_WIDTH = 35;
-    private static final int CELL_HEIGHT = 35;
     public TextArea popularGenotypesLabel;
     public VBox statsBox;
     public LineChart<Number, Number> animalsChart;
@@ -121,6 +121,11 @@ public class SimulationPresenter implements MapChangeListener {
         }
     }
 
+    private static void setElementSize(Node element, int size) {
+        element.setStyle(String.format("-fx-min-width: %s; -fx-min-height: %s; -fx-max-width: %s; -fx-max-height: %s;",
+                size, size, size, size));
+    }
+
     private void drawMapElements(WorldMap map, int left, int right, int bottom, int top) {
         for (int x = left; x <= right; x++) {
             for (int y = bottom; y <= top; y++) {
@@ -129,16 +134,18 @@ public class SimulationPresenter implements MapChangeListener {
                 if (highlightedFields && highlightedPositions.contains(position)){
                     VBox vBox = new VBox();
                     vBox.getStyleClass().add("preferred-field");
+                    setElementSize(vBox, cellSize - 2);
 
                     mapGrid.add(vBox, position.getX() - left + 1, top - position.getY() + 1);
                 }
 
                 map.objectAt(position).ifPresent(element -> {
-                    WorldElementBox box = new WorldElementBox(element, simulationParameters.energyParameters().moveEnergy());
+                    WorldElementBox box = new WorldElementBox(element, simulationParameters.energyParameters().moveEnergy(), cellSize);
 
                     if (element instanceof Animal) {
                         if (highlightedGenes && highlightedAnimals.contains((Animal) element)) {
                             box.getStyleClass().add("dominant-animal");
+                            setElementSize(box, cellSize - 2);
                         }
                         box.setOnMouseClicked(event -> handleElementClick(box));
                     }
@@ -155,16 +162,28 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void drawAxes(int left, int right, int bottom, int top) {
-        mapGrid.add(new Label("y\\x"),0,0);
-        mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
-        mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
-        for (int x = left; x <= right; x++){
-            mapGrid.add(new Label("%d".formatted(x)), x - left + 1, 0);
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_WIDTH));
+        // scale grid panes
+        cellSize = Math.max(Math.min((GRID_HEIGHT_WIDTH / (right - left + 2)), (GRID_HEIGHT_WIDTH / (top - bottom + 2))), 1);
+        double fontSize = cellSize * 0.4;
+
+        Label cornerLabel = new Label("y\\x");
+        cornerLabel.setStyle(String.format("-fx-font-size: %.2f;", fontSize));
+        mapGrid.add(cornerLabel, 0, 0);
+        mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
+        mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
+
+        for (int x = left; x <= right; x++) {
+            Label xLabel = new Label("%d".formatted(x));
+            xLabel.setStyle(String.format("-fx-font-size: %.2f;", fontSize));
+            mapGrid.add(xLabel, x - left + 1, 0);
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         }
-        for (int y = bottom; y <= top; y++){
-            mapGrid.add(new Label("%d".formatted(y)), 0,  top - y + 1);
-            mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
+
+        for (int y = bottom; y <= top; y++) {
+            Label yLabel = new Label("%d".formatted(y));
+            yLabel.setStyle(String.format("-fx-font-size: %.2f;", fontSize));
+            mapGrid.add(yLabel, 0, top - y + 1);
+            mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         }
     }
 
@@ -280,6 +299,7 @@ public class SimulationPresenter implements MapChangeListener {
             }
             selectedElement = element;
             selectedElement.getStyleClass().add("selected-element");
+            setElementSize(selectedElement, cellSize);
             updateSelectedAnimalInfo();
         }
     }
