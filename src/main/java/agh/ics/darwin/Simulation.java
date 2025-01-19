@@ -13,10 +13,12 @@ import agh.ics.darwin.model.util.IncorrectPositionException;
 import agh.ics.darwin.model.util.RandomPositionGenerator;
 import agh.ics.darwin.parameters.SimulationParameters;
 import agh.ics.darwin.stats.CsvHandler;
+import agh.ics.darwin.stats.SelectedAnimalStats;
 import agh.ics.darwin.stats.StatsCreator;
 import agh.ics.darwin.stats.StatsRecord;
 
 import java.util.List;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
@@ -128,6 +130,11 @@ public class Simulation implements Runnable {
 
     public List<Vector2d> getPreferredFields(){
         return plantGenerator.getPreferredFields();
+    }
+
+    public SelectedAnimalStats generateAnimalStats(Animal animal){
+        return new SelectedAnimalStats(animal.getGenes(), animal.getGenome().getActiveGeneIndex(), animal.getEnergy(), animal.getNumberOfEatenPlants(), animal.getNumberOfChildren(),
+                    animal.getDescendantsNum(), animal.getAge(), animal.getDayOfDeath());
     }
 
     public void run() {

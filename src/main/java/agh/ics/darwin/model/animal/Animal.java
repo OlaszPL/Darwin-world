@@ -2,9 +2,7 @@ package agh.ics.darwin.model.animal;
 
 import agh.ics.darwin.model.*;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class Animal implements WorldElement, Comparable<Animal> {
     private final UUID uuid = UUID.randomUUID();
@@ -14,6 +12,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private int energy, age = 0, numberOfChildren = 0, numberOfEatenPlants = 0;
     private Integer dayOfDeath = null;
     private List<Animal> parents = null;
+    private int numberOfDescentants = 0;
 
     public Animal(Vector2d position, AbstractGenome genome, int energy){
         this.position = position;
@@ -103,6 +102,15 @@ public class Animal implements WorldElement, Comparable<Animal> {
     public Optional<List<Animal>> getParents() {
         return Optional.ofNullable(parents);
     }
+    
+
+    public int getDescendantsNum(){
+        return numberOfDescentants;
+    }
+
+    public void incrementNumberOfDescendants(){
+        numberOfDescentants++;
+    }
 
     @Override
     public String toString() {
@@ -142,8 +150,9 @@ public class Animal implements WorldElement, Comparable<Animal> {
         other.decreaseEnergy(energyForChild);
         this.incrementNumberOfChildren();
         other.incrementNumberOfChildren();
-
-        return new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, energyForChild);
+        Animal child = new Animal(this, other, minNumberOfMutations, maxNumberOfMutations, energyForChild);
+        DescendantIncrementer.incrementDescendantsNum(child);
+        return child;
     }
 
     public void rotate(BehaviourType behaviourType){

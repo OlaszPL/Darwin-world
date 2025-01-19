@@ -51,19 +51,45 @@
     </center>
     <right>
         <VBox alignment="CENTER" spacing="10">
-            <Button fx:id="showDominantGenesButton" text="Highlight animals with most popular genome" wrapText="true"
-                    onAction="#onShowDominantGenesClicked" maxWidth="150" alignment="CENTER" textAlignment="CENTER">
+            <VBox spacing="10">
                 <VBox.margin>
                     <Insets left="10"/>
                 </VBox.margin>
-            </Button>
-            <Button fx:id="showPreferredFields" text="Highlight fields preferred by plants" wrapText="true"
-                    onAction="#onShowPreferredFieldsClicked" maxWidth="150" alignment="CENTER" textAlignment="CENTER">
+                <Button fx:id="showDominantGenesButton" text="Animals with most popular genome" wrapText="true"
+                        onAction="#onShowDominantGenesClicked" maxWidth="150" alignment="CENTER" textAlignment="CENTER">
+                </Button>
+                <Button fx:id="showPreferredFields" text="Fields preferred by plants" wrapText="true"
+                        onAction="#onShowPreferredFieldsClicked" maxWidth="150" alignment="CENTER" textAlignment="CENTER">
+                </Button>
+            </VBox>
+
+            <Region prefHeight="20" />
+
+            <VBox alignment="CENTER">
                 <VBox.margin>
                     <Insets left="10"/>
                 </VBox.margin>
-            </Button>
+                <Label text="Selected animal" textAlignment="CENTER" style="-fx-font-weight: bold;"/>
+                <Region prefHeight="10" />
+                <Label text="Genome:" textAlignment="CENTER"/>
+                <Label fx:id="genomeLabel" textAlignment="CENTER"/>
+                <Label text="Active Gene:" textAlignment="CENTER"/>
+                <Label fx:id="activeGeneLabel" textAlignment="CENTER"/>
+                <Label text="Energy:" textAlignment="CENTER"/>
+                <Label fx:id="energyLabel" textAlignment="CENTER"/>
+                <Label text="Eaten Plants:" textAlignment="CENTER"/>
+                <Label fx:id="eatenPlantsLabel" textAlignment="CENTER"/>
+                <Label text="Children:" textAlignment="CENTER"/>
+                <Label fx:id="childrenLabel" textAlignment="CENTER"/>
+                <Label text="Descendants:" textAlignment="CENTER"/>
+                <Label fx:id="descendantsLabel" textAlignment="CENTER"/>
+                <Label text="Age:" textAlignment="CENTER"/>
+                <Label fx:id="ageLabel" textAlignment="CENTER"/>
+                <Label text="Day of Death:" textAlignment="CENTER"/>
+                <Label fx:id="dayOfDeathLabel" textAlignment="CENTER"/>
+            </VBox>
         </VBox>
+
     </right>
     <bottom>
         <ScrollPane fitToHeight="true" fitToWidth="true" vbarPolicy="NEVER">

@@ -5,6 +5,7 @@ import agh.ics.darwin.model.*;
 import agh.ics.darwin.model.animal.Animal;
 import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.parameters.*;
+import agh.ics.darwin.stats.SelectedAnimalStats;
 import agh.ics.darwin.stats.StatsRecord;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -31,10 +32,19 @@ public class SimulationPresenter implements MapChangeListener {
     public Button toggleButton;
     public Button showDominantGenesButton;
     public Button showPreferredFields;
+    public Label genomeLabel;
+    public Label activeGeneLabel;
+    public Label energyLabel;
+    public Label eatenPlantsLabel;
+    public Label childrenLabel;
+    public Label descendantsLabel;
+    public Label ageLabel;
+    public Label dayOfDeathLabel;
     private SimulationParameters simulationParameters;
     private boolean highlightedGenes = false, highlightedFields = false;
     private Set<Animal> highlightedAnimals;
     private Set<Vector2d> highlightedPositions;
+    private VBox selectedElement;
     @FXML
     public Label descriptionLabel;
     @FXML
@@ -128,8 +138,11 @@ public class SimulationPresenter implements MapChangeListener {
                     WorldElement element = map.objectAt(position);
                     WorldElementBox box = new WorldElementBox(element, simulationParameters.energyParameters().moveEnergy());
 
-                    if (highlightedGenes && element instanceof Animal && highlightedAnimals.contains((Animal) element)){
-                        box.getStyleClass().add("dominant-animal");
+                    if (element instanceof Animal){
+                        if (highlightedGenes && highlightedAnimals.contains((Animal) element)){
+                            box.getStyleClass().add("dominant-animal");
+                        }
+                        box.setOnMouseClicked(event -> handleElementClick(box));
                     }
 
                     mapGrid.add(box, position.getX() - left + 1, top - position.getY() + 1);
@@ -156,6 +169,7 @@ public class SimulationPresenter implements MapChangeListener {
     public void mapChanged(WorldMap map, String message) {
         Platform.runLater(() -> {
             drawMap(map);
+            updateSelectedAnimalInfo();
             descriptionLabel.setText(message);
             simulation.countDown(); // fix JavaFX being too slow for simulation interval
         });
@@ -175,6 +189,7 @@ public class SimulationPresenter implements MapChangeListener {
     public void updateStats(StatsRecord statsRecord) {
         Platform.runLater(() -> {
             animalsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.animalsNumber()));
+//            animalsSeries.setName("Animals" + String.valueOf(statsRecord.animalsNumber()));
             plantsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.plantsNumber()));
             freeFieldsSeries.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.freeFields()));
             popularGenotypesLabel.setText("Most Popular Genotypes: " + statsRecord.mostPopularGenotypes());
@@ -182,6 +197,22 @@ public class SimulationPresenter implements MapChangeListener {
             averageLifeSpan.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageLifespan()));
             averageChildrenNumber.getData().add(new XYChart.Data<>(statsRecord.days(), statsRecord.averageNumberOfChildren()));
         });
+    }
+
+    public void updateSelectedAnimalInfo(){
+        if (selectedElement != null) {
+            Animal animal = (Animal) ((WorldElementBox) selectedElement).getElement();
+
+            SelectedAnimalStats animalStats = simulation.generateAnimalStats(animal);
+            genomeLabel.setText(animalStats.genome().toString());
+            activeGeneLabel.setText(String.valueOf(animalStats.activeGene()));
+            energyLabel.setText(String.valueOf(animalStats.energy()));
+            eatenPlantsLabel.setText(String.valueOf(animalStats.eatenPlants()));
+            childrenLabel.setText(String.valueOf(animalStats.childrenNumber()));
+            descendantsLabel.setText(String.valueOf(animalStats.descendantsNumber()));
+            ageLabel.setText(String.valueOf(animalStats.age()));
+            dayOfDeathLabel.setText(animalStats.dayOfDeath().map(String::valueOf).orElse(""));
+        }
     }
 
     public void onToggleClicked() {
@@ -216,5 +247,20 @@ public class SimulationPresenter implements MapChangeListener {
         }
         highlightedFields = !highlightedFields;
         drawMap(simulation.getMap());
+    }
+
+    private void handleElementClick(VBox element) {
+        if (simulation.isPaused()) {
+            if (selectedElement != null) {
+                selectedElement.getStyleClass().remove("selected-element");
+                if (selectedElement == element) {
+                    selectedElement = null;
+                    return;
+                }
+            }
+            selectedElement = element;
+            selectedElement.getStyleClass().add("selected-element");
+            updateSelectedAnimalInfo();
+        }
     }
 }

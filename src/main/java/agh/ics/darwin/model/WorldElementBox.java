@@ -15,12 +15,14 @@ import java.util.Map;
 public class WorldElementBox extends VBox {
     private static final Map<String, Image> imageCache = new HashMap<>();
     private ProgressBar energyBar;
+    private final WorldElement element;
 
     private static Image loadImage(String resourceName) {
         return imageCache.computeIfAbsent(resourceName, Image::new);
     }
 
     public WorldElementBox(WorldElement element, int moveEnergy) {
+        this.element = element;
         Image image = loadImage(element.getResourceName());
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(35);
@@ -63,5 +65,9 @@ public class WorldElementBox extends VBox {
         } else {
             energyBar.getStyleClass().add("energy-bar-low");
         }
+    }
+
+    public WorldElement getElement(){
+        return element;
     }
 }

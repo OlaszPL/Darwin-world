@@ -39,9 +39,15 @@
     -fx-background-color: yellow;
 }
 
-.dominant-animal, .preferred-field {
+.dominant-animal, .preferred-field .selected-element {
     -fx-min-width: 33px;
     -fx-min-height: 33px;
     -fx-max-width: 33px;
     -fx-max-height: 33px;
+}
+
+.selected-element {
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+    -fx-padding: -40px;
 }
