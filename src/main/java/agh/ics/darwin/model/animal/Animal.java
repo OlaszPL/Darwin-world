@@ -12,7 +12,7 @@ public class Animal implements WorldElement, Comparable<Animal> {
     private int energy, age = 0, numberOfChildren = 0, numberOfEatenPlants = 0;
     private Integer dayOfDeath = null;
     private List<Animal> parents = null;
-    private int numberOfDescentants = 0;
+    private int numberOfDescendants = 0;
 
     public Animal(Vector2d position, AbstractGenome genome, int energy){
         this.position = position;
@@ -47,13 +47,10 @@ public class Animal implements WorldElement, Comparable<Animal> {
         return position;
     }
 
-    public boolean isAt(Vector2d position){
-        return this.position.equals(position);
-    }
-
     public AbstractGenome getGenome(){
         return genome;
     }
+
     public List<Integer> getGenes(){
         return genome.getGenes();
     }
@@ -102,14 +99,13 @@ public class Animal implements WorldElement, Comparable<Animal> {
     public Optional<List<Animal>> getParents() {
         return Optional.ofNullable(parents);
     }
-    
 
     public int getDescendantsNum(){
-        return numberOfDescentants;
+        return numberOfDescendants;
     }
 
     public void incrementNumberOfDescendants(){
-        numberOfDescentants++;
+        numberOfDescendants++;
     }
 
     @Override

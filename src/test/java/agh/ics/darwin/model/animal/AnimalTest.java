@@ -163,19 +163,6 @@ class AnimalTest {
     }
 
     @Test
-    void doesItAtWorkCorrectly(){
-        //given:
-        Vector2d position = new Vector2d(0,0);
-        AbstractGenome genome = new FullRandomMutationGenome(5);
-        int energy = 8;
-        Animal animal = new Animal(position, genome, energy);
-
-        //when+then
-        assertTrue(animal.isAt(animal.getPosition()));
-        assertFalse(animal.isAt(new Vector2d(4,2)));
-    }
-
-    @Test
     void doesEatDecreaseEnergyCorrectly(){
         //given:
         Vector2d position = new Vector2d(0,0);

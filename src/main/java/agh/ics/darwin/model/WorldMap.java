@@ -5,6 +5,7 @@ import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.model.util.IncorrectPositionException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -19,7 +20,7 @@ public interface WorldMap extends MoveValidator {
      * Place an animal on the map.
      *
      * @param animal The animal to place on the map.
-     * @return True if the animal was placed. The animal cannot be placed if the move is not valid.
+     * Places animal on map. The animal cannot be placed if the move is not valid.
      */
     void place(Animal animal) throws IncorrectPositionException;
 
@@ -45,7 +46,7 @@ public interface WorldMap extends MoveValidator {
      * @param position The getPosition of the animal.
      * @return animal or null if the getPosition is not occupied.
      */
-    WorldElement objectAt(Vector2d position);
+    Optional<WorldElement> objectAt(Vector2d position);
 
     List<WorldElement> getElements();
 

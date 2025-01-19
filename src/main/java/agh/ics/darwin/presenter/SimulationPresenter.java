@@ -21,8 +21,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -135,24 +133,23 @@ public class SimulationPresenter implements MapChangeListener {
                     mapGrid.add(vBox, position.getX() - left + 1, top - position.getY() + 1);
                 }
 
-                if (map.isOccupied(position)) {
-                    WorldElement element = map.objectAt(position);
+                map.objectAt(position).ifPresent(element -> {
                     WorldElementBox box = new WorldElementBox(element, simulationParameters.energyParameters().moveEnergy());
 
-                    if (element instanceof Animal){
-                        if (highlightedGenes && highlightedAnimals.contains((Animal) element)){
+                    if (element instanceof Animal) {
+                        if (highlightedGenes && highlightedAnimals.contains((Animal) element)) {
                             box.getStyleClass().add("dominant-animal");
                         }
                         box.setOnMouseClicked(event -> handleElementClick(box));
+                    }
 
-                        if (selectedElement != null && ((WorldElementBox) selectedElement).getElement() == element){
-                            box.getStyleClass().add("selected-element");
-                            selectedElement = box;
-                        }
+                    if (selectedElement != null && ((WorldElementBox) selectedElement).getElement() == element) {
+                        box.getStyleClass().add("selected-element");
+                        selectedElement = box;
                     }
 
                     mapGrid.add(box, position.getX() - left + 1, top - position.getY() + 1);
-                }
+                });
             }
         }
     }
