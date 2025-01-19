@@ -31,7 +31,7 @@ public class CreepingJungle extends AbstractPlantGenerator{
             Vector2d pos = plant.getPosition();
             for (MapDirection direction : MapDirection.values()){
                 Vector2d toCheck = pos.add(direction.toUnitVector());
-                if (toCheck.follows(lowerLeft) && toCheck.precedes(upperRight) && map.plantAt(toCheck) == null){
+                if (toCheck.follows(lowerLeft) && toCheck.precedes(upperRight) && map.plantAt(toCheck).isEmpty()){
                     preferredFields.add(toCheck);
                 }
             }

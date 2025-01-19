@@ -50,12 +50,12 @@ class EarthGlobeMapTest {
         map.addPlant(plant);
 
         // then
-        assertEquals(animal, map.objectAt(new Vector2d(3,3)));
-        assertEquals(plant, map.objectAt(new Vector2d(1,1)));
-        assertEquals(plant, map.plantAt(new Vector2d(1,1)));
-        assertNull(map.plantAt(new Vector2d(3, 3)));
-        assertTrue(map.isOccupied(new Vector2d(1,1)));
-        assertTrue(map.isOccupied(new Vector2d(3,3)));
+        assertEquals(animal, map.objectAt(new Vector2d(3, 3)).orElse(null));
+        assertEquals(plant, map.objectAt(new Vector2d(1, 1)).orElse(null));
+        assertEquals(plant, map.plantAt(new Vector2d(1, 1)).orElse(null));
+        assertNull(map.plantAt(new Vector2d(3, 3)).orElse(null));
+        assertTrue(map.isOccupied(new Vector2d(1, 1)));
+        assertTrue(map.isOccupied(new Vector2d(3, 3)));
     }
 
     @Test
@@ -67,7 +67,7 @@ class EarthGlobeMapTest {
 
         // then
         assertDoesNotThrow(() -> map.place(animal));
-        assertEquals(animal, map.objectAt(new Vector2d(1, 2)));
+        assertEquals(animal, map.objectAt(new Vector2d(1, 2)).orElse(null));
         assertTrue(map.isOccupied(new Vector2d(1,2)));
     }
 
@@ -80,7 +80,7 @@ class EarthGlobeMapTest {
 
         // then
         assertThrows(IncorrectPositionException.class, () -> map.place(animal));
-        assertNull(map.objectAt(new Vector2d(-5, 16)));
+        assertTrue(map.objectAt(new Vector2d(-5, 16)).isEmpty());
         assertFalse(map.isOccupied(new Vector2d(-5, 16)));
     }
 

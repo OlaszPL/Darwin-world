@@ -1,6 +1,7 @@
 package agh.ics.darwin.model.util;
 
 import agh.ics.darwin.model.Vector2d;
+import agh.ics.darwin.model.WorldElement;
 import agh.ics.darwin.model.WorldMap;
 
 /**
@@ -18,7 +19,7 @@ public class MapVisualizer {
     /**
      * Initializes the MapVisualizer with an instance of map to visualize.
      *
-     * @param map
+     * @param map worldMap
      */
     public MapVisualizer(WorldMap map) {
         this.map = map;
@@ -74,12 +75,6 @@ public class MapVisualizer {
     }
 
     private String drawObject(Vector2d currentPosition) {
-        if (this.map.isOccupied(currentPosition)) {
-            Object object = this.map.objectAt(currentPosition);
-            if (object != null) {
-                return object.toString();
-            }
-        }
-        return EMPTY_CELL;
+        return map.objectAt(currentPosition).map(WorldElement::toString).orElse(EMPTY_CELL);
     }
 }

@@ -169,6 +169,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     private void handleElementClick(VBox element) {
         if (!simulation.isPaused()) return;
+
         if (selectedElement != null) {
             selectedElement.getStyleClass().remove("selected-element");
             AnimalInfoUpdater.cleanSelectedAnimalInfo(genomeLabel, activeGeneLabel, energyLabel,

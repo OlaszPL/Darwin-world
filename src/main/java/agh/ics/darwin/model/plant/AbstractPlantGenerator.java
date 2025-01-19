@@ -27,7 +27,7 @@ public abstract class AbstractPlantGenerator {
         for (int i = lowerLeft.getX(); i <= upperRight.getX(); i++){
             for (int j = lowerLeft.getY(); j <= upperRight.getY(); j++){
                 Vector2d vect = new Vector2d(i, j);
-                if (!preferredSet.contains(vect) && map.plantAt(vect) == null){
+                if (!preferredSet.contains(vect) && map.plantAt(vect).isEmpty()){
                     lessPreferred.add(vect);
                 }
             }
