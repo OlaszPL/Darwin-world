@@ -71,7 +71,6 @@ public class SimulationPresenter implements MapChangeListener {
 
     @FXML
     public void initialize() {
-        // Dodajemy listener do okna po inicjalizacji komponentów
         Platform.runLater(() -> {
             Stage stage = (Stage) mapGrid.getScene().getWindow();
             onSimulationStartClicked();
@@ -145,6 +144,11 @@ public class SimulationPresenter implements MapChangeListener {
                             box.getStyleClass().add("dominant-animal");
                         }
                         box.setOnMouseClicked(event -> handleElementClick(box));
+
+                        if (selectedElement != null && ((WorldElementBox) selectedElement).getElement() == element){
+                            box.getStyleClass().add("selected-element");
+                            selectedElement = box;
+                        }
                     }
 
                     mapGrid.add(box, position.getX() - left + 1, top - position.getY() + 1);
@@ -206,7 +210,7 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
-    public void updateSelectedAnimalInfo(){
+    private void updateSelectedAnimalInfo(){
         if (selectedElement != null) {
             Animal animal = (Animal) ((WorldElementBox) selectedElement).getElement();
 
@@ -220,6 +224,17 @@ public class SimulationPresenter implements MapChangeListener {
             ageLabel.setText(String.valueOf(animalStats.age()));
             dayOfDeathLabel.setText(animalStats.dayOfDeath().map(String::valueOf).orElse(""));
         }
+    }
+
+    private void cleanSelectedAnimalInfo(){
+        genomeLabel.setText("");
+        activeGeneLabel.setText("");
+        energyLabel.setText("");
+        eatenPlantsLabel.setText("");
+        childrenLabel.setText("");
+        descendantsLabel.setText("");
+        ageLabel.setText("");
+        dayOfDeathLabel.setText("");
     }
 
     public void onToggleClicked() {
@@ -260,6 +275,7 @@ public class SimulationPresenter implements MapChangeListener {
         if (simulation.isPaused()) {
             if (selectedElement != null) {
                 selectedElement.getStyleClass().remove("selected-element");
+                cleanSelectedAnimalInfo();
                 if (selectedElement == element) {
                     selectedElement = null;
                     return;
