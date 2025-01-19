@@ -73,7 +73,6 @@ public class SimulationPresenter implements MapChangeListener {
     private Set<Vector2d> highlightedPositions;
 
     private final ChartUpdater chartUpdater = new ChartUpdater();
-    private final AnimalInfoUpdater animalInfoUpdater = new AnimalInfoUpdater();
 
     public void setSimulationParameters(SimulationParameters simulationParameters){
         this.simulationParameters = simulationParameters;
@@ -194,7 +193,7 @@ public class SimulationPresenter implements MapChangeListener {
     public void mapChanged(WorldMap map, String message) {
         Platform.runLater(() -> {
             drawMap(map);
-            animalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation, genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
+            AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation, genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
             descriptionLabel.setText(message);
             simulation.countDown(); // fix JavaFX being too slow for simulation interval
         });
@@ -262,7 +261,7 @@ public class SimulationPresenter implements MapChangeListener {
 
         if (selectedElement != null) {
             selectedElement.getStyleClass().remove("selected-element");
-            animalInfoUpdater.cleanSelectedAnimalInfo(genomeLabel, activeGeneLabel, energyLabel,
+            AnimalInfoUpdater.cleanSelectedAnimalInfo(genomeLabel, activeGeneLabel, energyLabel,
                     eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
 
             if (selectedElement == element) {
@@ -273,7 +272,7 @@ public class SimulationPresenter implements MapChangeListener {
         selectedElement = element;
         selectedElement.getStyleClass().add("selected-element");
         setElementSize(selectedElement, cellSize);
-        animalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation,
+        AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation,
                 genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel,
                 childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
     }
