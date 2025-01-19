@@ -1,3 +1,7 @@
+.root{
+    -fx-font-family: "Segoe UI";
+}
+
 .energy-bar-high .bar {
     -fx-background-color: #00FF00;
     -fx-background-insets: 0, 1;
