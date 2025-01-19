@@ -3,31 +3,23 @@ package agh.ics.darwin.presenter;
 import agh.ics.darwin.Simulation;
 import agh.ics.darwin.model.*;
 import agh.ics.darwin.model.animal.Animal;
-import agh.ics.darwin.model.util.Boundary;
 import agh.ics.darwin.parameters.*;
 import agh.ics.darwin.stats.StatsRecord;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.util.HashSet;
 import java.util.Set;
 
 public class SimulationPresenter implements MapChangeListener {
 
-    private static final int GRID_HEIGHT_WIDTH = 385;
-    private int cellSize;
+    public static final int GRID_HEIGHT_WIDTH = 385;
 
     @FXML
     public Button toggleButton;
@@ -73,6 +65,7 @@ public class SimulationPresenter implements MapChangeListener {
     private Set<Vector2d> highlightedPositions;
 
     private final ChartUpdater chartUpdater = new ChartUpdater();
+    private final MapDrawer mapDrawer = new MapDrawer();
 
     public void setSimulationParameters(SimulationParameters simulationParameters){
         this.simulationParameters = simulationParameters;
@@ -100,99 +93,13 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().getFirst()); // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
-
-    public void drawMap(WorldMap map){
-        clearGrid();
-        Boundary boundary = map.getCurrentBounds();
-        int left = boundary.lowerLeft().getX();
-        int right = boundary.upperRight().getX();
-        int bottom = boundary.lowerLeft().getY();
-        int top = boundary.upperRight().getY();
-        drawAxes(left, right, bottom, top);
-        drawMapElements(map, left, right, bottom, top);
-        for (Node label : mapGrid.getChildren()){
-            GridPane.setHalignment(label, HPos.CENTER);
-            GridPane.setValignment(label, VPos.CENTER);
-        }
-    }
-
-    private static void setElementSize(Node element, int size) {
-        element.setStyle(String.format("-fx-min-width: %s; -fx-min-height: %s; -fx-max-width: %s; -fx-max-height: %s;",
-                size, size, size, size));
-    }
-
-    private void drawMapElements(WorldMap map, int left, int right, int bottom, int top) {
-        for (int x = left; x <= right; x++) {
-            for (int y = bottom; y <= top; y++) {
-                Vector2d position = new Vector2d(x, y);
-
-                if (highlightedFields && highlightedPositions.contains(position)){
-                    VBox vBox = new VBox();
-                    vBox.getStyleClass().add("preferred-field");
-                    setElementSize(vBox, cellSize - 2);
-
-                    mapGrid.add(vBox, position.getX() - left + 1, top - position.getY() + 1);
-                }
-
-                if (map.isOccupied(position)) {
-                    WorldElement element = map.objectAt(position);
-                    WorldElementBox box = new WorldElementBox(element, simulationParameters.energyParameters().moveEnergy(), cellSize);
-
-                    if (element instanceof Animal){
-                        if (highlightedGenes && highlightedAnimals.contains((Animal) element)){
-                            box.getStyleClass().add("dominant-animal");
-                            setElementSize(box, cellSize - 2);
-                        }
-                        box.setOnMouseClicked(event -> handleElementClick(box));
-
-                        if (selectedElement != null && ((WorldElementBox) selectedElement).getElement() == element){
-                            box.getStyleClass().add("selected-element");
-                            setElementSize(box, cellSize);
-                            selectedElement = box;
-                        }
-                    }
-
-                    mapGrid.add(box, position.getX() - left + 1, top - position.getY() + 1);
-                }
-            }
-        }
-    }
-
-    private void drawAxes(int left, int right, int bottom, int top) {
-        // scale grid panes
-        cellSize = Math.max(Math.min((GRID_HEIGHT_WIDTH / (right - left + 2)), (GRID_HEIGHT_WIDTH / (top - bottom + 2))), 1);
-        double fontSize = cellSize * 0.4;
-
-        Label cornerLabel = new Label("y\\x");
-        cornerLabel.setStyle(String.format("-fx-font-size: %.2f;", fontSize));
-        mapGrid.add(cornerLabel, 0, 0);
-        mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
-        mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
-
-        for (int x = left; x <= right; x++) {
-            Label xLabel = new Label("%d".formatted(x));
-            xLabel.setStyle(String.format("-fx-font-size: %.2f;", fontSize));
-            mapGrid.add(xLabel, x - left + 1, 0);
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
-        }
-
-        for (int y = bottom; y <= top; y++) {
-            Label yLabel = new Label("%d".formatted(y));
-            yLabel.setStyle(String.format("-fx-font-size: %.2f;", fontSize));
-            mapGrid.add(yLabel, 0, top - y + 1);
-            mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
-        }
-    }
-
     @Override
     public void mapChanged(WorldMap map, String message) {
         Platform.runLater(() -> {
-            drawMap(map);
+            mapDrawer.drawMap(map, mapGrid, highlightedGenes, highlightedFields,
+                    highlightedAnimals, highlightedPositions, selectedElement, this::handleElementClick,
+                    simulationParameters.energyParameters().moveEnergy());
+            selectedElement = mapDrawer.getCurrentSelectedNode();
             AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation, genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
             descriptionLabel.setText(message);
             simulation.countDown(); // fix JavaFX being too slow for simulation interval
@@ -244,7 +151,9 @@ public class SimulationPresenter implements MapChangeListener {
             highlightedAnimals = new HashSet<>(simulation.getDominantGenotypeAnimals());
         }
         highlightedGenes = !highlightedGenes;
-        drawMap(simulation.getMap());
+        mapDrawer.drawMap(simulation.getMap(), mapGrid, highlightedGenes, highlightedFields,
+                highlightedAnimals, highlightedPositions, selectedElement, this::handleElementClick,
+                simulationParameters.energyParameters().moveEnergy());
     }
 
     @FXML
@@ -253,12 +162,13 @@ public class SimulationPresenter implements MapChangeListener {
             highlightedPositions = new HashSet<>(simulation.getPreferredFields());
         }
         highlightedFields = !highlightedFields;
-        drawMap(simulation.getMap());
+        mapDrawer.drawMap(simulation.getMap(), mapGrid, highlightedGenes, highlightedFields,
+                highlightedAnimals, highlightedPositions, selectedElement, this::handleElementClick,
+                simulationParameters.energyParameters().moveEnergy());
     }
 
     private void handleElementClick(VBox element) {
         if (!simulation.isPaused()) return;
-
         if (selectedElement != null) {
             selectedElement.getStyleClass().remove("selected-element");
             AnimalInfoUpdater.cleanSelectedAnimalInfo(genomeLabel, activeGeneLabel, energyLabel,
@@ -271,7 +181,7 @@ public class SimulationPresenter implements MapChangeListener {
         }
         selectedElement = element;
         selectedElement.getStyleClass().add("selected-element");
-        setElementSize(selectedElement, cellSize);
+        mapDrawer.setElementSize(selectedElement, mapDrawer.cellSize);
         AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation,
                 genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel,
                 childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
