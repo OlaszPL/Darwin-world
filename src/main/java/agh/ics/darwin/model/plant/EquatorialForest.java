@@ -30,8 +30,8 @@ public class EquatorialForest extends AbstractPlantGenerator{
                 Vector2d vect1 = new Vector2d(x, center_down);
                 Vector2d vect2 = new Vector2d(x, center_up);
 
-                if (map.plantAt(vect1) == null) preferredFields.add(vect1);
-                if (map.plantAt(vect2) == null) preferredFields.add(vect2);
+                if (map.plantAt(vect1).isEmpty()) preferredFields.add(vect1);
+                if (map.plantAt(vect2).isEmpty()) preferredFields.add(vect2);
             }
 
             for (int i = 1; i <= rows_per_side; i++){
@@ -39,8 +39,8 @@ public class EquatorialForest extends AbstractPlantGenerator{
                     Vector2d vect1 = new Vector2d(x, center_down - i);
                     Vector2d vect2 = new Vector2d(x, center_up + i);
 
-                    if (map.plantAt(vect1) == null) preferredFields.add(vect1);
-                    if (map.plantAt(vect2) == null) preferredFields.add(vect2);
+                    if (map.plantAt(vect1).isEmpty()) preferredFields.add(vect1);
+                    if (map.plantAt(vect2).isEmpty()) preferredFields.add(vect2);
                 }
             }
 
@@ -51,7 +51,7 @@ public class EquatorialForest extends AbstractPlantGenerator{
 
             for (int x = lowerLeft.getX(); x <= upperRight.getX(); x++){
                 Vector2d vect = new Vector2d(x, center);
-                if (map.plantAt(vect) == null) preferredFields.add(vect);
+                if (map.plantAt(vect).isEmpty()) preferredFields.add(vect);
             }
 
             for (int i = 1; i <= rows_per_side; i++){
@@ -59,8 +59,8 @@ public class EquatorialForest extends AbstractPlantGenerator{
                     Vector2d vect1 = new Vector2d(x, center + i);
                     Vector2d vect2 = new Vector2d(x, center - i);
 
-                    if (map.plantAt(vect1) == null) preferredFields.add(vect1);
-                    if (map.plantAt(vect2) == null) preferredFields.add(vect2);
+                    if (map.plantAt(vect1).isEmpty()) preferredFields.add(vect1);
+                    if (map.plantAt(vect2).isEmpty()) preferredFields.add(vect2);
                 }
             }
         }

@@ -139,26 +139,24 @@ public class SimulationPresenter implements MapChangeListener {
                     mapGrid.add(vBox, position.getX() - left + 1, top - position.getY() + 1);
                 }
 
-                if (map.isOccupied(position)) {
-                    WorldElement element = map.objectAt(position);
+                map.objectAt(position).ifPresent(element -> {
                     WorldElementBox box = new WorldElementBox(element, simulationParameters.energyParameters().moveEnergy(), cellSize);
 
-                    if (element instanceof Animal){
-                        if (highlightedGenes && highlightedAnimals.contains((Animal) element)){
+                    if (element instanceof Animal) {
+                        if (highlightedGenes && highlightedAnimals.contains((Animal) element)) {
                             box.getStyleClass().add("dominant-animal");
                             setElementSize(box, cellSize - 2);
                         }
                         box.setOnMouseClicked(event -> handleElementClick(box));
+                    }
 
-                        if (selectedElement != null && ((WorldElementBox) selectedElement).getElement() == element){
-                            box.getStyleClass().add("selected-element");
-                            setElementSize(box, cellSize);
-                            selectedElement = box;
-                        }
+                    if (selectedElement != null && ((WorldElementBox) selectedElement).getElement() == element) {
+                        box.getStyleClass().add("selected-element");
+                        selectedElement = box;
                     }
 
                     mapGrid.add(box, position.getX() - left + 1, top - position.getY() + 1);
-                }
+                });
             }
         }
     }

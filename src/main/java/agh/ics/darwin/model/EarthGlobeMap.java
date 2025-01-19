@@ -44,26 +44,25 @@ public class EarthGlobeMap implements WorldMap {
     }
 
     @Override
-    public WorldElement objectAt(Vector2d position) {
-        if (animals.containsKey(position) && !animals.get(position).isEmpty()) {
-            return Collections.max(animals.get(position));
-        }
-        return plantAt(position);
+    public Optional<WorldElement> objectAt(Vector2d position) {
+        return animals.containsKey(position) && !animals.get(position).isEmpty()
+                ? Optional.of(Collections.max(animals.get(position)))
+                : (plantAt(position).map(plant -> (WorldElement) plant));
     }
 
-    public Plant plantAt(Vector2d position){
-        return plants.get(position);
+    public Optional<Plant> plantAt(Vector2d position){
+        return plants.containsKey(position) ? Optional.ofNullable(plants.get(position)) : Optional.empty();
     }
 
     public List<Animal> getOrderedAnimalsAt(Vector2d position){
-        return animals.get(position)!= null ? animals.get(position).stream()
+        return animals.containsKey(position) && animals.get(position)!= null ? animals.get(position).stream()
                 .sorted(Comparator.reverseOrder())
                 .toList() : null;
     }
 
     @Override
     public boolean isOccupied(Vector2d position) {
-        return objectAt(position) != null;
+        return objectAt(position).isPresent();
     }
 
     @Override
@@ -165,9 +164,7 @@ public class EarthGlobeMap implements WorldMap {
     }
 
     public void removePlant(Vector2d position){
-        if (plantAt(position) != null){
-            plants.remove(position);
-        }
+        plants.remove(position);
     }
 
     @Override

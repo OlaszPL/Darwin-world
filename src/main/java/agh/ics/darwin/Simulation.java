@@ -169,7 +169,7 @@ public class Simulation implements Runnable {
             // execute eat
             for (List<Animal> animalList : groupedAnimals) {
                 Vector2d position = animalList.getFirst().getPosition();
-                if (map.plantAt(position) != null) {
+                if (map.plantAt(position).isPresent()){
                     animalList.getFirst().eat(simulationParameters.energyParameters().onePlantEnergy());
                     map.removePlant(position);
                 }
