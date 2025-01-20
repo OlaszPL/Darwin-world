@@ -143,14 +143,19 @@ public class StartWindow extends Application {
                 interval.getValue(), csvSave.isSelected(), csvSave.isSelected() ? csvFileName.getText() : null);
         MutationParameters mutations = new MutationParameters(minMutationsNum.getValue(), maxMutationsNum.getValue());
 
-        SimulationParameters sim = ParametersValidator.validate(energy, map, mutations, misc);
-
-        SimulationApp simulationApp = new SimulationApp();
-        simulationApp.setSimulationParameters(sim);
         try {
-            simulationApp.start(new Stage());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+            SimulationParameters sim = ParametersValidator.validate(energy, map, mutations, misc);
+
+            SimulationApp simulationApp = new SimulationApp();
+            simulationApp.setSimulationParameters(sim);
+            try {
+                simulationApp.start(new Stage());
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        catch (InvalidParametersException e){
+            DialogUtils.showErrorDialog("Validation Error", "Invalid Paramters", String.join(", ", e.getMessage()));
         }
     }
 }

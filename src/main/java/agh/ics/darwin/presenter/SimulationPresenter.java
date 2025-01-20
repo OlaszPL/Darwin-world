@@ -78,7 +78,7 @@ public class SimulationPresenter implements MapChangeListener {
                     highlightedAnimals, highlightedPositions, selectedElement, this::handleElementClick,
                     simulationParameters.energyParameters().moveEnergy());
             selectedElement = mapDrawer.getCurrentSelectedNode();
-            AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation, genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
+            AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
             descriptionLabel.setText(message);
             simulation.countDown(); // fix JavaFX being too slow for simulation interval
         });
@@ -161,7 +161,7 @@ public class SimulationPresenter implements MapChangeListener {
         selectedElement = element;
         selectedElement.getStyleClass().add("selected-element");
         mapDrawer.setElementSize(selectedElement, mapDrawer.cellSize);
-        AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, simulation,
+        AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement,
                 genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel,
                 childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
     }

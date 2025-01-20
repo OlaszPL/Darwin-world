@@ -1,6 +1,5 @@
 package agh.ics.darwin.presenter;
 
-import agh.ics.darwin.Simulation;
 import agh.ics.darwin.model.WorldElementBox;
 import agh.ics.darwin.model.animal.Animal;
 import agh.ics.darwin.stats.SelectedAnimalStats;
@@ -8,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class AnimalInfoUpdater {
-    public static void updateSelectedAnimalInfo(VBox selectedElement, Simulation simulation,
+    public static void updateSelectedAnimalInfo(VBox selectedElement,
                                          Label genomeLabel, Label activeGeneLabel,
                                          Label energyLabel, Label eatenPlantsLabel,
                                          Label childrenLabel, Label descendantsLabel,
@@ -16,7 +15,9 @@ public class AnimalInfoUpdater {
         if (selectedElement == null) return;
 
         Animal animal = (Animal) ((WorldElementBox) selectedElement).getElement();
-        SelectedAnimalStats stats = simulation.generateAnimalStats(animal);
+
+        SelectedAnimalStats stats = new SelectedAnimalStats(animal.getGenes(), animal.getGenome().getActiveGeneIndex(), animal.getEnergy(), animal.getNumberOfEatenPlants(), animal.getNumberOfChildren(),
+                animal.getDescendantsNum(), animal.getAge(), animal.getDayOfDeath());
 
         updateLabels(stats, genomeLabel, activeGeneLabel, energyLabel,
                 eatenPlantsLabel, childrenLabel, descendantsLabel,
