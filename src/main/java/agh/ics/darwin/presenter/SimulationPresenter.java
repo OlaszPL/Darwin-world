@@ -18,35 +18,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SimulationPresenter implements MapChangeListener {
-
     public static final int GRID_HEIGHT_WIDTH = 385;
 
     @FXML
-    public Button toggleButton;
+    public Button toggleButton, showDominantGenesButton, showPreferredFields;
     @FXML
-    public Button showDominantGenesButton;
-    @FXML
-    public Button showPreferredFields;
-    @FXML
-    public Label genomeLabel;
-    @FXML
-    public Label activeGeneLabel;
-    @FXML
-    public Label energyLabel;
-    @FXML
-    public Label eatenPlantsLabel;
-    @FXML
-    public Label childrenLabel;
-    @FXML
-    public Label descendantsLabel;
-    @FXML
-    public Label ageLabel;
-    @FXML
-    public Label dayOfDeathLabel;
+    public Label genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel,
+            dayOfDeathLabel, descriptionLabel;
     @FXML
     private VBox selectedElement;
-    @FXML
-    public Label descriptionLabel;
     @FXML
     public GridPane mapGrid;
     @FXML
@@ -54,9 +34,7 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     public VBox statsBox;
     @FXML
-    public LineChart<Number, Number> animalsChart;
-    @FXML
-    public LineChart<Number, Number> energyChart;
+    public LineChart<Number, Number> animalsChart, energyChart;
 
     private Simulation simulation;
     private SimulationParameters simulationParameters;
