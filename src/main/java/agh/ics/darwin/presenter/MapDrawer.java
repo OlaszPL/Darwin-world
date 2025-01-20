@@ -98,7 +98,7 @@ public class MapDrawer {
             mapGrid.add(vBox, position.getX() - left + 1, top - position.getY() + 1);
         }
 
-        if (map.isOccupied(position)) {
+        if (map.objectAt(position).isPresent()){
             addWorldElement(map, mapGrid, position, left, top, cellSize,
                     highlightedGenes, highlightedAnimals, selectedElement,
                     elementClickHandler, moveEnergy);
@@ -110,7 +110,9 @@ public class MapDrawer {
                                  boolean highlightedGenes, Set<Animal> highlightedAnimals,
                                  VBox selectedElement, Consumer<VBox> elementClickHandler,
                                  int moveEnergy) {
-        WorldElement element = map.objectAt(position);
+
+        if (map.objectAt(position).isEmpty()) return;
+        WorldElement element = map.objectAt(position).get();
         WorldElementBox box = new WorldElementBox(element,
                 moveEnergy, cellSize);
 
