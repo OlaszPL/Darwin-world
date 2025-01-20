@@ -72,7 +72,6 @@ public class ParametersValidator {
         }
 
         if (!errors.isEmpty()){
-            DialogUtils.showErrorDialog("Validation Error", "Invalid Paramters", String.join(", ", errors));
             throw new InvalidParametersException(String.join(", ", errors));
         }
 

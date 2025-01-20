@@ -13,7 +13,6 @@ import agh.ics.darwin.model.util.IncorrectPositionException;
 import agh.ics.darwin.model.util.RandomPositionGenerator;
 import agh.ics.darwin.parameters.SimulationParameters;
 import agh.ics.darwin.stats.CsvHandler;
-import agh.ics.darwin.stats.SelectedAnimalStats;
 import agh.ics.darwin.stats.StatsCreator;
 import agh.ics.darwin.stats.StatsRecord;
 import javafx.application.Platform;
@@ -134,9 +133,14 @@ public class Simulation implements Runnable {
         return plantGenerator.getPreferredFields();
     }
 
-    public SelectedAnimalStats generateAnimalStats(Animal animal){
-        return new SelectedAnimalStats(animal.getGenes(), animal.getGenome().getActiveGeneIndex(), animal.getEnergy(), animal.getNumberOfEatenPlants(), animal.getNumberOfChildren(),
-                    animal.getDescendantsNum(), animal.getAge(), animal.getDayOfDeath());
+    private void showExtinctionAlert() {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Extinction Alert");
+            alert.setHeaderText("All animals are extinct");
+            alert.setContentText("The simulation has ended because all animals have died.");
+            alert.showAndWait();
+        });
     }
 
     private void showExtinctionAlert() {
