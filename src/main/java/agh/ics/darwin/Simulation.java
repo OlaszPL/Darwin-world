@@ -16,6 +16,8 @@ import agh.ics.darwin.stats.CsvHandler;
 import agh.ics.darwin.stats.SelectedAnimalStats;
 import agh.ics.darwin.stats.StatsCreator;
 import agh.ics.darwin.stats.StatsRecord;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
 import java.util.List;
 
@@ -137,6 +139,16 @@ public class Simulation implements Runnable {
                     animal.getDescendantsNum(), animal.getAge(), animal.getDayOfDeath());
     }
 
+    private void showExtinctionAlert() {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Extinction Alert");
+            alert.setHeaderText("All animals are extinct");
+            alert.setContentText("The simulation has ended because all animals have died.");
+            alert.showAndWait();
+        });
+    }
+
     public void run() {
         while (running) {
             if (paused) continue;
@@ -147,7 +159,11 @@ public class Simulation implements Runnable {
             sleep();
 
             List<Animal> animals = map.getAnimals();
-            if (animals.isEmpty()) stop();
+            if (animals.isEmpty()) {
+                showExtinctionAlert();
+                stop();
+                break;
+            }
 
             // execute rotation
             for (Animal animal : animals) {
