@@ -77,7 +77,7 @@
                 <Label text="Selected animal" textAlignment="CENTER" style="-fx-font-weight: bold;"/>
                 <Region prefHeight="10" />
                 <Label text="Genome:" textAlignment="CENTER"/>
-                <Label fx:id="genomeLabel" textAlignment="CENTER"/>
+                <Label fx:id="genomeLabel" textAlignment="CENTER" alignment="CENTER" wrapText="true" prefWidth="140" maxWidth="Infinity" />
                 <Label text="Active Gene:" textAlignment="CENTER"/>
                 <Label fx:id="activeGeneLabel" textAlignment="CENTER"/>
                 <Label text="Energy:" textAlignment="CENTER"/>
