@@ -134,28 +134,32 @@ public class StartWindow extends Application {
 
     @FXML
     public void newSimulation() {
-
-        EnergyParameters energy = new EnergyParameters(onePlantEnergy.getValue(), initialAnimalEnergy.getValue(),
-                minReproduceEnergy.getValue(), energyGivenToChild.getValue(), moveEnergy.getValue());
-        MapParameters map = new MapParameters(widthSpinner.getValue(), heightSpinner.getValue());
-        MiscParameters misc = new MiscParameters(behaviourType.getValue(), plantGeneratorType.getValue(),
-                genomeLength.getValue(), startAnimalsNum.getValue(), startPlantsNum.getValue(), dailyPlantsNum.getValue(),
-                interval.getValue(), csvSave.isSelected(), csvSave.isSelected() ? csvFileName.getText() : null);
-        MutationParameters mutations = new MutationParameters(minMutationsNum.getValue(), maxMutationsNum.getValue());
-
         try {
-            SimulationParameters sim = ParametersValidator.validate(energy, map, mutations, misc);
+            EnergyParameters energy = new EnergyParameters(onePlantEnergy.getValue(), initialAnimalEnergy.getValue(),
+                    minReproduceEnergy.getValue(), energyGivenToChild.getValue(), moveEnergy.getValue());
+            MapParameters map = new MapParameters(widthSpinner.getValue(), heightSpinner.getValue());
+            MiscParameters misc = new MiscParameters(behaviourType.getValue(), plantGeneratorType.getValue(),
+                    genomeLength.getValue(), startAnimalsNum.getValue(), startPlantsNum.getValue(), dailyPlantsNum.getValue(),
+                    interval.getValue(), csvSave.isSelected(), csvSave.isSelected() ? csvFileName.getText() : null);
+            MutationParameters mutations = new MutationParameters(minMutationsNum.getValue(), maxMutationsNum.getValue());
 
-            SimulationApp simulationApp = new SimulationApp();
-            simulationApp.setSimulationParameters(sim);
             try {
-                simulationApp.start(new Stage());
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
+                SimulationParameters sim = ParametersValidator.validate(energy, map, mutations, misc);
+
+                SimulationApp simulationApp = new SimulationApp();
+                simulationApp.setSimulationParameters(sim);
+                try {
+                    simulationApp.start(new Stage());
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            } catch (InvalidParametersException e) {
+                DialogUtils.showErrorDialog("Validation Error", "Invalid Paramters", String.join(", ", e.getMessage()));
             }
         }
-        catch (InvalidParametersException e){
-            DialogUtils.showErrorDialog("Validation Error", "Invalid Paramters", String.join(", ", e.getMessage()));
+        catch (NullPointerException e){
+            DialogUtils.showErrorDialog("Validation Error", "Invalid Paramters", String.join(", ",
+                    "Parameter shouldn't be empty!"));
         }
     }
 }
