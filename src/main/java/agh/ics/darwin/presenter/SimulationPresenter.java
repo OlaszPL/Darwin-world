@@ -18,7 +18,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SimulationPresenter implements MapChangeListener {
-    public static final int GRID_HEIGHT_WIDTH = 385;
+    private static final int HEIGHT_OF_COMPONENTS_WITHOUT_GRID = 120;
+    private int gridHeightWidth;
 
     @FXML
     public Button toggleButton, showDominantGenesButton, showPreferredFields;
@@ -68,7 +69,18 @@ public class SimulationPresenter implements MapChangeListener {
             stage.setOnCloseRequest(event -> {
                 if (simulation != null) simulation.stop();
             });
+            stage.widthProperty().addListener((obs, oldVal, newVal) -> updateGridHeightWidth());
+            stage.heightProperty().addListener((obs, oldVal, newVal) -> updateGridHeightWidth());
+            stage.maximizedProperty().addListener((obs, wasMaximized, isNowMaximized) -> Platform.runLater(this::updateGridHeightWidth));
         });
+    }
+
+    private void updateGridHeightWidth() {
+        gridHeightWidth = (int)Math.min((Math.max(mapGrid.getScene().getWidth(), mapGrid.getScene().getHeight()) / 2.34),
+                mapGrid.getScene().getHeight() - HEIGHT_OF_COMPONENTS_WITHOUT_GRID);
+        mapDrawer.drawMap(simulation.getMap(), mapGrid, highlightedGenes, highlightedFields,
+                highlightedAnimals, highlightedPositions, selectedElement, this::handleElementClick,
+                simulationParameters.energyParameters().moveEnergy(), gridHeightWidth);
     }
 
     @Override
@@ -76,7 +88,7 @@ public class SimulationPresenter implements MapChangeListener {
         Platform.runLater(() -> {
             mapDrawer.drawMap(map, mapGrid, highlightedGenes, highlightedFields,
                     highlightedAnimals, highlightedPositions, selectedElement, this::handleElementClick,
-                    simulationParameters.energyParameters().moveEnergy());
+                    simulationParameters.energyParameters().moveEnergy(), gridHeightWidth);
             selectedElement = mapDrawer.getCurrentSelectedNode();
             AnimalInfoUpdater.updateSelectedAnimalInfo(selectedElement, genomeLabel, activeGeneLabel, energyLabel, eatenPlantsLabel, childrenLabel, descendantsLabel, ageLabel, dayOfDeathLabel);
             descriptionLabel.setText(message);
@@ -90,6 +102,7 @@ public class SimulationPresenter implements MapChangeListener {
         }
         simulation = new Simulation(simulationParameters);
         simulation.registerObserver(this);
+        updateGridHeightWidth();
         new Thread(simulation).start();
     }
 
@@ -131,7 +144,7 @@ public class SimulationPresenter implements MapChangeListener {
         highlightedGenes = !highlightedGenes;
         mapDrawer.drawMap(simulation.getMap(), mapGrid, highlightedGenes, highlightedFields,
                 highlightedAnimals, highlightedPositions, selectedElement, this::handleElementClick,
-                simulationParameters.energyParameters().moveEnergy());
+                simulationParameters.energyParameters().moveEnergy(), gridHeightWidth);
     }
 
     @FXML
@@ -142,7 +155,7 @@ public class SimulationPresenter implements MapChangeListener {
         highlightedFields = !highlightedFields;
         mapDrawer.drawMap(simulation.getMap(), mapGrid, highlightedGenes, highlightedFields,
                 highlightedAnimals, highlightedPositions, selectedElement, this::handleElementClick,
-                simulationParameters.energyParameters().moveEnergy());
+                simulationParameters.energyParameters().moveEnergy(), gridHeightWidth);
     }
 
     private void handleElementClick(VBox element) {

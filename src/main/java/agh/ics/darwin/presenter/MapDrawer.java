@@ -12,8 +12,6 @@ import javafx.scene.layout.*;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static agh.ics.darwin.presenter.SimulationPresenter.GRID_HEIGHT_WIDTH;
-
 public class MapDrawer {
     public int cellSize;
     private VBox currentSelectedNode;
@@ -22,11 +20,11 @@ public class MapDrawer {
                         boolean highlightedGenes, boolean highlightedFields,
                         Set<Animal> highlightedAnimals, Set<Vector2d> highlightedPositions,
                         VBox selectedElement, Consumer<VBox> elementClickHandler,
-                        int moveEnergy) {
+                        int moveEnergy, int gridHeightWidth) {
         currentSelectedNode = selectedElement;
         clearGrid(mapGrid);
         Boundary boundary = map.getCurrentBounds();
-        drawAxes(mapGrid, boundary);
+        drawAxes(mapGrid, boundary, gridHeightWidth);
         drawMapElements(map, mapGrid, boundary, cellSize, highlightedGenes, highlightedFields,
                 highlightedAnimals, highlightedPositions, selectedElement, elementClickHandler,
                 moveEnergy);
@@ -45,13 +43,13 @@ public class MapDrawer {
                 size, size, size, size));
     }
 
-    private void drawAxes(GridPane mapGrid, Boundary boundary) {
+    private void drawAxes(GridPane mapGrid, Boundary boundary, int gridHeightWidth) {
         int left = boundary.lowerLeft().getX();
         int right = boundary.upperRight().getX();
         int bottom = boundary.lowerLeft().getY();
         int top = boundary.upperRight().getY();
 
-        cellSize = Math.max(Math.min((GRID_HEIGHT_WIDTH / (right - left + 2)), (GRID_HEIGHT_WIDTH / (top - bottom + 2))), 1);
+        cellSize = Math.max(Math.min((gridHeightWidth / (right - left + 2)), (gridHeightWidth / (top - bottom + 2))), 1);
         double fontSize = cellSize * 0.4;
 
         addCornerLabel(mapGrid, cellSize, fontSize);
