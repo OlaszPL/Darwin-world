@@ -1,4 +1,4 @@
-# Darwin-world
+# Darwin World 🐑
 Java Desktop App that models simulation inspired by the Charles Darwin's theory of natural selection. The application allows users to configure various parameters related to the map, animals, and simulation settings, follow real-time ecosystem changes and analyze statistics.
 
 Project realized as a part of Object Oriented Programming Course at AGH University of Krakow by:
@@ -44,6 +44,11 @@ As a user, you can choose:
 - energy per single movement
 - energy provided by eating one plant
 
+### Presets
+App comes with some predefined presets by default. They can be used as samples to show all of the available features. User can also save own presets as csv files.
+
+> [!IMPORTANT]
+> Presets by default are stored and saved in user's home directory in the .darwin-world folder.
 
 ### Visualization
 ### Logs
@@ -63,6 +68,9 @@ The above contains the following information for each day:
 To run the application on your computer, you should have **Java 21** installed. 
 
 Make sure you have it; if not, you can install it from [Oracle](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html).
+
+>[!NOTE]
+> App has been tested under Windows and Linux operating systems, nevertheless it should also work under MacOS.
 
 ### Running
 1. Download the latest release from the **[Releases](https://github.com/OlaszPL/Darwin-world/releases)** section.  
