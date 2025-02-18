@@ -2,6 +2,13 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'com.gradleup.shadow' version '8.3.6'
+}
+
+ext {
+    javafxVersion = '21.0.5'
+    javafxModules = ['base', 'controls', 'fxml', 'graphics']
+    platforms = ['win', 'linux', 'mac']
 }
 
 group = 'agh.ics.darwin'
@@ -11,16 +18,17 @@ repositories {
     mavenCentral()
 }
 
-javafx {
-    version = "21.0.5"
-    modules = ['javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.media', 'javafx.swing', 'javafx.web']
-}
-
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'com.opencsv:opencsv:5.7.1'
     implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
+
+    javafxModules.each { module ->
+        platforms.each { platform ->
+            implementation "org.openjfx:javafx-${module}:${javafxVersion}:${platform}"
+        }
+    }
 }
 
 test {
@@ -28,11 +36,25 @@ test {
 }
 
 application {
-    getMainClass().set('agh.ics.darwin.Main')
+    getMainClass().set('agh.ics.darwin.Launcher')
 }
 
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('Darwin World')
+    archiveVersion.set('1.0')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'agh.ics.darwin.Launcher'
+    }
+    mergeServiceFiles()
+    from(sourceSets.main.resources) {
+        include 'presets/**'
+        into ''
     }
 }
