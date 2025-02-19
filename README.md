@@ -1,9 +1,12 @@
 # Darwin World 🐑
 Java Desktop App that models simulation inspired by the Charles Darwin's theory of natural selection. The application allows users to configure various parameters related to the map, animals, and simulation settings, follow real-time ecosystem changes and analyze statistics.
 
-Project realized as a part of Object Oriented Programming Course at AGH University of Krakow by:
+Project realized as a part of Object Oriented Programming Course at AGH University of Cracow by:
 - Katarzyna Bęben [[kasiabeben10]](https://github.com/kasiabeben10)
 - Aleksander Jóźwik [[OlaszPL]](https://github.com/OlaszPL)
+
+![image](https://github.com/user-attachments/assets/3ea342ed-a567-4faa-989a-9f84cca9cf8f)
+
 
 ## About
 This project is a visualization of the world of herbivores traveling in search of food to survive and a partner to reproduce to expand the number of individuals of their species. Species develop over time through the mechanism of gene transmission from parents. Genes motivate the behavior and movement of animals.
@@ -24,6 +27,8 @@ The simulation shows how the population changes over time and allows you to obse
 ## Features
 ### Configuration
 The simulation is highly customizable. The user can both set a myriad of parameters and use ready-made configurations that provide stunts that are interesting to observe.
+
+![image](https://github.com/user-attachments/assets/965cb695-bffb-4325-b6b4-1e904a392eca)
 
 As a user, you can choose:
 - height and width of the map
@@ -47,10 +52,14 @@ As a user, you can choose:
 ### Presets
 App comes with some predefined presets by default. They can be used as samples to show all of the available features. User can also save own presets as csv files.
 
+![2025-02-1913-06-01-ezgif com-video-to-gif-converter (1)](https://github.com/user-attachments/assets/f5fb0589-bdb0-49ba-a31b-1cb52cedaad3)
+
 > [!IMPORTANT]
 > Presets by default are stored and saved in user's home directory in the .darwin-world folder.
 
 ### Visualization
+![2025-02-1913-23-30-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/cfe56b70-15b9-4e95-a79b-7d4df03cd423)
+
 ### Logs
 The application saves simulation logs to a csv file if this option is selected in the start window.
 The above contains the following information for each day:
@@ -80,3 +89,4 @@ java -jar Darwin_World-1.0.jar
 ```
 or simply double-click on Darwin_World-1.0.jar file.
 
+![2025-02-1913-33-48-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/ef84b10b-164b-49be-9b70-48d2550fd4a3)
