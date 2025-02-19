@@ -7,6 +7,7 @@ Project realized as a part of Object Oriented Programming Course at AGH Universi
 
 ![image](https://github.com/user-attachments/assets/3ea342ed-a567-4faa-989a-9f84cca9cf8f)
 
+Project guidelines (in Polish) are located [here](https://github.com/OlaszPL/Darwin-world/tree/main/project-guidelines). A variant F3 is implemented.
 
 ## About
 This project is a visualization of the world of herbivores traveling in search of food to survive and a partner to reproduce to expand the number of individuals of their species. Species develop over time through the mechanism of gene transmission from parents. Genes motivate the behavior and movement of animals.
