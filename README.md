@@ -1,7 +1,7 @@
 # Darwin World 🐑
 Java Desktop App that models simulation inspired by the Charles Darwin's theory of natural selection. The application allows users to configure various parameters related to the map, animals, and simulation settings, follow real-time ecosystem changes and analyze statistics.
 
-Project realized as a part of Object Oriented Programming Course at AGH University of Cracow by:
+Project realized as a part of Object Oriented Programming Course at AGH University of Krakow by:
 - Katarzyna Bęben [[kasiabeben10]](https://github.com/kasiabeben10)
 - Aleksander Jóźwik [[OlaszPL]](https://github.com/OlaszPL)
 
